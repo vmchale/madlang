@@ -1,0 +1,18 @@
+:define person
+    0.7 "I will"
+    0.3 "You will"
+:define fortune
+    0.5 "drink a boatload of milk"
+    0.5 "get heckin angry"
+{#
+:define copies
+    :replicate person
+        (1) 0.3
+        (2) 0.7
+    aka
+    0.3 person
+    0.7 person person
+#}
+:return
+    0.8 person fortune
+    0.2 "nice things will happen today"
