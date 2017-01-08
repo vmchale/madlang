@@ -1,13 +1,29 @@
 - [x] make simple templating language
     - [ ] sequential parsing
-    - [ ] parsing with stuff that's out of order
+    - [x] parsing with stuff that's out of order
 - [ ] make replication command
     - [ ] vimscript for language
         - [ ] integrate with syntastic
+        - [ ] consider a PR on megaparsec to add colors to the `ParseError`s
+- [ ] figure out which modules/functions should be exposed
 - [ ] make semantics errors better
-     - [ ] when stuff doesn't add to 1 = bad
-     - [ ] two "return" functions = bad
-     - [ ] circular dependencies = bad
+    - [ ] when stuff doesn't add to 1 = bad
+    - [ ] two "return" functions = bad
+    - [ ] circular dependencies = bad
 - [ ] using a catamorphism to build it up? or a hylomorphism
-- [ ] parse tibetan characters because I think that would be cool
-- [ ] figure out the pretty-printer for parse errors
+- [ ] parse tibetan characters/numerals because I think that would be cool
+- [ ] 
+- [x] figure out the pretty-printer for parse errors
+- [ ] implement test suite
+    - [x] check parsing
+    - [x] check randomization of tokens
+    - ~~[ ] check executable (?)~~
+- [ ] readme documentation
+- [ ] haddock documentation
+    - [ ] hackage upload
+- [ ] some sort of manual for the language (?)
+    - [ ] toboggan twitter bot generator example w/ clit of course
+- [ ] DSL stuff:
+    - [ ] replication
+    - [ ] instances based on regex or something?
+    - [ ] file linking??

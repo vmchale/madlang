@@ -2,7 +2,6 @@
 
 import Test.Hspec
 import Test.Hspec.Megaparsec
-import Control.Exception (evaluate)
 import Text.Madlibs.Ana.Parse hiding (main)
 import Text.Madlibs.Internal.Types
 import Text.Madlibs.Internal.Utils
@@ -25,8 +24,6 @@ main = hspec $ do
         it "returns a correct string from the template when evaluating a token" $ do
             (testIO . run) exampleTok `shouldSatisfy` (\a -> on (||) (a ==) "heads" "tails")
 
---shouldSatisfyIO = on shouldSatisfy testIO
-
 exampleTok :: RandTok
 exampleTok = List [(1.0,List [(0.5,Value "heads"),(0.5,Value "tails")])]
 
@@ -34,7 +31,11 @@ madFile :: T.Text
 madFile = ":define something\n    0.5 \"heads\"\n    0.5 \"tails\"\n:return\n    1.0 something"
 
 madFileFailure :: T.Text
-madFileFailure = ":define something\n    0.5 \"heads\"\n    0.5 \"tails\n:return\n    1.0 something"
+madFileFailure = ":define something\
+\    0.5 \"heads\"\
+\    0.5 \"tails\
+\:return\
+\    1.0 something"
 
 madComplexFile :: T.Text
 madComplexFile = ":define person\

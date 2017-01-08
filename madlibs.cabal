@@ -21,6 +21,7 @@ library
                      , Text.Madlibs.Internal.Types
                      , Text.Madlibs.Internal.Utils
   other-modules:       Text.Madlibs.Ana.ParseUtils
+                     , Text.Madlibs.Cata.SemErr
   build-depends:       base >= 4.7 && < 5
                      , megaparsec
                      , text
@@ -29,6 +30,7 @@ library
                      , lens
                      , mtl
                      , composition
+                     , ansi-wl-pprint
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings
                      , DeriveGeneric
