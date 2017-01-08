@@ -15,13 +15,14 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Text.Madlibs.Exec.Main
+  exposed-modules:     Text.Madlibs
+  other-modules:       Text.Madlibs.Ana.ParseUtils
                      , Text.Madlibs.Cata.Run
                      , Text.Madlibs.Ana.Parse
                      , Text.Madlibs.Internal.Types
                      , Text.Madlibs.Internal.Utils
                      , Text.Madlibs.Cata.SemErr
-  other-modules:       Text.Madlibs.Ana.ParseUtils
+                     , Text.Madlibs.Exec.Main
   build-depends:       base >= 4.7 && < 5
                      , megaparsec
                      , text
@@ -29,7 +30,6 @@ library
                      , mwc-random
                      , lens
                      , mtl
-                     , composition
                      , ansi-wl-pprint
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings
@@ -40,7 +40,7 @@ library
 executable madlibs
   hs-source-dirs:      app
   main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N -O2
   build-depends:       base
                      , madlibs
   default-language:    Haskell2010
@@ -56,7 +56,7 @@ test-suite madlibs-test
                      , text
                      , mtl
                      , hspec-megaparsec
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N -O2
   default-language:    Haskell2010
 
 source-repository head

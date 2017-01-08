@@ -1,6 +1,6 @@
 module Main where
 
-import Text.Madlibs.Exec.Main
+import Text.Madlibs (exec)
 
 main :: IO ()
 main = exec

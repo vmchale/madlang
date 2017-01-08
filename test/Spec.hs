@@ -2,17 +2,14 @@
 
 import Test.Hspec
 import Test.Hspec.Megaparsec
-import Text.Madlibs.Ana.Parse hiding (main)
-import Text.Madlibs.Internal.Types
-import Text.Madlibs.Internal.Utils
-import Text.Madlibs.Cata.Run
-import Text.Madlibs.Cata.SemErr
+import Text.Madlibs
 import Text.Megaparsec
 import Control.Monad.IO.Class
 import Control.Monad.State
 import Data.Function
 import Control.Exception
 import qualified Data.Text as T
+import System.IO.Unsafe
 
 main :: IO ()
 main = hspec $ do
@@ -28,6 +25,7 @@ main = hspec $ do
         it "throws exception when two `:return`s are declared" $ do
             (parseTok `shouldFailOn` semErrFile) `shouldThrow` semErr
             --this is still behaving weirdly but I don't care
+            --also we need a parse error one but that shouldn't be too hard idk
 
 semErr :: Selector SemanticError
 semErr = const True
@@ -68,3 +66,7 @@ semErrFile = ":define something\
 \:return\
 \    0.5 something\
 \    0.5 \"it doesn't matter b/c this is gonna blow up in our faces anyways\""
+
+-- | for the testing framework; to 
+testIO :: IO a -> a
+testIO = unsafePerformIO
