@@ -26,4 +26,5 @@
     - [ ] replication
     - [ ] instances based on regex or something?
     - [ ] file linking??
+    - [ ] interleaving/agreement among templates!! or two return values idk
     - [ ] colors idk
