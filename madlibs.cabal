@@ -19,8 +19,8 @@ library
                      , Text.Madlibs.Cata.Run
                      , Text.Madlibs.Ana.Parse
                      , Text.Madlibs.Internal.Types
-  other-modules:       Text.Madlibs.Internal.Utils
-                     , Text.Madlibs.Ana.ParseUtils
+                     , Text.Madlibs.Internal.Utils
+  other-modules:       Text.Madlibs.Ana.ParseUtils
   build-depends:       base >= 4.7 && < 5
                      , megaparsec
                      , text
