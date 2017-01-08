@@ -17,9 +17,10 @@
     - [x] check randomization of tokens
     - ~~[ ] check executable (?)~~
     - [x] check exceptions
-- [ ] readme documentation
-- [ ] haddock documentation
-    - [ ] hackage upload
+- [x] readme documentation
+    - [ ] mention probability semErr
+- [x] haddock documentation
+    - [x] hackage upload
 - [ ] some sort of manual for the language (?)
     - [ ] toboggan twitter bot generator example w/ clit of course
 - [ ] DSL extensions/stuff:

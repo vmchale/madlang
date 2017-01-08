@@ -30,6 +30,17 @@ There are two "statements" in madlang, `:define` and `:return`. `:return` is the
 
 Of course, you can't have a circular reference with names - if `goodfortune` depends on `fortune` while `fortune` depends on `goodfortune`, you'll end up with either no fortune or an infinite fortune. So instead we just throw an error. 
 
+### Using the libary
+
+The main function you'll want to use is probably `runFile`; it reads a file and generates randomized text:
+
+```
+ λ> runFile "test/templates/gambling.mad"
+ "heads"
+```
+
+Haddock documentation of all available functionality is located [here](https://hackage.haskell.org/package/madlang-0.1.0.0#readme). 
+
 ## Installation
 
 ### Stack
@@ -37,7 +48,7 @@ Of course, you can't have a circular reference with names - if `goodfortune` dep
 Download `stack` with
 
 ```
-curl -sSl http://haskellstack.org | sh
+curl -sSL http://haskellstack.org | sh
 ```
 
 Then run `stack install` and you'll get the `madlang` executable installed on your path. You can even do `stack install madlang` if you'd like. 
