@@ -1,12 +1,15 @@
 :define person
     0.7 "I will "
     0.3 "You will "
-:return
-    0.8 person fortune
-    0.2 "nice things will happen today"
+:define goodfortune
+    0.1 person "make nice things happen today"
+    0.9 "nice things will happen today"
 :define fortune
     0.5 "drink a boatload of milk"
     0.5 "get heckin angry"
+:return
+    0.8 person fortune
+    0.2 goodfortune
 {#
 :define copies
     :replicate person
@@ -15,5 +18,6 @@
     aka
     0.3 person
     0.7 person person
-    also consider implementing regex!
+    also consider implementing regex idk
+    like instances through regex??
 #}

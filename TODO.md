@@ -3,4 +3,8 @@
     - [ ] parsing with stuff that's out of order
 - [ ] make replication command
     - [ ] vimscript for language
+- [ ] make semantics errors better
+     - [ ] when stuff doesn't add to 1 = bad
+     - [ ] two "return" functions = bad
+     - [ ] circular dependencies = bad
 - [ ] using a catamorphism to build it up? or a hylomorphism

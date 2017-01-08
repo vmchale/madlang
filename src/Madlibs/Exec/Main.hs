@@ -43,5 +43,5 @@ parseFile :: FilePath -> IO (Either (ParseError Char Dec) RandTok)
 parseFile filepath = do
     txt <- T.pack <$> readFile filepath
     let val = runParser program "" txt
-    let built = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) . build . pure <$> val
+    let built = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) . build <$> val
     pure built

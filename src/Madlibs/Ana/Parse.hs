@@ -16,7 +16,6 @@ import Control.Monad.Reader
 import Data.Composition
 import Data.Foldable
 import Data.Monoid
-import Data.List
 
 lexeme :: Parser a -> Parser a
 lexeme = L.lexeme spaceConsumer
@@ -93,6 +92,11 @@ isVal = all f
     where f (PreTok txt) = True
           f (Name str) = False
 
+parseTok :: Parser (Context RandTok)
+parseTok = do
+    pre <- program
+    pure $ build pre
+
 --create an instance of (Ord a) for which definitions are dependent on one another?
 concatTok :: Context [PreTok] -> Context RandTok
 concatTok pretoks = do
@@ -101,9 +105,21 @@ concatTok pretoks = do
     let toRand (Name str) = List . snd . head . (filter ((== str) . fst)). (map (\(i,j) -> (i, unList j))) $ ctx
         toRand (PreTok txt) = Value txt
     fold . (map toRand) <$> pretoks
-              --also make sure there aren't multiple definitions
-              --make from two tokens: mulptiply probabilities, append in some sense?
-              --((==) .* fst))
+
+build :: [(Key, [(Prob, [PreTok])])] -> Context RandTok
+build list
+    | length list == 1 = do
+        let [(key, pairs)] = list
+        toks <- sequence $ map (\(i,j) -> concatTok (pure j)) $ pairs
+        let probs = map (fst) $ pairs
+        let tok = List $ zip probs toks
+        state (\s -> (tok,((key, tok):s)))
+        --should do: recurse or take "Template" key
+    | otherwise = do
+        let (x:xs) = list
+        y <- (build [x])
+        ys <- pure <$> build xs
+        pure $ fold (y:ys)
 
 sortKeys :: [(Key, [(Prob, [PreTok])])] -> [(Key, [(Prob, [PreTok])])]
 sortKeys = sortBy orderKeys
@@ -115,27 +131,3 @@ orderKeys (key1, l1) (key2, l2)
     | any (\pair -> any (T.isInfixOf key1) (map unTok . snd $ pair)) l1 = LT
     | any (\pair -> any (T.isInfixOf key2) (map unTok . snd $ pair)) l1 = GT
     | otherwise = EQ
-
-unTok :: PreTok -> T.Text
-unTok (PreTok txt) = ""
-unTok (Name txt) = txt
-
-build :: Context [(Key, [(Prob, [PreTok])])] -> Context RandTok
-build ctxList
-    | fmap length ctxList == pure 1 = do
-        list <- ctxList
-        let [(key, pairs)] = list
-        toks <- sequence $ map (\(i,j) -> concatTok (pure j)) $ pairs
-        let probs = map (fst) $ pairs
-        let tok = List $ zip probs toks
-        --env <- get
-        --put ((key, tok):env)
-        --pure tok
-        state (\s -> (tok,((key, tok):s)))
-        --should do: recurse or take "Template" key
-    | otherwise = do
-        list <- ctxList
-        let (x:xs) = list
-        y <- (build . pure $ [x])
-        ys <- pure <$> (build . pure) xs
-        pure $ fold (y:ys)

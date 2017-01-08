@@ -24,3 +24,7 @@ cdf = (drop 2) . (scanl (+) 0) . ((:) 0)
 
 show' :: (Show a) => a -> T.Text
 show' = T.pack . show
+
+unTok :: PreTok -> T.Text
+unTok (PreTok txt) = ""
+unTok (Name txt) = txt
