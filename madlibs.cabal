@@ -20,8 +20,8 @@ library
                      , Text.Madlibs.Ana.Parse
                      , Text.Madlibs.Internal.Types
                      , Text.Madlibs.Internal.Utils
-  other-modules:       Text.Madlibs.Ana.ParseUtils
                      , Text.Madlibs.Cata.SemErr
+  other-modules:       Text.Madlibs.Ana.ParseUtils
   build-depends:       base >= 4.7 && < 5
                      , megaparsec
                      , text
