@@ -8,3 +8,4 @@
      - [ ] two "return" functions = bad
      - [ ] circular dependencies = bad
 - [ ] using a catamorphism to build it up? or a hylomorphism
+- [ ] parse tibetan characters because I think that would be cool

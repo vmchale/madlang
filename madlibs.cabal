@@ -19,6 +19,7 @@ library
                      , Madlibs.Cata.Run
   other-modules:       Madlibs.Internal.Utils
                      , Madlibs.Ana.Parse
+                     , Madlibs.Ana.ParseUtils
                      , Madlibs.Internal.Types
   build-depends:       base >= 4.7 && < 5
                      , megaparsec

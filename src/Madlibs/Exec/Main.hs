@@ -8,6 +8,7 @@ module Madlibs.Exec.Main
 
 import Madlibs.Cata.Run
 import Madlibs.Ana.Parse
+import Madlibs.Ana.ParseUtils
 import Madlibs.Internal.Types
 import Madlibs.Internal.Utils
 import qualified Data.Text as T
