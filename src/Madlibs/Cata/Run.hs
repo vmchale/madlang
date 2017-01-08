@@ -16,8 +16,3 @@ run (Value txt) = pure txt
 
 mkCdf :: RandTok -> [(Double, RandTok)]
 mkCdf (List rs) = zip (cdf . (map fst) $ rs) (map snd rs)
-
-example :: RandTok
-example = List [(0.3, (Value "fuck")), (0.7, List [(0.5, (Value "you")),(0.5, (Value "me"))])]
-
---also twitter-bot-generator maybe just like package it all together?

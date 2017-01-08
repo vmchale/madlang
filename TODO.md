@@ -1,6 +1,6 @@
-- [ ] make simple templating language
+- [x] make simple templating language
     - [ ] sequential parsing
     - [ ] parsing with stuff that's out of order
-- [ ] make "typeclasses" like nouns/verbs etc.
+- [ ] make replication command
     - [ ] vimscript for language
 - [ ] using a catamorphism to build it up? or a hylomorphism

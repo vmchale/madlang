@@ -5,6 +5,7 @@ module Madlibs.Internal.Utils where
 
 import Madlibs.Internal.Types
 import Text.Megaparsec.Text
+import qualified Data.Text as T
 
 -- | Function to apply a value on both arguments, e.g.
 -- > between .$ (symbol "\'")
@@ -20,3 +21,6 @@ instance (Monoid a) => Monoid (Parser a) where
 -- | Helper function for creating a cdf from a pdf
 cdf :: [Prob] -> [Prob]
 cdf = (drop 2) . (scanl (+) 0) . ((:) 0)
+
+show' :: (Show a) => a -> T.Text
+show' = T.pack . show

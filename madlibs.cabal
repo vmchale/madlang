@@ -25,9 +25,14 @@ library
                      , text
                      , optparse-generic
                      , mwc-random
+                     , lens
+                     , mtl
+                     , composition
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings
                      , DeriveGeneric
+                     , DeriveFunctor
+                     , DeriveAnyClass
 
 executable madlibs
   hs-source-dirs:      app
