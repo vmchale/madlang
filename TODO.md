@@ -11,6 +11,7 @@
     - [x] circular dependencies = bad
 - [ ] using a catamorphism to build it up? or a hylomorphism
 - [ ] parse tibetan characters/numerals because I think that would be cool
+    - [ ] PR with a parser for floats/ints (easy for unicode?)
 - [x] figure out the pretty-printer for parse errors
 - [x] implement test suite
     - [x] check parsing
@@ -22,10 +23,11 @@
 - [x] haddock documentation
     - [x] hackage upload
 - [ ] some sort of manual for the language (?)
-    - [ ] toboggan twitter bot generator example w/ clit of course
+    - [x] toboggan twitter bot generator example w/ Web.Tweet of course
 - [ ] DSL extensions/stuff:
     - [ ] replication
     - [ ] instances based on regex or something?
     - [ ] file linking??
     - [ ] interleaving/agreement among templates!! or two return values idk
-    - [ ] colors idk
+        - [ ] basically like verb agreement. I think this is doable. Possibly by generalizing RandTok and 
+    - ~~[ ] colors idk~~

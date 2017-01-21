@@ -2,7 +2,7 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 
--- | Provides `madlang` executable
+-- | Provides `madlang` runMadlangutable
 module Text.Madlibs.Exec.Main where
 
 import Text.Madlibs.Cata.Run
@@ -24,8 +24,8 @@ data Program = Program { input :: FilePath <?> "filepath to template"
 instance ParseRecord Program where
 
 -- | Main program action
-exec :: IO ()
-exec = do
+runMadlang :: IO ()
+runMadlang = do
     x <- getRecord "Text.Madlibs templating DSL"
     case unHelpful . rep $ x of
         (Just n) -> sequence_ . (take n) . repeat $ template x

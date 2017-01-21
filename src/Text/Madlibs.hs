@@ -11,8 +11,8 @@ module Text.Madlibs (
                     -- * Types associated with the parser
                     , Context
                     , SemanticError (..)
-                    -- * Command-line executable
-                    , exec
+                    -- * Command-line runMadlangutable
+                    , runMadlang
                     ) where
 
 import Text.Madlibs.Ana.Parse
