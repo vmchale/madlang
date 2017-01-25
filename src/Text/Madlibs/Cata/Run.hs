@@ -9,7 +9,7 @@ import System.Random.MWC
 -- | Generate randomized text from a `RandTok`
 run :: RandTok -> IO T.Text
 run tok@(List rs) = do
-    value <- (withSystemRandom . asGenST $ \gen -> uniform gen)
+    value <-(withSystemRandom . asGenST $ \gen -> uniform gen)
     let ret = ((snd . head) . filter ((>=value) . fst)) $ mkCdf tok
     case ret of
         (Value txt) -> pure txt

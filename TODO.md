@@ -31,3 +31,4 @@
     - [ ] interleaving/agreement among templates!! or two return values idk
         - [ ] basically like verb agreement. I think this is doable. Possibly by generalizing RandTok and 
     - ~~[ ] colors idk~~
+- [ ] flag to build executable
