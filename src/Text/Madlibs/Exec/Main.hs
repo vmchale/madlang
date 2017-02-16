@@ -5,6 +5,7 @@
 -- | Provides `madlang` runMadlangutable
 module Text.Madlibs.Exec.Main where
 
+import Control.Monad
 import Text.Madlibs.Cata.Run
 import Text.Madlibs.Ana.Parse
 import Text.Madlibs.Internal.Types
@@ -13,11 +14,13 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 import Text.Megaparsec
 import Options.Generic
+import Development.GitRev
 
 -- | datatype for the program
 data Program = Program { input :: FilePath <?> "filepath to template"
                        , debug :: Bool <?> "whether to display parsed RandTok" --also: display crontab in that case?
                        , rep :: Maybe Int <?> "How many times to repeat"
+                       , version :: Bool <?> "Display version information for debugging"
                        } deriving (Generic)
 
 -- | Generated automatically by optparse-generic.
@@ -27,8 +30,9 @@ instance ParseRecord Program where
 runMadlang :: IO ()
 runMadlang = do
     x <- getRecord "Text.Madlibs templating DSL"
+    if unHelpful . version $ x then putStrLn build else pure ()
     case unHelpful . rep $ x of
-        (Just n) -> sequence_ . (take n) . repeat $ template x
+        (Just n) -> replicateM_ n $ template x
         Nothing -> template x
 
 -- | given a parsed record perform the appropriate IO action
@@ -58,3 +62,12 @@ parseFile filepath = do
     txt <- readFile' filepath
     let val = parseTok txt
     pure val
+
+build :: String
+build = concat [ "[version: ", $(gitBranch), "@", $(gitHash)
+               , " (", $(gitCommitDate), ")"
+               , " (", $(gitCommitCount), " commits in HEAD)"
+               , dirty, "] "] 
+    where
+        dirty | $(gitDirty) = " (uncommitted files present)" 
+              | otherwise   = ""

@@ -1,3 +1,4 @@
+
 -- | Main module exporting the relevant functions
 module Text.Madlibs (
                     -- * Parsers for `.mad` files
