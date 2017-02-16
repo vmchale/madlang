@@ -14,15 +14,15 @@ import System.IO.Unsafe
 main :: IO ()
 main = hspec $ do
     describe "parseTok" $ do
-        it "parses a .mad string" $ do
+        parallel$ it "parses a .mad string" $ do
             parseTok madFile `shouldParse` (List [(1.0,List [(0.5,Value "heads"),(0.5,Value "tails")])])
-        it "fails when quotes aren't closed" $ do
+        parallel$ it "fails when quotes aren't closed" $ do
             parseTok `shouldFailOn` madFileFailure
-        it "parses when functions are out of order" $ do
+        parallel$ it "parses when functions are out of order" $ do
             parseTok `shouldSucceedOn` madComplexFile
-        it "returns a correct string from the template when evaluating a token" $ do
+        parallel$ it "returns a correct string from the template when evaluating a token" $ do
             (testIO . run) exampleTok `shouldSatisfy` (\a -> on (||) (a ==) "heads" "tails")
-        it "throws exception when two `:return`s are declared" $ do
+        parallel$ it "throws exception when two `:return`s are declared" $ do
             (parseTok `shouldFailOn` semErrFile) `shouldThrow` semErr
             --this is still behaving weirdly but I don't care
             --also we need a parse error one but that shouldn't be too hard idk
@@ -65,7 +65,7 @@ semErrFile = ":define something\
 \    1.0 something\
 \:return\
 \    0.5 something\
-\    0.5 \"it doesn't matter b/c this is gonna blow up in our faces anyways\""
+\    0.5 \"parallel$ it doesn't matter b/c this is gonna blow up in our faces anyways\""
 
 -- | for the testing framework; to 
 testIO :: IO a -> a
