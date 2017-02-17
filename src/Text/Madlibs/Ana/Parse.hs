@@ -71,7 +71,7 @@ preStr :: [T.Text] -> Parser PreTok
 preStr ins = (fmap (Name . T.pack) name) <|>
     do {
         v <- var ;
-        pure . PreTok $ ins !! (v - 1)
+        pure . PreTok $ (<> " ") $ ins !! (v - 1)
     } <|>
     do {
         s <- quote (many $ noneOf ("\"\'" :: String)) ;

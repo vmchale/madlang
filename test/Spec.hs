@@ -15,17 +15,19 @@ main :: IO ()
 main = hspec $ do
     describe "parseTok" $ do
         parallel$ it "parses a .mad string" $ do
-            parseTok madFile `shouldParse` (List [(1.0,List [(0.5,Value "heads"),(0.5,Value "tails")])])
-        parallel$ it "fails when quotes aren't closed" $ do
-            parseTok `shouldFailOn` madFileFailure
-        parallel$ it "parses when functions are out of order" $ do
-            parseTok `shouldSucceedOn` madComplexFile
-        parallel$ it "returns a correct string from the template when evaluating a token" $ do
+            parseTok [] madFile `shouldParse` (List [(1.0,List [(0.5,Value "heads"),(0.5,Value "tails")])])
+        parallel $ it "fails when quotes aren't closed" $ do
+            parseTok [] `shouldFailOn` madFileFailure
+        parallel $ it "parses when functions are out of order" $ do
+            parseTok [] `shouldSucceedOn` madComplexFile
+        parallel $ it "returns a correct string from the template when evaluating a token" $ do
             (testIO . run) exampleTok `shouldSatisfy` (\a -> on (||) (a ==) "heads" "tails")
-        parallel$ it "throws exception when two `:return`s are declared" $ do
-            (parseTok `shouldFailOn` semErrFile) `shouldThrow` semErr
-            --this is still behaving weirdly but I don't care
-            --also we need a parse error one but that shouldn't be too hard idk
+        parallel $ it "throws exception when two `:return`s are declared" $ do
+            (parseTok [] `shouldFailOn` semErrFile) `shouldThrow` semErr
+        parallel $ it "substitutes a variable correctly" $ do
+            parseTok ["maxine"] `shouldSucceedOn` madVar
+        parallel $ it "fails when variables are not passed in" $ do
+            (parseTok [] `shouldFailOn` madVar) `shouldThrow` anyException
 
 semErr :: Selector SemanticError
 semErr = const True
@@ -66,6 +68,10 @@ semErrFile = ":define something\
 \:return\
 \    0.5 something\
 \    0.5 \"parallel$ it doesn't matter b/c this is gonna blow up in our faces anyways\""
+
+madVar :: T.Text
+madVar = ":return\
+\    1.0 $1 \" is a good doggo.\""
 
 -- | for the testing framework; to 
 testIO :: IO a -> a
