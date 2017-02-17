@@ -18,8 +18,9 @@ import Development.GitRev
 
 -- | datatype for the program
 data Program = Program { input :: FilePath <?> "filepath to template"
-                       , debug :: Bool <?> "whether to display parsed RandTok" --also: display crontab in that case?
+                       , debug :: Bool <?> "whether to display parsed RandTok" 
                        , rep :: Maybe Int <?> "How many times to repeat"
+                       , v :: [String] <?> "Extra input to the template" --fix soon?
                        , version :: Bool <?> "Display version information for debugging"
                        } deriving (Generic)
 
@@ -39,30 +40,32 @@ runMadlang = do
 template :: Program -> IO ()
 template rec = do
     let filepath = unHelpful . input $ rec
-    parsed <- parseFile filepath
-    runFile filepath >>= TIO.putStrLn
+    let ins = map T.pack $ (unHelpful . v $ rec)
+    parsed <- parseFile ins filepath
+    runFile ins filepath >>= TIO.putStrLn
     if unHelpful . debug $ rec then
         print parsed
     else
         pure ()
 
 -- | Generate randomized text from a template
-templateGen :: T.Text -> Either (ParseError Char Dec) (IO T.Text)
-templateGen txt = run <$> parseTok txt
+templateGen :: [T.Text] -> T.Text -> Either (ParseError Char Dec) (IO T.Text)
+templateGen ins txt = run <$> parseTok ins txt
 
 -- | Generate randomized text from a file conatining a template
-runFile :: FilePath -> IO T.Text
-runFile filepath = do
+runFile :: [T.Text] -> FilePath -> IO T.Text
+runFile ins filepath = do
     txt <- readFile' filepath
-    either (pure . parseErrorPretty') (>>= (pure . show')) (templateGen txt)
+    either (pure . parseErrorPretty') (>>= (pure . show')) (templateGen ins txt)
 
 -- | Parse a template file into the `RandTok` data type
-parseFile :: FilePath -> IO (Either (ParseError Char Dec) RandTok)
-parseFile filepath = do
+parseFile :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
+parseFile ins filepath = do
     txt <- readFile' filepath
-    let val = parseTok txt
+    let val = parseTok ins txt
     pure val
 
+-- | String with git commit string
 build :: String
 build = concat [ "[version: ", $(gitBranch), "@", $(gitHash)
                , " (", $(gitCommitDate), ")"

@@ -31,4 +31,5 @@
     - [ ] interleaving/agreement among templates!! or two return values idk
         - [ ] basically like verb agreement. I think this is doable. Possibly by generalizing RandTok and 
     - ~~[ ] colors idk~~
-- [ ] flag to build executable
+- ~~[ ] flag to build executable~~
+- [ ] something like doggo in rust, but with some chars for command line arguments??

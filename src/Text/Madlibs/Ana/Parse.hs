@@ -30,6 +30,9 @@ symbol = L.symbol spaceConsumer
 float :: Parser Prob
 float = lexeme L.float
 
+integer :: Parser Integer
+integer = lexeme L.integer
+
 -- | Make sure definition blocks start un-indented
 nonIndented = L.nonIndented spaceConsumer
 
@@ -43,11 +46,16 @@ quote = between .$ (symbol "\"")
 keyword :: String -> Parser String
 keyword str = (pure <$> char ':') <> (symbol str) <?> "keyword"
 
+-- | Parse a var
+var :: Parser Int
+var = fromIntegral <$> do
+    char '$'
+    integer <?> "variable"
+
 -- | Parse the `define` keyword.
 define :: Parser ()
 define = (void $ nonIndented (keyword "define"))
     <?> "define block"
-    --make them more similar/reuse code here!!
 
 -- | Parse the `:return` keyword.
 main :: Parser ()
@@ -59,51 +67,54 @@ name :: Parser String
 name = lexeme (some letterChar) <?> "template name"
 
 -- | Parse template into a `PreTok` of referents and strings
-preStr :: Parser PreTok
-preStr = (fmap (Name . T.pack) name) <|>
+preStr :: [T.Text] -> Parser PreTok
+preStr ins = (fmap (Name . T.pack) name) <|>
     do {
-    s <- quote (many $ noneOf ("\"\'" :: String)) ;
-    pure $ PreTok . T.pack $ s
+        v <- var ;
+        pure . PreTok $ ins !! (v - 1)
+    } <|>
+    do {
+        s <- quote (many $ noneOf ("\"\'" :: String)) ;
+        pure $ PreTok . T.pack $ s
     } 
     <?> "string or function name"
 
 -- | Parse a probability/corresponding template
-pair :: Parser (Prob, [PreTok])
-pair = do
+pair :: [T.Text] -> Parser (Prob, [PreTok])
+pair ins = do
     --indentGuard
     p <- float
-    str <- some $ preStr
+    str <- some $ preStr ins
     pure (p, str)
 
 -- | Parse a `define` block
-definition :: Parser (Key, [(Prob, [PreTok])])
-definition = do
+definition :: [T.Text] -> Parser (Key, [(Prob, [PreTok])])
+definition ins = do
     define
     str <- name
-    val <- some pair
-    --linebreak
+    val <- some $ pair ins
     pure (T.pack str, val)
 
 -- | Parse the `:return` block
-final :: Parser [(Prob, [PreTok])]
-final = do
+final :: [T.Text] -> Parser [(Prob, [PreTok])]
+final ins = do
     main
-    val <- some pair
+    val <- some $ pair ins
     pure val
 
 -- | Parse the program in terms of `PreTok` and the `Key`s to link them.
-program :: Parser [(Key, [(Prob, [PreTok])])]
-program = sortKeys . checkSemantics <$> do
-    p <- many (try definition <|> ((,) "Template" <$> final))
+program :: [T.Text] -> Parser [(Key, [(Prob, [PreTok])])]
+program ins = sortKeys . checkSemantics <$> do
+    p <- many (try (definition ins) <|> ((,) "Template" <$> final ins))
     pure p
 
 -- | Parse text as a token + context (aka a reader monad with all the other functions)
-parseTokM :: Parser (Context RandTok)
-parseTokM = fmap build program
+parseTokM :: [T.Text] -> Parser (Context RandTok)
+parseTokM ins = fmap build $ program ins
 
 -- | Parse text as a token
 --
 -- > f <- readFile "template.mad"
 -- > parseTok f
-parseTok :: T.Text -> Either (ParseError Char Dec) RandTok
-parseTok f = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) <$> runParser parseTokM "" f
+parseTok :: [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
+parseTok ins f = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) <$> runParser (parseTokM ins) "" f
