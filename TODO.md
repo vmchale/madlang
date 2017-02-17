@@ -33,3 +33,4 @@
     - ~~[ ] colors idk~~
 - ~~[ ] flag to build executable~~
 - [ ] something like doggo in rust, but with some chars for command line arguments??
+- [ ] bug with variables?
