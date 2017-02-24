@@ -14,6 +14,9 @@ stability:           experimental
 extra-source-files:  README.md
                    , test/templates/*.mad
                    , test/templates/err/*.mad
+                   , stack.yaml
+                   , stack-8.yaml
+                   , stack-nightly.yaml
 cabal-version:       >=1.10
 
 library
