@@ -14,7 +14,7 @@ import System.IO.Unsafe
 main :: IO ()
 main = hspec $ do
     describe "parseTok" $ do
-        parallel$ it "parses a .mad string" $ do
+        parallel $ it "parses a .mad string" $ do
             parseTok [] madFile `shouldParse` (List [(1.0,List [(0.5,Value "heads"),(0.5,Value "tails")])])
         parallel $ it "fails when quotes aren't closed" $ do
             parseTok [] `shouldFailOn` madFileFailure

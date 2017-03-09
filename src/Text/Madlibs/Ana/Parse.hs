@@ -92,14 +92,14 @@ definition :: [T.Text] -> Parser (Key, [(Prob, [PreTok])])
 definition ins = do
     define
     str <- name
-    val <- some $ pair ins
+    val <- fmap normalize . some $ pair ins
     pure (T.pack str, val)
 
 -- | Parse the `:return` block
 final :: [T.Text] -> Parser [(Prob, [PreTok])]
 final ins = do
     main
-    val <- some $ pair ins
+    val <- fmap normalize . some $ pair ins
     pure val
 
 -- | Parse the program in terms of `PreTok` and the `Key`s to link them.

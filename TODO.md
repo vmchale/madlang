@@ -4,6 +4,7 @@
 - [x] vimscript for language
     - [ ] integrate with syntastic
     - [ ] consider a PR on megaparsec to add colors to the `ParseError`s
+- [ ] `madlang init` command to install vim stuff? 
 - [x] figure out which modules/functions should be exposed
 - [x] make semantics errors better
     - [x] when stuff doesn't add to 1 = bad
@@ -33,4 +34,6 @@
     - ~~[ ] colors idk~~
 - ~~[ ] flag to build executable~~
 - [ ] something like doggo in rust, but with some chars for command line arguments??
+- [ ] poetry generator with madlang? 
 - [ ] bug with variables?
+- [x] fix it with weights not just adding up to 1!

@@ -9,6 +9,7 @@ import Text.Megaparsec.Text
 import Text.Megaparsec.Error
 import qualified Data.Text as T
 import System.IO.Unsafe
+import Control.Lens
 
 -- | Function to apply a value on both arguments, e.g.
 --
@@ -21,6 +22,10 @@ import System.IO.Unsafe
 instance (Monoid a) => Monoid (Parser a) where
     mempty = pure mempty
     mappend x y = mappend <$> x <*> y
+
+normalize :: [(Prob, [PreTok])] -> [(Prob, [PreTok])]
+normalize list = map (over _1 (/total)) list
+    where total = sum . map fst $ list
 
 -- | Helper function for creating a cdf from a pdf
 cdf :: [Prob] -> [Prob]
