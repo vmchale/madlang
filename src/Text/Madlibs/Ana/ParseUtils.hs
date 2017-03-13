@@ -9,6 +9,7 @@ import qualified Data.Text as T
 import Control.Monad.State
 import Data.Foldable
 import Control.Exception
+import Control.Arrow
 
 --consider moving Ana.ParseUtils to Cata.Sorting
 
@@ -17,7 +18,7 @@ concatTok :: T.Text -> Context [PreTok] -> Context RandTok
 concatTok param pretoks = do
     ctx <- get
     let unList (List a) = a
-    let toRand (Name str) = List . snd . (head' str param) . (filter ((== str) . fst)). (map (\(i,j) -> (i, unList j))) $ ctx
+    let toRand (Name str) = List . snd . (head' str param) . (filter ((== str) . fst)). (map (second unList)) $ ctx
         toRand (PreTok txt) = Value txt
     fold . (map toRand) <$> pretoks
 
@@ -26,8 +27,8 @@ build :: [(Key, [(Prob, [PreTok])])] -> Context RandTok
 build list
     | length list == 1 = do
         let [(key, pairs)] = list
-        toks <- sequence $ map (\(i,j) -> concatTok key (pure j)) $ pairs
-        let probs = map (fst) $ pairs
+        toks <- mapM (\(i,j) -> concatTok key (pure j)) pairs
+        let probs = map fst pairs
         let tok = List $ zip probs toks
         state (\s -> (tok,((key, tok):s)))
         --should do: recurse or take "Template" key
@@ -48,4 +49,5 @@ orderKeys (key1, l1) (key2, l2)
     | key2 == "Template" = LT
     | any (\pair -> any (T.isInfixOf key1) (map unTok . snd $ pair)) l1 = LT
     | any (\pair -> any (T.isInfixOf key2) (map unTok . snd $ pair)) l1 = GT
+    -- issue: if we define nationality, subject object NOW object can't be used in subject?
     | otherwise = EQ

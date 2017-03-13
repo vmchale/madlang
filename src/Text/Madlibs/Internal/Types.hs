@@ -33,7 +33,7 @@ instance Monoid RandTok where
     mempty = Value ""
     mappend (Value v1) (Value v2) = Value (T.append v1 v2)
     mappend (List l1) v@(Value v1) = List $ map (over (_2) (`mappend` v)) l1 
-    mappend v@(Value v2) (List l2) = List $ map (over (_2) (`mappend` v)) l2
+    mappend v@(Value v2) (List l2) = List $ map (over (_2) (v `mappend`)) l2
     mappend l@(List l1) (List l2) = List [ (p, l `mappend` tok) | (p,tok) <- l2 ]
 
 -- | State monad providing context, i.e. function we've already called before

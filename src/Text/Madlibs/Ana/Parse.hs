@@ -110,7 +110,7 @@ program ins = sortKeys . checkSemantics <$> do
 
 -- | Parse text as a token + context (aka a reader monad with all the other functions)
 parseTokM :: [T.Text] -> Parser (Context RandTok)
-parseTokM ins = fmap build $ program ins
+parseTokM ins = build <$> program ins
 
 -- | Parse text as a token
 --
