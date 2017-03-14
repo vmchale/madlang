@@ -1,3 +1,4 @@
+- [ ] test instance so it's not backwards....
 - [x] make simple templating language
     - [x] sequential parsing
     - [x] parsing with stuff that's out of order

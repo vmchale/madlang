@@ -62,8 +62,11 @@ runFile ins filepath = do
 parseFile :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
 parseFile ins filepath = do
     txt <- readFile' filepath
+    --print $ runParser (program ins) "" txt
     let val = parseTok ins txt
     pure val
+
+--     pure . unsafePerformIO . print $ runParser (program ins) "" f
 
 -- | String with git commit string
 build :: String

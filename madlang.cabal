@@ -1,5 +1,5 @@
 name:                madlang
-version:             1.1.0.0
+version:             1.1.1.0
 synopsis:            Randomized templating language DSL
 description:         Please see README.md
 homepage:            https://github.com/vmchale/madlang#readme
@@ -15,8 +15,6 @@ extra-source-files:  README.md
                    , test/templates/*.mad
                    , test/templates/err/*.mad
                    , stack.yaml
-                   , stack-8.yaml
-                   , stack-nightly.yaml
 cabal-version:       >=1.10
 
 Flag llvm-fast {

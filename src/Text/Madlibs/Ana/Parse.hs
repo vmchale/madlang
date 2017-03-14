@@ -13,6 +13,8 @@ import qualified Text.Megaparsec.Lexer as L
 import Data.Monoid
 import Control.Monad
 import Control.Monad.State
+--
+import System.IO.Unsafe
 
 -- | Parse a lexeme, aka deal with whitespace nicely. 
 lexeme :: Parser a -> Parser a
