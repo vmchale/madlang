@@ -1,18 +1,21 @@
-- [ ] test instance so it's not backwards....
+- [x] test instance so it's not backwards....
 - [x] make simple templating language
     - [x] sequential parsing
     - [x] parsing with stuff that's out of order
 - [x] vimscript for language
     - [ ] integrate with syntastic
+      - [ ] would need a linter though. 
     - [ ] consider a PR on megaparsec to add colors to the `ParseError`s
 - [ ] `madlang init` command to install vim stuff? 
+  - [ ] linter
+  - [ ] subcommand parser
 - [x] figure out which modules/functions should be exposed
 - [x] make semantics errors better
     - [x] when stuff doesn't add to 1 = bad
     - [x] two "return" functions = bad
     - [x] circular dependencies = bad
 - [ ] using a catamorphism to build it up? or a hylomorphism
-- [ ] parse tibetan characters/numerals because I think that would be cool
+- [x] parse tibetan characters/numerals because I think that would be cool
     - [ ] PR with a parser for floats/ints (easy for unicode?)
 - [x] figure out the pretty-printer for parse errors
 - [x] implement test suite
@@ -21,11 +24,13 @@
     - ~~[ ] check executable (?)~~
     - [x] check exceptions
 - [x] readme documentation
-    - [ ] mention probability semErr
+    - ~~[ ] mention probability semErr~~
 - [x] haddock documentation
     - [x] hackage upload
 - [ ] some sort of manual for the language (?)
     - [x] toboggan twitter bot generator example w/ Web.Tweet of course
+    - [x] vim-twitter integration
+    - [ ] madlang as a language for markov chains.
 - [ ] DSL extensions/stuff:
     - [ ] replication
     - [ ] instances based on regex or something?
@@ -34,7 +39,9 @@
         - [ ] basically like verb agreement. I think this is doable. Possibly by generalizing RandTok and 
     - ~~[ ] colors idk~~
 - ~~[ ] flag to build executable~~
-- [ ] something like doggo in rust, but with some chars for command line arguments??
+- [x] something like doggo in rust, but with some chars for command line arguments??
 - [ ] poetry generator with madlang? 
-- [ ] bug with variables?
+- [x] bug with variables?
+- [x] bug with wrong order for functions/strings read together
+- [x] order bug causing circular dependencies when none exist
 - [x] fix it with weights not just adding up to 1!
