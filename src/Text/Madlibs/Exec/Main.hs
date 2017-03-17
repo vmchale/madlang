@@ -24,6 +24,9 @@ data Program = Program { input :: FilePath <?> "filepath to template"
                        , version :: Bool <?> "Display version information for debugging"
                        } deriving (Generic)
 
+data Subcommand = Debug { file :: FilePath } 
+                | Run { file :: FilePath , rep' :: Maybe Int , input' :: [String] } 
+
 -- | Generated automatically by optparse-generic.
 instance ParseRecord Program where
 
@@ -62,11 +65,8 @@ runFile ins filepath = do
 parseFile :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
 parseFile ins filepath = do
     txt <- readFile' filepath
-    --print $ runParser (program ins) "" txt
     let val = parseTok ins txt
     pure val
-
---     pure . unsafePerformIO . print $ runParser (program ins) "" f
 
 -- | String with git commit string
 build :: String

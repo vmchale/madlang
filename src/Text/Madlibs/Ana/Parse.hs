@@ -42,7 +42,7 @@ nonIndented = L.nonIndented spaceConsumer
 
 -- | Parse between quotes
 quote :: Parser a -> Parser a
-quote = between .$ (symbol "\"")
+quote = between .$ (char '"')
 
 -- | Parse a keyword
 keyword :: String -> Parser String

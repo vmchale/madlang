@@ -45,3 +45,5 @@
 - [x] bug with wrong order for functions/strings read together
 - [x] order bug causing circular dependencies when none exist
 - [x] fix it with weights not just adding up to 1!
+- [x] fix bug with spaces
+
