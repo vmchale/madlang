@@ -1,19 +1,21 @@
+- [ ] `build` command to make it work on a corpus??
 - [x] test instance so it's not backwards....
 - [x] make simple templating language
     - [x] sequential parsing
     - [x] parsing with stuff that's out of order
 - [x] vimscript for language
     - [ ] integrate with syntastic
-      - [ ] would need a linter though. 
+      - [x] would need a linter though. 
     - [ ] consider a PR on megaparsec to add colors to the `ParseError`s
 - [ ] `madlang init` command to install vim stuff? 
-  - [ ] linter
-  - [ ] subcommand parser
+  - [x] linter
+  - [x] subcommand parser
 - [x] figure out which modules/functions should be exposed
 - [x] make semantics errors better
     - [x] when stuff doesn't add to 1 = bad
     - [x] two "return" functions = bad
     - [x] circular dependencies = bad
+- [x] add cli semantic error for insufficient args
 - [ ] using a catamorphism to build it up? or a hylomorphism
 - [x] parse tibetan characters/numerals because I think that would be cool
     - [ ] PR with a parser for floats/ints (easy for unicode?)
@@ -25,6 +27,7 @@
     - [x] check exceptions
     - [ ] check spacing works correctly
     - [ ] test double substitutions work correctly
+- [x] test for command-line args
 - [x] readme documentation
     - ~~[ ] mention probability semErr~~
 - [x] haddock documentation

@@ -18,25 +18,42 @@ concatTok :: T.Text -> Context [PreTok] -> Context RandTok
 concatTok param pretoks = do
     ctx <- get
     let unList (List a) = a
-    let toRand (Name str) = List . snd . (head' str param) . (filter ((== str) . fst)). (map (second unList)) $ ctx
+    let toRand (Name str) = List . snd . (head' str param) . (filter ((== str) . fst)) . (map (second unList)) $ ctx
         toRand (PreTok txt) = Value txt
     fold . (map toRand) <$> pretoks
 
+buildTok :: T.Text -> Context [PreTok] -> Context RandTok
+buildTok param pretoks = do
+    ctx <- get
+    let unList (List a) = a
+    let toRand (Name str) = List . snd . (head' str param) . (filter ((==str) . fst)) . (map (second unList)) $ ctx
+        toRand (PreTok txt) = Value txt
+    List . zip ([1..]) . (map toRand) <$> pretoks
+
+buildTree :: [(Key, [(Prob, [PreTok])])] -> Context RandTok
+buildTree list@[(key,pairs)] = do
+    toks <- mapM (\(i,j) -> buildTok key (pure j)) pairs
+    let probs = map fst pairs
+    let tok = List $ zip probs toks
+    state (\s -> (tok,((key,tok):s)))
+buildTree list@(x:xs) = do
+    y <- buildTree [x]
+    ys <- pure <$> buildTree xs
+    pure . List . zip ([1..]) $ (y:ys)
+
+-- basically just substitute? 
+
 -- | Given keys naming the tokens, and lists of `PreTok`, build our `RandTok`
 build :: [(Key, [(Prob, [PreTok])])] -> Context RandTok
-build list
-    | length list == 1 = do
-        let [(key, pairs)] = list
-        toks <- mapM (\(i,j) -> concatTok key (pure j)) pairs
-        let probs = map fst pairs
-        let tok = List $ zip probs toks
-        state (\s -> (tok,((key, tok):s)))
-        --should do: recurse or take "Template" key
-    | otherwise = do
-        let (x:xs) = list
-        y <- (build [x])
-        ys <- pure <$> build xs
-        pure $ fold (y:ys)
+build list@[(key,pairs)] = do
+    toks <- mapM (\(i,j) -> concatTok key (pure j)) pairs
+    let probs = map fst pairs
+    let tok = List $ zip probs toks
+    state (\s -> (tok,((key, tok):s)))
+build list@(x:xs) = do
+    y <- (build [x])
+    ys <- pure <$> build xs
+    pure $ fold (y:ys)
 
 -- | Sort the keys that we have parsed so that dependencies are in the correct places
 sortKeys :: [(Key, [(Prob, [PreTok])])] -> [(Key, [(Prob, [PreTok])])]

@@ -11,6 +11,8 @@ import qualified Data.Text.IO as TIO
 import Text.Megaparsec
 import Options.Applicative hiding (ParseError)
 import Data.Monoid
+--
+import Data.Tree
 
 -- | datatype for the program
 data Program = Program { sub :: Subcommand 
@@ -75,29 +77,35 @@ template :: Program -> IO ()
 template rec = do
     let filepath = input $ rec
     let ins = map T.pack $ (clInputs . sub $ rec)
+    parsed <- parseFile ins filepath
     case sub rec of
         (Run reps _) -> do
-            replicateM_ (maybe 0 id reps) $ runFile ins filepath >>= TIO.putStrLn
+            replicateM_ (maybe 1 id reps) $ runFile ins filepath >>= TIO.putStrLn -- fix so it parses once!! either show run $ parsed 
         (Debug _) -> do
-            parsed <- parseFile ins filepath
-            print parsed
+            putStrLn . (either show (drawTree . tokToTree)) =<< makeTree ins filepath -- parsed
+            --print parsed
         (Lint _) -> do
-            parsed <- parseFile ins filepath
             putStrLn $ either show (const "No errors found.") parsed
 
 -- | Generate randomized text from a template
-templateGen :: [T.Text] -> T.Text -> Either (ParseError Char Dec) (IO T.Text)
-templateGen ins txt = run <$> parseTok ins txt
+templateGen :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) (IO T.Text)
+templateGen filename ins txt = run <$> parseTok filename ins txt
 
 -- | Generate randomized text from a file conatining a template
 runFile :: [T.Text] -> FilePath -> IO T.Text
 runFile ins filepath = do
     txt <- readFile' filepath
-    either (pure . parseErrorPretty') (>>= (pure . show')) (templateGen ins txt)
+    either (pure . parseErrorPretty') (>>= (pure . show')) (templateGen filepath ins txt)
 
 -- | Parse a template file into the `RandTok` data type
 parseFile :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
 parseFile ins filepath = do
     txt <- readFile' filepath
-    let val = parseTok ins txt
+    let val = parseTok filepath ins txt
+    pure val
+
+makeTree :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
+makeTree ins filepath = do
+    txt <- readFile' filepath
+    let val = parseTree filepath ins txt
     pure val

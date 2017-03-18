@@ -73,7 +73,7 @@ preStr :: [T.Text] -> Parser PreTok
 preStr ins = (fmap (Name . T.pack) name) <|>
     do {
         v <- var ;
-        pure . PreTok $ ins !! (v - 1)
+        pure . PreTok $ ins `access` (v-1) -- ins !! (v - 1)
     } <|>
     do {
         s <- quote (many $ noneOf ("\"" :: String)) ;
@@ -111,6 +111,9 @@ program ins = sortKeys . checkSemantics <$> do
     p <- many (try (definition ins) <|> ((,) "Template" <$> final ins))
     pure p
 
+parseTreeM :: [T.Text] -> Parser (Context RandTok)
+parseTreeM ins = buildTree <$> program ins
+
 -- | Parse text as a token + context (aka a reader monad with all the other functions)
 parseTokM :: [T.Text] -> Parser (Context RandTok)
 parseTokM ins = build <$> program ins
@@ -119,5 +122,8 @@ parseTokM ins = build <$> program ins
 --
 -- > f <- readFile "template.mad"
 -- > parseTok f
-parseTok :: [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
-parseTok ins f = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) <$> runParser (parseTokM ins) "" f
+parseTok :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
+parseTok filename ins f = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) <$> runParser (parseTokM ins) filename f
+
+parseTree :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
+parseTree filename ins f = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) <$> runParser (parseTreeM ins) filename f

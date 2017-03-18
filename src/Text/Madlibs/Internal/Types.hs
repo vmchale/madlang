@@ -10,6 +10,8 @@ import Data.Functor.Identity
 import Control.Lens hiding (List, Context)
 import Data.Function
 import Data.Monoid
+--
+import Data.Tree
 
 -- | datatype for a double representing a probability
 type Prob = Double
@@ -24,6 +26,10 @@ data PreTok = Name T.Text | PreTok T.Text
 -- | datatype for a token returning a random string
 data RandTok = List [(Prob, RandTok)] | Value T.Text
     deriving (Show, Eq)
+
+tokToTree :: RandTok -> Tree String
+tokToTree (Value a) = Node (show a) []
+tokToTree (List xs) = Node "++" (map (tokToTree . snd) xs)
 
 -- | Neat 2-dimensional drawing of a parsed tree.
 {--

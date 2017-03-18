@@ -8,7 +8,7 @@ import Control.Exception
 import qualified Data.Text as T
 
 -- | Datatype for a semantic error
-data SemanticError = OverloadedReturns | CircularFunctionCalls T.Text T.Text | ProbSum T.Text
+data SemanticError = OverloadedReturns | CircularFunctionCalls T.Text T.Text | ProbSum T.Text | InsufficientArgs Int Int
     deriving (Typeable)
 
 --also consider overloading parseError tbqh
@@ -16,6 +16,7 @@ data SemanticError = OverloadedReturns | CircularFunctionCalls T.Text T.Text | P
 instance Show SemanticError where
     show OverloadedReturns = show $ semErrStart <> text "File contains multiple declarations of :return"
     show (CircularFunctionCalls f1 f2) = show $ semErrStart <> text "Circular function declaration between:" <> indent 4 (yellow $ (text' f1) <> (text ", ") <> (text' f2))
+    show (InsufficientArgs i j) = show $ semErrStart <> text "Insufficent arguments from the command line, given " <> (text . show $ i) <> ", expected at least " <> (text . show $ j)
     show (ProbSum f) = show $ semErrStart <> text "Function's options do not sum to 1:\n" <> indent 4 (yellow (text' f))
     --we probably want to do our instance of `Show` for `ParseError` since that will let us color the position nicely @ least
 
@@ -35,6 +36,9 @@ checkSemantics :: [(Key, [(Prob, [PreTok])])] -> [(Key, [(Prob, [PreTok])])]
 checkSemantics = foldr (.) id [ checkProb
                               , checkReturn ]
 
+-- checker to verify we have the right number of command-line args
+-- checkArgs :: [(Key, [(Prob, [PreTok])])] -> [(Key, [(Prob, [PreTok])])]
+
 -- | checker to verify probabilities sum to 1
 checkProb :: [(Key, [(Prob, [PreTok])])] -> [(Key, [(Prob, [PreTok])])]
 checkProb = map (\(i,j) -> if sumProb j then (i,j) else throw (ProbSum i))
@@ -49,6 +53,9 @@ sumProb = ((==1) . sum . (map fst))
 head' :: T.Text -> T.Text -> [a] -> a
 head' _ _ (x:xs) = x
 head' f1 f2 _ = throw (CircularFunctionCalls f1 f2)
+
+access :: [a] -> Int -> a
+access xs i = if (i >= length xs) then throw (InsufficientArgs (length xs) (i+1)) else xs !! i
 
 -- | checker to verify there is at most one `:return` statement
 checkReturn :: [(Key, [(Prob, [PreTok])])] -> [(Key, [(Prob, [PreTok])])]
