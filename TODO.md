@@ -23,6 +23,8 @@
     - [x] check randomization of tokens
     - ~~[ ] check executable (?)~~
     - [x] check exceptions
+    - [ ] check spacing works correctly
+    - [ ] test double substitutions work correctly
 - [x] readme documentation
     - ~~[ ] mention probability semErr~~
 - [x] haddock documentation

@@ -38,11 +38,11 @@ integer = lexeme L.integer
 -- | Make sure definition blocks start un-indented
 nonIndented = L.nonIndented spaceConsumer
 
---indentGuard = L.indentGuard spaceConsumer
+indentGuard = L.indentGuard spaceConsumer GT (unsafePos 4)
 
 -- | Parse between quotes
 quote :: Parser a -> Parser a
-quote = between .$ (char '"')
+quote = between .$ (char '"') --also CAN'T have any \n AFTER
 
 -- | Parse a keyword
 keyword :: String -> Parser String
@@ -73,10 +73,11 @@ preStr :: [T.Text] -> Parser PreTok
 preStr ins = (fmap (Name . T.pack) name) <|>
     do {
         v <- var ;
-        pure . PreTok $ (<> " ") $ ins !! (v - 1)
+        pure . PreTok $ ins !! (v - 1)
     } <|>
     do {
-        s <- quote (many $ noneOf ("\"\'" :: String)) ;
+        s <- quote (many $ noneOf ("\"" :: String)) ;
+        spaceConsumer ;
         pure $ PreTok . T.pack $ s
     } 
     <?> "string or function name"
@@ -84,10 +85,10 @@ preStr ins = (fmap (Name . T.pack) name) <|>
 -- | Parse a probability/corresponding template
 pair :: [T.Text] -> Parser (Prob, [PreTok])
 pair ins = do
-    --indentGuard
+    indentGuard
     p <- float
-    str <- some $ preStr ins
-    pure (p, str)
+    str <- some $ (preStr ins)
+    pure (p, str) <?> "Probability/text pair"
 
 -- | Parse a `define` block
 definition :: [T.Text] -> Parser (Key, [(Prob, [PreTok])])
@@ -95,7 +96,7 @@ definition ins = do
     define
     str <- name
     val <- fmap normalize . some $ pair ins
-    pure (T.pack str, val)
+    pure (T.pack str, val) <?> "define block"
 
 -- | Parse the `:return` block
 final :: [T.Text] -> Parser [(Prob, [PreTok])]
