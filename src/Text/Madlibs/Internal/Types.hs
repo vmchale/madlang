@@ -25,6 +25,23 @@ data PreTok = Name T.Text | PreTok T.Text
 data RandTok = List [(Prob, RandTok)] | Value T.Text
     deriving (Show, Eq)
 
+-- | Neat 2-dimensional drawing of a parsed tree.
+{--
+drawTree :: Tree String -> String
+drawTree  = unlines . draw
+
+
+draw :: Tree String -> [String]
+draw (Node x ts0) = lines x ++ drawSubTrees ts0
+  where
+    drawSubTrees [] = []
+    drawSubTrees [t] =
+        "|" : shift "`- " "   " (draw t)
+    drawSubTrees (t:ts) =
+        "|" : shift "+- " "|  " (draw t) ++ drawSubTrees ts
+
+    shift first other = zipWith (++) (first : repeat other)
+--}
 -- | Make `RandTok` a monoid so we can append them together nicely (since they do generate text). 
 --
 -- > (Value "Hello") <> (List [(0.5," you"), (0.5, " me")])

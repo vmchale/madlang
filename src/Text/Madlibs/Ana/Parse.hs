@@ -13,8 +13,6 @@ import qualified Text.Megaparsec.Lexer as L
 import Data.Monoid
 import Control.Monad
 import Control.Monad.State
---
-import System.IO.Unsafe
 
 -- | Parse a lexeme, aka deal with whitespace nicely. 
 lexeme :: Parser a -> Parser a
@@ -32,12 +30,14 @@ symbol = L.symbol spaceConsumer
 float :: Parser Prob
 float = lexeme L.float
 
+-- | Parse an integer
 integer :: Parser Integer
 integer = lexeme L.integer
 
 -- | Make sure definition blocks start un-indented
 nonIndented = L.nonIndented spaceConsumer
 
+-- | Make contents of definition blocks are indented.
 indentGuard = L.indentGuard spaceConsumer GT (unsafePos 4)
 
 -- | Parse between quotes

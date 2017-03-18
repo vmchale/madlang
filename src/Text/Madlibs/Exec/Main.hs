@@ -1,7 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE TypeOperators #-}
-
 -- | Provides `madlang` runMadlangutable
 module Text.Madlibs.Exec.Main where
 
@@ -13,43 +9,81 @@ import Text.Madlibs.Internal.Utils
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 import Text.Megaparsec
-import Options.Generic
-import Development.GitRev
+import Options.Applicative hiding (ParseError)
+import Data.Monoid
 
 -- | datatype for the program
-data Program = Program { input :: FilePath <?> "filepath to template"
-                       , debug :: Bool <?> "whether to display parsed RandTok" 
-                       , rep :: Maybe Int <?> "How many times to repeat"
-                       , v :: [String] <?> "Extra input to the template" --fix soon?
-                       , version :: Bool <?> "Display version information for debugging"
-                       } deriving (Generic)
+data Program = Program { sub :: Subcommand 
+                       , input :: FilePath 
+                       }
 
-data Subcommand = Debug { file :: FilePath } 
-                | Run { file :: FilePath , rep' :: Maybe Int , input' :: [String] } 
+data Subcommand = Debug { version :: Bool }
+                | Run { rep :: Maybe Int , clInputs :: [String] }
+                | Lint { clInputs :: [String] }
+                -- Repeat { rep :: Maybe Int }
 
--- | Generated automatically by optparse-generic.
-instance ParseRecord Program where
+orders :: Parser Program
+orders = Program
+    <$> (hsubparser
+        (command "run" (info temp (progDesc "Generate text from a .mad file"))
+        <> command "debug" (info debug (progDesc "Debug a template"))
+        <> command "lint" (info lint (progDesc "Lint a file"))))
+    <*> (argument str
+        (metavar "FILEPATH"
+        <> help "File path to madlang template"))
+
+debug :: Parser Subcommand
+debug = Debug
+    <$> switch
+        (long "version"
+        <> short 'v'
+        <> help "Show version information")
+
+temp :: Parser Subcommand
+temp = Run
+    <$> (optional $ read <$> strOption
+        (long "rep"
+        <> short 'r'
+        <> metavar "REPETITIONS"
+        <> help "Number of times to repeat"))
+    <*> (many $ strOption
+        (short 'i'
+        <> metavar "VAR"
+        <> help "command-line inputs to the template."))
+
+lint :: Parser Subcommand
+lint = Lint
+    <$> (many $ strOption
+        (short 'i'
+        <> metavar "VAR"
+        <> help "command-line inputs to the template."))
 
 -- | Main program action
 runMadlang :: IO ()
-runMadlang = do
-    x <- getRecord "Text.Madlibs templating DSL"
-    if unHelpful . version $ x then putStrLn build else pure ()
-    case unHelpful . rep $ x of
-        (Just n) -> replicateM_ n $ template x
-        Nothing -> template x
+runMadlang = execParser wrapper >>= template 
+    --case rep . sub $ x of
+    --    (Just n) -> replicateM_ n $ template x
+    --    Nothing -> template x
+
+wrapper = info (helper <*> orders)
+    (fullDesc
+    <> progDesc "Madlang templating language"
+    <> header "Madlang - markov chains made easy")
 
 -- | given a parsed record perform the appropriate IO action
 template :: Program -> IO ()
 template rec = do
-    let filepath = unHelpful . input $ rec
-    let ins = map T.pack $ (unHelpful . v $ rec)
-    parsed <- parseFile ins filepath
-    runFile ins filepath >>= TIO.putStrLn
-    if unHelpful . debug $ rec then
-        print parsed
-    else
-        pure ()
+    let filepath = input $ rec
+    let ins = map T.pack $ (clInputs . sub $ rec)
+    case sub rec of
+        (Run reps _) -> do
+            replicateM_ (maybe 0 id reps) $ runFile ins filepath >>= TIO.putStrLn
+        (Debug _) -> do
+            parsed <- parseFile ins filepath
+            print parsed
+        (Lint _) -> do
+            parsed <- parseFile ins filepath
+            putStrLn $ either show (const "No errors found.") parsed
 
 -- | Generate randomized text from a template
 templateGen :: [T.Text] -> T.Text -> Either (ParseError Char Dec) (IO T.Text)
@@ -67,13 +101,3 @@ parseFile ins filepath = do
     txt <- readFile' filepath
     let val = parseTok ins txt
     pure val
-
--- | String with git commit string
-build :: String
-build = concat [ "[version: ", $(gitBranch), "@", $(gitHash)
-               , " (", $(gitCommitDate), ")"
-               , " (", $(gitCommitCount), " commits in HEAD)"
-               , dirty, "] "] 
-    where
-        dirty | $(gitDirty) = " (uncommitted files present)" 
-              | otherwise   = ""

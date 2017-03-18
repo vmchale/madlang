@@ -35,12 +35,11 @@ library
   build-depends:       base >= 4.7 && < 5
                      , megaparsec
                      , text
-                     , optparse-generic
+                     , optparse-applicative
                      , mwc-random
                      , lens
                      , mtl
                      , ansi-wl-pprint
-                     , gitrev
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings
                      , DeriveGeneric
