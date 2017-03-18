@@ -82,7 +82,7 @@ template rec = do
         (Run reps _) -> do
             replicateM_ (maybe 1 id reps) $ runFile ins filepath >>= TIO.putStrLn -- fix so it parses once!! either show run $ parsed 
         (Debug _) -> do
-            putStrLn . (either show (drawTree . tokToTree)) =<< makeTree ins filepath -- parsed
+            putStrLn . (either show (drawTree . tokToTree 1.0)) =<< makeTree ins filepath -- parsed
             --print parsed
         (Lint _) -> do
             putStrLn $ either show (const "No errors found.") parsed

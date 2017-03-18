@@ -27,9 +27,10 @@ data PreTok = Name T.Text | PreTok T.Text
 data RandTok = List [(Prob, RandTok)] | Value T.Text
     deriving (Show, Eq)
 
-tokToTree :: RandTok -> Tree String
-tokToTree (Value a) = Node (show a) []
-tokToTree (List xs) = Node "++" (map (tokToTree . snd) xs)
+tokToTree :: Prob -> RandTok -> Tree String
+tokToTree p (Value a) = Node ((take 4 . show . min 1.0) p ++ " " ++ show a) []
+tokToTree p (List [(_,Value a)]) = Node ((take 4 . show . min 1.0) p ++ " " ++ show a) []
+tokToTree p (List xs) = Node (take 4 . show . min 1.0 $ p) (map (\(prob, val) -> tokToTree prob val) xs) -- (on (tokToTree .* fst -.* snd) (flip ($))) xs)
 
 -- | Neat 2-dimensional drawing of a parsed tree.
 {--
