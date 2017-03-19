@@ -27,28 +27,14 @@ data PreTok = Name T.Text | PreTok T.Text
 data RandTok = List [(Prob, RandTok)] | Value T.Text
     deriving (Show, Eq)
 
+-- | Function to transform a `RandTok` into a `Tree String` so that it can be pretty-printed. 
+--
+-- > tokToTree 1.0 tok
 tokToTree :: Prob -> RandTok -> Tree String
 tokToTree p (Value a) = Node ((take 4 . show . min 1.0) p ++ " " ++ show a) []
 tokToTree p (List [(_,Value a)]) = Node ((take 4 . show . min 1.0) p ++ " " ++ show a) []
-tokToTree p (List xs) = Node (take 4 . show . min 1.0 $ p) (map (\(prob, val) -> tokToTree prob val) xs) -- (on (tokToTree .* fst -.* snd) (flip ($))) xs)
+tokToTree p (List xs) = Node (take 4 . show . min 1.0 $ p) (map (uncurry tokToTree) xs)
 
--- | Neat 2-dimensional drawing of a parsed tree.
-{--
-drawTree :: Tree String -> String
-drawTree  = unlines . draw
-
-
-draw :: Tree String -> [String]
-draw (Node x ts0) = lines x ++ drawSubTrees ts0
-  where
-    drawSubTrees [] = []
-    drawSubTrees [t] =
-        "|" : shift "`- " "   " (draw t)
-    drawSubTrees (t:ts) =
-        "|" : shift "+- " "|  " (draw t) ++ drawSubTrees ts
-
-    shift first other = zipWith (++) (first : repeat other)
---}
 -- | Make `RandTok` a monoid so we can append them together nicely (since they do generate text). 
 --
 -- > (Value "Hello") <> (List [(0.5," you"), (0.5, " me")])

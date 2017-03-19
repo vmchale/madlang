@@ -13,6 +13,7 @@ import qualified Text.Megaparsec.Lexer as L
 import Data.Monoid
 import Control.Monad
 import Control.Monad.State
+import Text.Megaparsec.Lexer.Tibetan
 
 -- | Parse a lexeme, aka deal with whitespace nicely. 
 lexeme :: Parser a -> Parser a
@@ -28,11 +29,11 @@ symbol = L.symbol spaceConsumer
 
 -- | Parse a number/probability
 float :: Parser Prob
-float = lexeme L.float
+float = lexeme L.float <|> (fromIntegral <$> integer)
 
 -- | Parse an integer
 integer :: Parser Integer
-integer = lexeme L.integer
+integer = lexeme (L.integer <|> parseNumber)
 
 -- | Make sure definition blocks start un-indented
 nonIndented = L.nonIndented spaceConsumer
@@ -108,7 +109,7 @@ final ins = do
 -- | Parse the program in terms of `PreTok` and the `Key`s to link them.
 program :: [T.Text] -> Parser [(Key, [(Prob, [PreTok])])]
 program ins = sortKeys . checkSemantics <$> do
-    p <- many (try (definition ins) <|> ((,) "Template" <$> final ins))
+    p <- many (try (definition ins) <|> ((,) "Template" <$> final ins)) -- FIXME: parse multiple `returns`? why isn't indentation working @ all?
     pure p
 
 parseTreeM :: [T.Text] -> Parser (Context RandTok)

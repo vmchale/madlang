@@ -4,6 +4,14 @@
 # For advanced use and comprehensive documentation of the format, please see:
 # http://docs.haskellstack.org/en/stable/yaml_configuration/
 
+# A warning or info to be displayed to the user on config load.
+user-message: ! 'Warning (added by new or init): Specified resolver could not satisfy
+  all dependencies. Some external packages have been added as dependencies.
+
+  You can suppress this message by removing it from stack.yaml
+
+'
+
 # Resolver to choose a 'specific' stackage snapshot or a compiler version.
 # A snapshot resolver dictates the compiler version and the set of packages
 # to be used for project dependencies. For example:
@@ -39,7 +47,8 @@ packages:
 - '.'
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
-extra-deps: []
+extra-deps:
+- tibetan-utils-0.1.1.2
 
 # Override default flag values for local packages and extra-deps
 flags: {}

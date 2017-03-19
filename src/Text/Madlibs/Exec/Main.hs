@@ -77,15 +77,15 @@ template :: Program -> IO ()
 template rec = do
     let filepath = input $ rec
     let ins = map T.pack $ (clInputs . sub $ rec)
-    parsed <- parseFile ins filepath
     case sub rec of
         (Run reps _) -> do
-            replicateM_ (maybe 1 id reps) $ runFile ins filepath >>= TIO.putStrLn -- fix so it parses once!! either show run $ parsed 
+            parsed <- parseFile ins filepath
+            replicateM_ (maybe 1 id reps) $ runFile ins filepath >>= TIO.putStrLn 
         (Debug _) -> do
-            putStrLn . (either show (drawTree . tokToTree 1.0)) =<< makeTree ins filepath -- parsed
-            --print parsed
+            putStr . (either show (drawTree . tokToTree 1.0)) =<< makeTree ins filepath -- parsed
         (Lint _) -> do
-            putStrLn $ either show (const "No errors found.") parsed
+            parsed <- parseFile ins filepath
+            putStrLn $ either parseErrorPretty (const "No errors found.") parsed
 
 -- | Generate randomized text from a template
 templateGen :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) (IO T.Text)
@@ -98,12 +98,14 @@ runFile ins filepath = do
     either (pure . parseErrorPretty') (>>= (pure . show')) (templateGen filepath ins txt)
 
 -- | Parse a template file into the `RandTok` data type
+-- FIXME: should account for SemErr's
 parseFile :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
 parseFile ins filepath = do
     txt <- readFile' filepath
     let val = parseTok filepath ins txt
     pure val
 
+-- | Parse a template into a RandTok suitable to be displayed as a tree
 makeTree :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
 makeTree ins filepath = do
     txt <- readFile' filepath
