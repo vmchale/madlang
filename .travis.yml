@@ -24,7 +24,7 @@ addons:
     apt:
         packages:
             - libgmp3-dev
-            - fonts-tibetan-machine
+            # - fonts-tibetan-machine
 
 before_install:
 # Download and unpack the stack executable
