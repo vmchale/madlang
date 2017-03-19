@@ -1,0 +1,5 @@
+:define མ
+    ༡ "heads"
+    ༡ "tails"
+:return
+    ༡ མ
