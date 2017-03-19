@@ -16,20 +16,20 @@ import Text.Megaparsec.Error
 data SemanticError = OverloadedReturns | CircularFunctionCalls T.Text T.Text | InsufficientArgs Int Int
     deriving (Typeable)
 
---also consider overloading parseError tbqh
 -- | display a `SemanticError` nicely with coloration & whatnot
 instance Show SemanticError where
     show OverloadedReturns = show $ semErrStart <> text "File contains multiple declarations of :return"
     show (CircularFunctionCalls f1 f2) = show $ semErrStart <> text "Circular function declaration between:" <> indent 4 (yellow $ (text' f1) <> (text ", ") <> (text' f2))
     show (InsufficientArgs i j) = show $ semErrStart <> text "Insufficent arguments from the command line, given " <> (text . show $ i) <> ", expected at least " <> (text . show $ j)
-    --we probably want to do our instance of `Show` for `ParseError` since that will let us color the position nicely @ least
 
 -- | Derived via our show instance;
 instance Exception SemanticError where
 
+-- | Throw custom error given by string, within the parser
 customError :: String -> Parser a
 customError = failure S.empty S.empty . S.singleton . representFail
 
+-- | Throw `OverloadedReturns` error within parser
 overloadedReturns :: Parser a
 overloadedReturns = customError . show $ OverloadedReturns
 
@@ -53,7 +53,6 @@ text' = text . T.unpack
 checkSemantics :: [(Key, [(Prob, [PreTok])])] -> Parser [(Key, [(Prob, [PreTok])])]
 checkSemantics = foldr (<=<) pure [ checkReturn
                                   ]
-
 -- | helper to filter out stuff that doesn't
 sumProb :: [(Prob, [PreTok])] -> Bool
 sumProb = ((==1) . sum . (map fst))

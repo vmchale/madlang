@@ -19,10 +19,12 @@ data Program = Program { sub :: Subcommand
                        , input :: FilePath 
                        }
 
+-- | datatype for the subcommands
 data Subcommand = Debug { version :: Bool }
                 | Run { rep :: Maybe Int , clInputs :: [String] }
                 | Lint { clInputs :: [String] }
 
+-- | Parser for command-line options for the program
 orders :: Parser Program
 orders = Program
     <$> (hsubparser
@@ -33,6 +35,7 @@ orders = Program
         (metavar "FILEPATH"
         <> help "File path to madlang template"))
 
+-- | Parser for debug subcommand
 debug :: Parser Subcommand
 debug = Debug
     <$> switch
@@ -40,6 +43,7 @@ debug = Debug
         <> short 'v'
         <> help "Show version information")
 
+-- | Parser for the run subcommand
 temp :: Parser Subcommand
 temp = Run
     <$> (optional $ read <$> strOption
@@ -52,6 +56,7 @@ temp = Run
         <> metavar "VAR"
         <> help "command-line inputs to the template."))
 
+-- | Parser for the lint subcommand
 lint :: Parser Subcommand
 lint = Lint
     <$> (many $ strOption

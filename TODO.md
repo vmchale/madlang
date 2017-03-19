@@ -57,3 +57,4 @@
 - [x] fixed bug causing parses on unclosed quotes.
 - [x] make sure all double-return exceptions are thrown
   - [x] fixed indentation bug
+  - [ ] throw circular reference errors via `Either` so the linter catches them

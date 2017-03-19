@@ -23,6 +23,7 @@ instance (Monoid a) => Monoid (Parser a) where
     mempty = pure mempty
     mappend x y = mappend <$> x <*> y
 
+-- | Normalize pre-tokens/corresponding probabilities
 normalize :: [(Prob, [PreTok])] -> [(Prob, [PreTok])]
 normalize list = map (over _1 (/total)) list
     where total = sum . map fst $ list
