@@ -22,8 +22,8 @@ cache:
 # Ensure necessary system libraries are present
 addons:
     packages:
-        - libgmp3-dev
-    #      - binutils
+        - binutils
+        #- libgmp3-dev
 
 before_install:
 # Download and unpack the stack executable
