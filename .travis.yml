@@ -20,9 +20,10 @@ cache:
   - $HOME/.stack
 
 # Ensure necessary system libraries are present
-#addons:
-#    packages:
-#      - binutils
+addons:
+    packages:
+        - libgmp3-dev
+    #      - binutils
 
 before_install:
 # Download and unpack the stack executable
