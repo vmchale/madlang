@@ -22,7 +22,6 @@ data Program = Program { sub :: Subcommand
 data Subcommand = Debug { version :: Bool }
                 | Run { rep :: Maybe Int , clInputs :: [String] }
                 | Lint { clInputs :: [String] }
-                -- Repeat { rep :: Maybe Int }
 
 orders :: Parser Program
 orders = Program
@@ -63,10 +62,8 @@ lint = Lint
 -- | Main program action
 runMadlang :: IO ()
 runMadlang = execParser wrapper >>= template 
-    --case rep . sub $ x of
-    --    (Just n) -> replicateM_ n $ template x
-    --    Nothing -> template x
 
+-- | Wraps parser with help parser
 wrapper = info (helper <*> orders)
     (fullDesc
     <> progDesc "Madlang templating language"
@@ -85,7 +82,7 @@ template rec = do
             putStr . (either show (drawTree . tokToTree 1.0)) =<< makeTree ins filepath -- parsed
         (Lint _) -> do
             parsed <- parseFile ins filepath
-            putStrLn $ either parseErrorPretty (const "No errors found.") parsed
+            putStrLn $ either parseErrorPretty (const "No syntax errors found.") parsed
 
 -- | Generate randomized text from a template
 templateGen :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) (IO T.Text)
@@ -98,7 +95,6 @@ runFile ins filepath = do
     either (pure . parseErrorPretty') (>>= (pure . show')) (templateGen filepath ins txt)
 
 -- | Parse a template file into the `RandTok` data type
--- FIXME: should account for SemErr's
 parseFile :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
 parseFile ins filepath = do
     txt <- readFile' filepath

@@ -14,6 +14,7 @@ import Data.Monoid
 import Control.Monad
 import Control.Monad.State
 import Text.Megaparsec.Lexer.Tibetan
+import Control.Exception hiding (try)
 
 -- | Parse a lexeme, aka deal with whitespace nicely. 
 lexeme :: Parser a -> Parser a
@@ -37,6 +38,7 @@ integer = lexeme (L.integer <|> parseNumber)
 
 -- | Make sure definition blocks start un-indented
 nonIndented = L.nonIndented spaceConsumer
+-- current behavior for return blocks: two blocks are only parsed IF some block is indented wrong? 
 
 -- | Make contents of definition blocks are indented.
 indentGuard = L.indentGuard spaceConsumer GT (unsafePos 4)
@@ -47,7 +49,7 @@ quote = between (char '"') (char '"') -- .$ (char '"') --also CAN'T have any \n 
 
 -- | Parse a keyword
 keyword :: String -> Parser String
-keyword str = (pure <$> char ':') <> (symbol str) <?> "keyword"
+keyword str = (char ':') >> (symbol str) <?> "keyword"
 
 -- | Parse a var
 var :: Parser Int
@@ -57,12 +59,12 @@ var = fromIntegral <$> do
 
 -- | Parse the `define` keyword.
 define :: Parser ()
-define = (void $ nonIndented (keyword "define"))
+define = void (nonIndented (keyword "define"))
     <?> "define block"
 
 -- | Parse the `:return` keyword.
 main :: Parser ()
-main = (void $ nonIndented (keyword "return"))
+main = void (nonIndented (keyword "return"))
     <?> "return block"
 
 -- | Parse a template name (what follows a `:define` or `return` block)
@@ -108,9 +110,10 @@ final ins = do
 
 -- | Parse the program in terms of `PreTok` and the `Key`s to link them.
 program :: [T.Text] -> Parser [(Key, [(Prob, [PreTok])])]
-program ins = sortKeys . checkSemantics <$> do
+program ins = sortKeys <$> (checkSemantics =<< do
     p <- many (try (definition ins) <|> ((,) "Template" <$> final ins)) -- FIXME: parse multiple `returns`? why isn't indentation working @ all?
-    pure p
+    lexeme eof
+    pure p)
 
 parseTreeM :: [T.Text] -> Parser (Context RandTok)
 parseTreeM ins = buildTree <$> program ins

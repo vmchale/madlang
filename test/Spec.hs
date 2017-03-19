@@ -31,7 +31,7 @@ main = hspec $ do
             (run) exampleTok >>= (`shouldSatisfy` (\a -> on (||) (a ==) "heads" "tails"))
         parallel $ it "throws exception when two `:return`s are declared" $ do
             file <- semErrFile
-            (parseTok "" [] `shouldFailOn` file) `shouldThrow` semErr
+            (parseTok "" [] `shouldFailOn` file) 
         parallel $ it "substitutes a variable correctly" $ do
             file <- madVar
             parseTok "" ["maxine"] `shouldSucceedOn` file

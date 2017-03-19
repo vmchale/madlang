@@ -51,4 +51,7 @@
 - [x] order bug causing circular dependencies when none exist
 - [x] fix it with weights not just adding up to 1!
 - [x] fix bug with spaces
-
+- [ ] fix linter bug
+- [x] fixed bug causing parses on unclosed quotes.
+- [ ] make sure all double-return exceptions are thrown
+  - [x] fixed indentation bug
