@@ -23,7 +23,7 @@ cache:
 addons:
     packages:
         - binutils
-        #- libgmp3-dev
+        - libgmp3-dev
 
 before_install:
 # Download and unpack the stack executable
