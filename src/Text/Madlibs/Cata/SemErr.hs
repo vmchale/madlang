@@ -33,8 +33,12 @@ customError = failure S.empty S.empty . S.singleton . representFail
 overloadedReturns :: Parser a
 overloadedReturns = customError . show $ OverloadedReturns
 
+-- | Throws argument for circular function calls
+circularFunctionCalls :: T.Text -> T.Text -> Parser a
 circularFunctionCalls f1 f2 = customError . show $ CircularFunctionCalls f1 f2
 
+-- | Throws error for insufficient arguments
+insufficientArgs :: Int -> Int -> Parser a
 insufficientArgs i j = customError . show $ InsufficientArgs i j
 
 -- | Constant to start `SemanticError`s
@@ -60,6 +64,7 @@ head' :: T.Text -> T.Text -> [a] -> a
 head' _ _ (x:xs) = x
 head' f1 f2 _ = throw (CircularFunctionCalls f1 f2)
 
+-- | Access argument, or throw error if the list is too short. 
 access :: [a] -> Int -> a
 access xs i = if (i >= length xs) then throw (InsufficientArgs (length xs) (i+1)) else xs !! i
 

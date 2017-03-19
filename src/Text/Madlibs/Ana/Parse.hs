@@ -30,15 +30,14 @@ symbol = L.symbol spaceConsumer
 
 -- | Parse a number/probability
 float :: Parser Prob
-float = lexeme L.float <|> (fromIntegral <$> integer)
+float = lexeme L.float <|> (fromIntegral <$> integer) <?> "Float"
 
 -- | Parse an integer
 integer :: Parser Integer
-integer = lexeme (L.integer <|> parseNumber)
+integer = lexeme (L.integer <|> parseNumber) <?> "Integer"
 
 -- | Make sure definition blocks start un-indented
 nonIndented = L.nonIndented spaceConsumer
--- current behavior for return blocks: two blocks are only parsed IF some block is indented wrong? 
 
 -- | Make contents of definition blocks are indented.
 indentGuard = L.indentGuard spaceConsumer GT (unsafePos 4)
@@ -90,7 +89,7 @@ pair :: [T.Text] -> Parser (Prob, [PreTok])
 pair ins = do
     indentGuard
     p <- float
-    str <- some $ (preStr ins)
+    str <- some (preStr ins)
     pure (p, str) <?> "Probability/text pair"
 
 -- | Parse a `define` block
@@ -115,12 +114,13 @@ program ins = sortKeys <$> (checkSemantics =<< do
     lexeme eof
     pure p)
 
-parseTreeM :: [T.Text] -> Parser (Context RandTok)
-parseTreeM ins = buildTree <$> program ins
-
 -- | Parse text as a token + context (aka a reader monad with all the other functions)
 parseTokM :: [T.Text] -> Parser (Context RandTok)
 parseTokM ins = build <$> program ins
+
+-- | Parse text as token + context
+parseTreeM :: [T.Text] -> Parser (Context RandTok)
+parseTreeM ins = buildTree <$> program ins
 
 -- | Parse text as a token
 --
@@ -129,5 +129,6 @@ parseTokM ins = build <$> program ins
 parseTok :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
 parseTok filename ins f = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) <$> runParser (parseTokM ins) filename f
 
+-- | Parse text as a token, suitable for printing as a tree..
 parseTree :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
 parseTree filename ins f = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) <$> runParser (parseTreeM ins) filename f
