@@ -1,6 +1,7 @@
 :define something
     0.5 "heads"
-    0.5 "tails"                      :return
+    0.5 "tails"
+    :return
     1.0 something
 :return
     0.5 something

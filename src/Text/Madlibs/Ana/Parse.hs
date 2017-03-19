@@ -43,7 +43,7 @@ indentGuard = L.indentGuard spaceConsumer GT (unsafePos 4)
 
 -- | Parse between quotes
 quote :: Parser a -> Parser a
-quote = between .$ (char '"') --also CAN'T have any \n AFTER
+quote = between (char '"') (char '"') -- .$ (char '"') --also CAN'T have any \n AFTER
 
 -- | Parse a keyword
 keyword :: String -> Parser String
@@ -77,7 +77,7 @@ preStr ins = (fmap (Name . T.pack) name) <|>
         pure . PreTok $ ins `access` (v-1) -- ins !! (v - 1)
     } <|>
     do {
-        s <- quote (many $ noneOf ("\"" :: String)) ;
+        s <- quote (many $ noneOf ("\n\"" :: String)) ;
         spaceConsumer ;
         pure $ PreTok . T.pack $ s
     } 
