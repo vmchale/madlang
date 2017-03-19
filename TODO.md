@@ -1,3 +1,5 @@
+- [ ] :include for file linking?
+  - [ ] package manager lol
 - [ ] `build` command to make it work on a corpus??
 - [x] test instance so it's not backwards....
 - [x] make simple templating language
@@ -51,7 +53,7 @@
 - [x] order bug causing circular dependencies when none exist
 - [x] fix it with weights not just adding up to 1!
 - [x] fix bug with spaces
-- [ ] fix linter bug
+- [x] fix linter bug
 - [x] fixed bug causing parses on unclosed quotes.
-- [ ] make sure all double-return exceptions are thrown
+- [x] make sure all double-return exceptions are thrown
   - [x] fixed indentation bug

@@ -1,5 +1,5 @@
 name:                madlang
-version:             2.0.0.1
+version:             2.0.1.0
 synopsis:            Randomized templating language DSL
 description:         Please see README.md
 homepage:            https://github.com/vmchale/madlang#readme
