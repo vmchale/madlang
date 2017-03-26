@@ -57,7 +57,10 @@ Download `stack` with
 curl -sSL http://haskellstack.org | sh
 ```
 
-Then run `stack install madlang` and you'll get the `madlang` executable installed on your path.
+Then run `stack install madlang --resolver nightly` and you'll get the `madlang` executable installed on your path.
+
+You can also run `stack install` in the appropriate directory after cloning this
+repository. 
 
 ### Use
 

@@ -44,7 +44,7 @@ indentGuard = L.indentGuard spaceConsumer GT (unsafePos 4)
 
 -- | Parse between quotes
 quote :: Parser a -> Parser a
-quote = between (char '"') (char '"') -- .$ (char '"') --also CAN'T have any \n AFTER
+quote = between (char '"') (char '"') 
 
 -- | Parse a keyword
 keyword :: String -> Parser String
@@ -60,6 +60,10 @@ var = fromIntegral <$> do
 define :: Parser ()
 define = void (nonIndented (keyword "define"))
     <?> "define block"
+
+include :: Parser ()
+include = void (nonIndented (keyword "define"))
+    <?> "include"
 
 -- | Parse the `:return` keyword.
 main :: Parser ()
@@ -91,6 +95,18 @@ pair ins = do
     p <- float
     str <- some (preStr ins)
     pure (p, str) <?> "Probability/text pair"
+
+-- | Parse an `include`
+-- TODO define semantics for variables and all that?
+inclusions :: Parser [String]
+inclusions = many $ do
+    include
+    str <- name
+    string ".mad"
+    pure (str ++ ".mad")
+        -- TODO verify that libraries don't return a value?
+        -- or define semantics there. idk how namespaces/all that will work
+        -- current thought: parse inclusions once, resolve dependencies etc. there. 
 
 -- | Parse a `define` block
 definition :: [T.Text] -> Parser (Key, [(Prob, [PreTok])])

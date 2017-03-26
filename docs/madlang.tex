@@ -2,20 +2,31 @@
 
 \usepackage{amsmath}
 \usepackage{appendix}
-\usepackage{amsthm}
 
+\usepackage[english]{babel}
+
+\usepackage{amsthm}
+ 
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+ 
 \theoremstyle{plain}
 \newtheorem{theo}{Theorem}[section]
 
 \begin{document}
 
-\title{Madlang - a DSL for Markov Chains}
+\title{Madlang \textendash{} a Domain-Specific Language for Generating Text with Markov Chains}
 \author{Vanessa McHale}
 \maketitle
 
 \begin{abstract}
-We present madlang, a DSL for easily readable markov chains and templating
-random text.
+    We present madlang, a Domain-Specific Language (DSL) for easily readable markov chains and templating
+    random text. The language enables quick, easy % also maybe say something
+    %about quick/easy probabilistic state? 
 \end{abstract}
 
 \tableofcontents
@@ -24,7 +35,11 @@ random text.
 
 \subsection{Definitions}
 
-\newtheorem{defin}[theo]{Definition} goes here??
+\theoremstyle{definition}
+\begin{definition}{Markov chain}
+    A markov chain is a sequence of random variables $X_1,X_2,\ldots$ such
+    that $\pi(X_i|X_{i-1})=\pi(X_{i+1}|X_i)$. 
+\end{definition}
 
 \subsection{Generating random text with Markov Chains}
 
@@ -35,6 +50,22 @@ random text.
 \subsection{Human-readable markov chains}
 
 \subsection{Twitter bots}
+
+\section{Macros for existing programming languages}
+
+\subsection{Selecting a path with madlang}
+
+\subsection{Parsing paths generated with madlang}
+% something w/ scheme?
+% possibility of recursive parsing?
+
+%basically like control flow?
+% random ASTs?? could be v useful! but would require type system? mostly for
+% fun.
+% consider adding functions to the language! so that e.g. we could do randomized
+% JSON easily. 
+% so far adding linking would be easy but actually defining what you need in
+% scope would be more involved.
 
 \section{Templating Text}
 

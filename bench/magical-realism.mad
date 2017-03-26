@@ -1,0 +1,38 @@
+:define nationality
+    1.0 "Hungarian" 
+    1.0 "Japanese"
+    1.0 "Bhutanese"
+    1.0 "Spainish"
+    1.0 "American"
+
+:define location
+    1.0 "the Basque country"
+    1.0 "a Bön monastery"
+    1.0 "America"
+    1.0 "Saint Petersburg"
+    0.5 "the old country"
+
+:define subject
+    1.0 "A princess "
+    1.0 "A frog "
+    1.0 "A " nationality " professor " 
+
+:define gnomic
+    1.0 "That is all."
+    1.0 "And so it was written."
+    1.0 "The day went on forever."
+
+:define predicate
+    1.0 "invents " object
+    3.0 "discovers " object
+    1.0 "sleeps"
+
+:define object
+    1.0 "memories"
+    1.0 "a ziggurat"
+    1.0 "the global financial system"
+
+:return
+    3.0 subject predicate " in " location "." 
+    5.0 subject predicate "."
+    1.0 subject predicate ". " gnomic

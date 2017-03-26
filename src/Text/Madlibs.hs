@@ -1,7 +1,8 @@
 -- | Main module exporting the relevant functions
 module Text.Madlibs (
                     -- * Parsers for `.mad` files
-                    parseTok
+                      parseTok
+                    , parseTokM
                     , runFile
                     , parseFile
                     , templateGen

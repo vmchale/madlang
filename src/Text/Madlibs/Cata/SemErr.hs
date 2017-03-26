@@ -53,6 +53,7 @@ text' = text . T.unpack
 checkSemantics :: [(Key, [(Prob, [PreTok])])] -> Parser [(Key, [(Prob, [PreTok])])]
 checkSemantics = foldr (<=<) pure [ checkReturn
                                   ]
+
 -- | helper to filter out stuff that doesn't
 sumProb :: [(Prob, [PreTok])] -> Bool
 sumProb = ((==1) . sum . (map fst))

@@ -12,7 +12,9 @@ category:            Web
 build-type:          Simple
 stability:           experimental
 extra-source-files:  README.md
-                   , test/templates/*.mad
+                   , test/templates/fortune-teller.mad
+                   , test/templates/gambling.mad
+                   , test/templates/var.mad
                    , test/templates/err/*.mad
                    , stack.yaml
                    , bash/mkCompletions
@@ -59,6 +61,21 @@ executable madlang
   build-depends:       base
                      , madlang
   default-language:    Haskell2010
+
+benchmark tweeths-bench
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   bench
+  main-is:          Bench.hs
+  build-depends:    base
+                  , criterion
+                  , madlang
+                  , megaparsec
+                  , text
+  if flag(llvm-fast)
+    ghc-options:       -threaded -rtsopts -with-rtsopts=-N -fllvm -optlo-O3 -O3
+  else
+    ghc-options:       -threaded -rtsopts -with-rtsopts=-N -O3
+  default-language: Haskell2010
 
 test-suite madlang-test
   type:                exitcode-stdio-1.0
