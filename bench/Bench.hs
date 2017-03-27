@@ -9,7 +9,7 @@ fun = parse (parseTokM []) ""
 
 main = do
     file <- TIO.readFile "test/templates/fortune-teller.mad"
-    file2 <- TIO.readFile "bench/magical-realism.mad"
+    file2 <- TIO.readFile "bench/templates/magical-realism.mad"
     defaultMain [ bgroup "parseFile"
                       [ bench "fortune-teller" $ whnf fun file 
                       , bench "magical-realism" $ whnf fun file2 ]
