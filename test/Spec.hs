@@ -18,9 +18,9 @@ main = hspec $ do
         parallel $ it "parses a .mad string" $ do
             file <- madFile
             parseTok "" [] file `shouldParse` (List [(1.0,List [(0.5,Value "heads"),(0.5,Value "tails")])])
-        parallel $ it "parses tibetan numerals" $ do
-            file <- madFileTibetan
-            parseTok "" [] file `shouldParse` (List [(1.0,List [(0.5,Value "heads"),(0.5,Value "tails")])])
+        --parallel $ it "parses tibetan numerals" $ do
+        --    file <- madFileTibetan
+        --    parseTok "" [] file `shouldParse` (List [(1.0,List [(0.5,Value "heads"),(0.5,Value "tails")])])
         parallel $ it "fails when quotes aren't closed" $ do
             file <- madFileFailure
             parseTok "" [] `shouldFailOn` file
