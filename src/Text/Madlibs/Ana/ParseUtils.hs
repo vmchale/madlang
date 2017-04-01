@@ -13,6 +13,9 @@ import Control.Arrow
 
 --TODO consider moving Ana.ParseUtils to Cata.Sorting
 
+takeTemplate :: [(Key, RandTok)] -> RandTok
+takeTemplate = snd . head . filter (\(i,j) -> i == "Template")
+
 -- | Convert the stuff after the number to a `RandTok`
 concatTok :: T.Text -> Context [PreTok] -> Context RandTok
 concatTok param pretoks = do

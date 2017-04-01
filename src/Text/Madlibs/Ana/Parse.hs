@@ -15,6 +15,7 @@ import Control.Monad
 import Control.Monad.State
 import Text.Megaparsec.Lexer.Tibetan
 import Control.Exception hiding (try)
+import Data.Composition
 
 -- | Parse a lexeme, aka deal with whitespace nicely. 
 lexeme :: Parser a -> Parser a
@@ -126,7 +127,7 @@ final ins = do
 -- | Parse the program in terms of `PreTok` and the `Key`s to link them.
 program :: [T.Text] -> Parser [(Key, [(Prob, [PreTok])])]
 program ins = sortKeys <$> (checkSemantics =<< do
-    p <- many (try (definition ins) <|> ((,) "Template" <$> final ins)) -- FIXME: parse multiple `returns`? why isn't indentation working @ all?
+    p <- many (try (definition ins) <|> ((,) "Template" <$> final ins))
     lexeme eof
     pure p)
 
@@ -138,13 +139,25 @@ parseTokM ins = build <$> program ins
 parseTreeM :: [T.Text] -> Parser (Context RandTok)
 parseTreeM ins = buildTree <$> program ins
 
+-- | Parse text as a list of functions
+parseTokF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) [(Key, RandTok)]
+parseTokF filename state ins f = (filter (\(i,j) -> i /= "Template")) . (flip execState state) <$> runParser (parseTokM ins) filename f -- TODO make it 
+
+-- | Parse text given a context
+parseTokCtx :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
+parseTokCtx = (fmap takeTemplate) .*** parseTokF
+
 -- | Parse text as a token
 --
 -- > f <- readFile "template.mad"
 -- > parseTok f
 parseTok :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
-parseTok filename ins f = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) <$> runParser (parseTokM ins) filename f
+parseTok filename ins f = takeTemplate . (flip execState []) <$> runParser (parseTokM ins) filename f
 
 -- | Parse text as a token, suitable for printing as a tree..
 parseTree :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
-parseTree filename ins f = snd . head . (filter (\(i,j) -> i == "Template")) . (flip execState []) <$> runParser (parseTreeM ins) filename f
+parseTree filename ins f = takeTemplate . (flip execState []) <$> runParser (parseTreeM ins) filename f
+
+-- | Parse inclustions
+parseInclusions :: FilePath -> T.Text -> Either (ParseError Char Dec) [String]
+parseInclusions filename f = runParser (inclusions) filename f
