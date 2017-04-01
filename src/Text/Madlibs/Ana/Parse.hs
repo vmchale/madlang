@@ -63,7 +63,7 @@ define = void (nonIndented (keyword "define"))
     <?> "define block"
 
 include :: Parser ()
-include = void (nonIndented (keyword "define"))
+include = void (nonIndented (keyword "include"))
     <?> "include"
 
 -- | Parse the `:return` keyword.
@@ -73,7 +73,7 @@ main = void (nonIndented (keyword "return"))
 
 -- | Parse a template name (what follows a `:define` or `return` block)
 name :: Parser String
-name = lexeme (some letterChar) <?> "template name"
+name = lexeme (some (letterChar <|> char '-')) <?> "template name"
 
 -- | Parse template into a `PreTok` of referents and strings
 preStr :: [T.Text] -> Parser PreTok
@@ -98,16 +98,13 @@ pair ins = do
     pure (p, str) <?> "Probability/text pair"
 
 -- | Parse an `include`
--- TODO define semantics for variables and all that?
 inclusions :: Parser [String]
-inclusions = many $ do
+inclusions = many . try $ do
     include
     str <- name
     string ".mad"
     pure (str ++ ".mad")
-        -- TODO verify that libraries don't return a value?
-        -- or define semantics there. idk how namespaces/all that will work
-        -- current thought: parse inclusions once, resolve dependencies etc. there. 
+        -- still needs dependency resolution but eh
 
 -- | Parse a `define` block
 definition :: [T.Text] -> Parser (Key, [(Prob, [PreTok])])
@@ -127,6 +124,7 @@ final ins = do
 -- | Parse the program in terms of `PreTok` and the `Key`s to link them.
 program :: [T.Text] -> Parser [(Key, [(Prob, [PreTok])])]
 program ins = sortKeys <$> (checkSemantics =<< do
+    inclusions
     p <- many (try (definition ins) <|> ((,) "Template" <$> final ins))
     lexeme eof
     pure p)
@@ -141,7 +139,8 @@ parseTreeM ins = buildTree <$> program ins
 
 -- | Parse text as a list of functions
 parseTokF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) [(Key, RandTok)]
-parseTokF filename state ins f = (filter (\(i,j) -> i /= "Template")) . (flip execState state) <$> runParser (parseTokM ins) filename f -- TODO make it 
+parseTokF filename state ins f = (flip execState (filterTemplate state)) <$> runParser (parseTokM ins) filename f -- FIXME fix labelling
+    where filterTemplate = filter (\(i,j) -> i /= "Template")
 
 -- | Parse text given a context
 parseTokCtx :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok

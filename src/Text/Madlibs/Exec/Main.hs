@@ -82,8 +82,7 @@ template rec = do
     case sub rec of
         (Run reps _) -> do
             parsed <- parseFile ins filepath
-            replicateM_ (maybe 1 id reps) $ runFileRecursive ins filepath >>= TIO.putStrLn 
-            --replicateM_ (maybe 1 id reps) $ runFile ins filepath >>= TIO.putStrLn 
+            replicateM_ (maybe 1 id reps) $ runFile ins filepath >>= TIO.putStrLn 
         (Debug _) -> do
             putStr . (either show (drawTree . tokToTree 1.0)) =<< makeTree ins filepath -- parsed
         (Lint _) -> do
@@ -101,30 +100,32 @@ runInclusions ins filepath = (fmap run) <$> getInclusions ins filepath
 getInclusions :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
 getInclusions ins filepath = do
     file <- readFile' filepath
-    --filenames <- parseInclusions filepath file TODO actually have more than one
-    let filename = head <$> parseInclusions filepath file
-    ctx <- parseCtx ins ((either show id) filename) -- FIXME pass up errors correctly
-    parseWithCtx ins filepath (either (error . show) id ctx)
+    let filenames = either (const []) id $ parseInclusions filepath file -- FIXME pass up errors correctly
+    ctx <- mapM (getInclusionCtx ins) filenames 
+    parseWithCtx ins filepath (concatMap (either (const []) id) ctx)
 
-runFileRecursive :: [T.Text] -> FilePath -> IO T.Text
-runFileRecursive ins filepath = do
-    result <- runInclusions ins filepath
-    either (pure . parseErrorPretty') (>>= (pure . show')) result
+-- | Generate text from file with inclusions
+getInclusionCtx :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) [(Key, RandTok)])
+getInclusionCtx ins filepath = do
+    file <- readFile' filepath
+    let filenames = either (const []) id $ parseInclusions filepath file -- FIXME pass up errors correctly
+    ctx <- mapM (getInclusionCtx ins) filenames 
+    parseCtx ins (concatMap (either (const []) id) ctx) filepath
 
 -- | Generate randomized text from a file conatining a template
 runFile :: [T.Text] -> FilePath -> IO T.Text
 runFile ins filepath = do
-    txt <- readFile' filepath
-    either (pure . parseErrorPretty') (>>= (pure . show')) (templateGen filepath ins txt)
+    result <- runInclusions ins filepath
+    either (pure . parseErrorPretty') (>>= (pure . show')) result
 
 -- | Get file as context
-parseCtx :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) [(Key, RandTok)]) -- FIXME 
-parseCtx ins filepath = do
+parseCtx :: [T.Text] -> [(Key, RandTok)] -> FilePath -> IO (Either (ParseError Char Dec) [(Key, RandTok)]) 
+parseCtx ins state filepath = do
     txt <- readFile' filepath
-    let keys = parseTokF filepath [] ins txt
+    let keys = parseTokF filepath state ins txt
     pure keys
 
-parseWithCtx :: [T.Text] -> FilePath -> [(Key, RandTok)] -> IO (Either (ParseError Char Dec) RandTok) -- IO (Either (ParseError Char Dec) [(Key, RandTok)]) FIXME don't reuse too much code idk.
+parseWithCtx :: [T.Text] -> FilePath -> [(Key, RandTok)] -> IO (Either (ParseError Char Dec) RandTok) 
 parseWithCtx ins filepath ctx = do
     txt <- readFile' filepath
     let val = parseTokCtx filepath ctx ins txt

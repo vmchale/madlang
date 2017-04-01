@@ -22,6 +22,7 @@ concatTok param pretoks = do
     ctx <- get
     let unList (List a) = a
     let toRand (Name str) = List . snd . (head' str param) . (filter ((== str) . fst)) . (map (second unList)) $ ctx -- TODO move the shared functions to utils
+    -- TODO fix head' which can fail because of lack of scope too?
         toRand (PreTok txt) = Value txt
     fold . (map toRand) <$> pretoks
 
