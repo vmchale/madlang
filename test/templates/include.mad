@@ -1,5 +1,4 @@
 :include gambling.mad
-:include fortune-teller.mad
 :define realistic
     1.0 something
     0.03 "on its side"

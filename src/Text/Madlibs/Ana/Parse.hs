@@ -139,19 +139,16 @@ parseTreeM ins = buildTree <$> program ins
 
 -- | Parse text as a list of functions
 parseTokF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) [(Key, RandTok)]
-parseTokF filename state ins f = (flip execState (filterTemplate state)) <$> runParser (parseTokM ins) filename f -- FIXME fix labelling
-    where filterTemplate = filter (\(i,j) -> i /= "Template")
-
--- | Parse text given a context
-parseTokCtx :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
-parseTokCtx = (fmap takeTemplate) .*** parseTokF
+parseTokF filename state ins f = (flip execState (filterTemplate state)) <$> runParser (parseTokM ins) filename f 
+    where filterTemplate = filter (\(i,j) -> i /= "Template")-- FIXME fix labelling
 
 -- | Parse text as a token
 --
 -- > f <- readFile "template.mad"
 -- > parseTok f
-parseTok :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
-parseTok filename ins f = takeTemplate . (flip execState []) <$> runParser (parseTokM ins) filename f
+-- | Parse text given a context
+parseTok :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
+parseTok = (fmap takeTemplate) .*** parseTokF
 
 -- | Parse text as a token, suitable for printing as a tree..
 parseTree :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok

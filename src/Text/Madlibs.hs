@@ -16,6 +16,7 @@ module Text.Madlibs (
                     , runMadlang
                     ) where
 
+import Text.Madlibs.Ana.Resolve
 import Text.Madlibs.Ana.Parse
 import Text.Madlibs.Ana.ParseUtils
 import Text.Madlibs.Cata.Run
