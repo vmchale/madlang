@@ -11,6 +11,10 @@ import qualified Data.Text as T
 import System.IO.Unsafe
 import Control.Lens
 
+-- | Get directory associated to a file
+getDir :: FilePath -> FilePath
+getDir = reverse . (dropWhile (/='/')) . reverse
+
 -- | Function to apply a value on both arguments, e.g.
 --
 -- > between .$ (symbol "\'")

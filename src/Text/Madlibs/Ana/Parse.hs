@@ -73,7 +73,7 @@ main = void (nonIndented (keyword "return"))
 
 -- | Parse a template name (what follows a `:define` or `return` block)
 name :: Parser String
-name = lexeme (some (letterChar <|> char '-')) <?> "template name"
+name = lexeme (some (letterChar <|> oneOf ("-/" :: String))) <?> "template name"
 
 -- | Parse template into a `PreTok` of referents and strings
 preStr :: [T.Text] -> Parser PreTok

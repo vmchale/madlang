@@ -15,6 +15,7 @@ extra-source-files:  README.md
                    , test/templates/fortune-teller.mad
                    , test/templates/gambling.mad
                    , test/templates/var.mad
+                   , test/templates/include.mad
                    , test/templates/err/*.mad
                    , bench/templates/*.mad
                    , stack.yaml
@@ -41,6 +42,7 @@ library
                      , text
                      , optparse-applicative
                      , composition
+                     , directory
                      , mwc-random
                      , lens
                      , mtl

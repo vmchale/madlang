@@ -11,6 +11,8 @@ import qualified Data.Text.IO as TIO
 import Text.Megaparsec
 import Options.Applicative hiding (ParseError)
 import Data.Monoid
+import Data.Composition
+import System.Directory
 --
 import Data.Tree
 
@@ -77,7 +79,9 @@ wrapper = info (helper <*> orders)
 -- | given a parsed record perform the appropriate IO action
 template :: Program -> IO ()
 template rec = do
-    let filepath = input $ rec
+    let toFolder = input $ rec
+    setCurrentDirectory (getDir toFolder)
+    let filepath = reverse . (takeWhile (/='/')) . reverse $ toFolder
     let ins = map T.pack $ (clInputs . sub $ rec)
     case sub rec of
         (Run reps _) -> do
@@ -93,14 +97,16 @@ template rec = do
 templateGen :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) (IO T.Text)
 templateGen filename ins txt = run <$> parseTok filename ins txt
 
-runInclusions :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) (IO T.Text))
-runInclusions ins filepath = (fmap run) <$> getInclusions ins filepath
-
 -- | Generate text from file with inclusions
-getInclusions :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
-getInclusions ins filepath = do
+runInclusions :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) (IO T.Text))
+runInclusions = fmap (fmap run) .* parseFile
+
+-- | Parse a template file into the `RandTok` data type
+-- FIXME this should pass errors up correctly, also read files correctly?
+parseFile :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
+parseFile ins filepath = do
     file <- readFile' filepath
-    let filenames = either (const []) id $ parseInclusions filepath file -- FIXME pass up errors correctly
+    let filenames = either (const []) id $ parseInclusions filepath file 
     ctx <- mapM (getInclusionCtx ins) filenames 
     parseWithCtx ins filepath (concatMap (either (const []) id) ctx)
 
@@ -129,13 +135,6 @@ parseWithCtx :: [T.Text] -> FilePath -> [(Key, RandTok)] -> IO (Either (ParseErr
 parseWithCtx ins filepath ctx = do
     txt <- readFile' filepath
     let val = parseTokCtx filepath ctx ins txt
-    pure val
-
--- | Parse a template file into the `RandTok` data type
-parseFile :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
-parseFile ins filepath = do
-    txt <- readFile' filepath
-    let val = parseTok filepath ins txt
     pure val
 
 -- | Parse a template into a RandTok suitable to be displayed as a tree
