@@ -49,6 +49,18 @@ Haddock documentation of all available functionality is located [here](https://h
 If you're on windows or linux, grabbing release binaries is probably the
 easiest. Find them [here](https://github.com/vmchale/madlibs/releases).
 
+### Nix
+
+If you're on linux or mac, you can just grab the binaries via nix.
+
+Download nix with
+
+```
+curl https://nixos.org/nix/install | sh
+```
+
+From there, `nix-env -i madlang` will install the proper executables.
+
 ### Stack
 
 Download `stack` with
