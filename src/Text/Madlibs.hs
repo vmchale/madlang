@@ -5,14 +5,14 @@ module Text.Madlibs (
                     , parseTokM
                     , runFile
                     , parseFile
-                    , templateGen
+                    , makeTree
                     -- * Functions and constructs for the `RandTok` data type
                     , run
                     , RandTok (..)
                     -- * Types associated with the parser
                     , Context
                     , SemanticError (..)
-                    -- * Command-line runMadlangutable
+                    -- * Command-line executable
                     , runMadlang
                     ) where
 

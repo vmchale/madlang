@@ -62,6 +62,7 @@ define :: Parser ()
 define = void (nonIndented (keyword "define"))
     <?> "define block"
 
+-- | Parse the `include` keyword.
 include :: Parser ()
 include = void (nonIndented (keyword "include"))
     <?> "include"
@@ -140,7 +141,12 @@ parseTreeM ins = buildTree <$> program ins
 -- | Parse text as a list of functions
 parseTokF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) [(Key, RandTok)]
 parseTokF filename state ins f = (flip execState (filterTemplate state)) <$> runParser (parseTokM ins) filename f 
-    where filterTemplate = filter (\(i,j) -> i /= "Template")-- FIXME fix labelling
+    where filterTemplate = map (\(i,j) -> if i == "Template" then (T.pack filename, j) else (i,j)) -- problem: doesn't tell what file we're reading FROM
+
+-- | Parse text as a list of tokens, suitable for printing as a tree.
+parseTreeF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) [(Key, RandTok)]
+parseTreeF filename state ins f = (flip execState (filterTemplate state)) <$> runParser (parseTreeM ins) filename f 
+    where filterTemplate = map (\(i,j) -> if i == "Template" then (T.pack filename, j) else (i,j))
 
 -- | Parse text as a token
 --
@@ -151,9 +157,9 @@ parseTok :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseE
 parseTok = (fmap takeTemplate) .*** parseTokF
 
 -- | Parse text as a token, suitable for printing as a tree..
-parseTree :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
-parseTree filename ins f = takeTemplate . (flip execState []) <$> runParser (parseTreeM ins) filename f
+parseTree :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) RandTok
+parseTree = (fmap takeTemplate) .*** parseTreeF 
 
 -- | Parse inclustions
 parseInclusions :: FilePath -> T.Text -> Either (ParseError Char Dec) [String]
-parseInclusions filename f = runParser (inclusions) filename f
+parseInclusions = runParser inclusions

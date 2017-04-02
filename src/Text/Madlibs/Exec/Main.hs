@@ -15,7 +15,6 @@ import Data.Composition
 import System.Directory
 --
 import Text.Madlibs.Ana.Parse
-import Data.Tree
 
 -- | datatype for the program
 data Program = Program { sub :: Subcommand 
@@ -58,7 +57,7 @@ temp = Run
         (short 'i'
         <>  metavar "VAR"
         <> help "command-line inputs to the template."))
-        -- TODO consider making arguments work/be nicer?
+        -- TODO consider making arguments nicer?
 
 -- | Parser for the lint subcommand
 lint :: Parser Subcommand
@@ -89,20 +88,8 @@ template rec = do
         (Run reps _) -> do
             parsed <- parseFile ins filepath
             replicateM_ (maybe 1 id reps) $ runFile ins filepath >>= TIO.putStrLn 
-
         (Debug _) -> do
-            putStr . (either show (drawTree . tokToTree 1.0)) =<< makeTree ins filepath -- parsed
+            putStr . (either show displayTree) =<< makeTree ins filepath 
         (Lint _) -> do
             parsed <- parseFile ins filepath
             putStrLn $ either parseErrorPretty (const "No syntax errors found.") parsed
-
--- | Generate randomized text from a template
-templateGen :: FilePath -> [T.Text] -> T.Text -> Either (ParseError Char Dec) (IO T.Text)
-templateGen filename ins txt = run <$> parseTok filename [] ins txt
-
--- | Parse a template into a RandTok suitable to be displayed as a tree
-makeTree :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
-makeTree ins filepath = do
-    txt <- readFile' filepath
-    let val = parseTree filepath ins txt
-    pure val

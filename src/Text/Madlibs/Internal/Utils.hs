@@ -10,6 +10,11 @@ import Text.Megaparsec.Error
 import qualified Data.Text as T
 import System.IO.Unsafe
 import Control.Lens
+import Data.Tree
+
+-- | Draw as a syntax Tree
+displayTree :: RandTok -> String
+displayTree = drawTree . tokToTree 1.0
 
 -- | Get directory associated to a file
 getDir :: FilePath -> FilePath
