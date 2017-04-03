@@ -12,7 +12,7 @@
 sudo: false
 
 # Do not choose a language; we provide our own build tools.
-language: generic
+language: nix
 
 # Caching so the next build will be fast too.
 cache:
@@ -40,3 +40,4 @@ install:
 script:
 # Build the package, its tests, and its docs and run the tests
 - stack --no-terminal test --haddock --no-haddock-deps
+- nix-build release.nix
