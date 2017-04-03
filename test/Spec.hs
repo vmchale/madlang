@@ -38,6 +38,11 @@ main = hspec $ do
         --parallel $ it "parses tibetan numerals" $ do
         --    file <- madFileTibetan
         --    parseTok "" [] file `shouldParse` (List [(1.0,List [(0.5,Value "heads"),(0.5,Value "tails")])])
+    describe "runFile" $ do
+        it "parses file with inclusions" $ do
+            runFile [] "test/templates/include.mad" >>= (`shouldSatisfy` (\a -> any (a==) ["heads","tails","on its side"]))
+        it "runs on a file out of order" $ do
+            runFile [] "test/templates/ordered.mad" >>= (`shouldSatisfy` (\a -> any (a==) ["heads","tails","one","two","three","thid"]))
 
 semErr :: Selector SemanticError
 semErr = const True
@@ -48,6 +53,9 @@ readFile' = (fmap T.pack) . readFile
 
 exampleTok :: RandTok
 exampleTok = List [(1.0,List [(0.5,Value "heads"),(0.5,Value "tails")])]
+
+includeFile :: IO T.Text
+includeFile = readFile' "test/templates/include.mad"
 
 madFile :: IO T.Text
 madFile = readFile' "test/templates/gambling.mad" 

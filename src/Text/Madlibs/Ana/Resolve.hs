@@ -9,6 +9,7 @@ import Text.Madlibs.Ana.Parse
 import Text.Madlibs.Ana.ParseUtils
 import Text.Madlibs.Cata.Run
 import Data.Composition
+import System.Directory
 
 -- | Parse a template file into the `RandTok` data type
 parseFile :: [T.Text] -> FilePath -> IO (Either (ParseError Char Dec) RandTok)
@@ -24,7 +25,15 @@ getInclusionCtx isTree ins filepath = do
 
 -- | Generate randomized text from a file conatining a template
 runFile :: [T.Text] -> FilePath -> IO T.Text
-runFile = ((either (pure . parseErrorPretty') (>>= (pure . show'))) =<<) .* (fmap (fmap run) .* parseFile)
+runFile ins toFolder = do 
+    exists <- doesDirectoryExist (getDir toFolder)
+    if exists then  setCurrentDirectory (getDir toFolder) else pure ()
+    let filepath = reverse . (takeWhile (/='/')) . reverse $ toFolder
+    runInFolder ins filepath
+
+-- | Run in the appropriate folder
+runInFolder :: [T.Text] -> FilePath -> IO T.Text
+runInFolder = ((either (pure . parseErrorPretty') (>>= (pure . show'))) =<<) .* (fmap (fmap run) .* parseFile)
 
 -- | Get file as context
 parseCtx :: Bool -> [T.Text] -> [(Key, RandTok)] -> FilePath -> IO (Either (ParseError Char Dec) [(Key, RandTok)]) 
