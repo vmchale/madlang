@@ -1,0 +1,14 @@
+:define something
+    1.0 "heads"
+    1.0 "tails"
+    1.0 somethingelse
+
+:define somethingelse
+    1.0 "1"
+    1.0 "2"
+    1.0 "3"
+    1.0 "4"
+    1.0 "5"
+
+:return
+    1.0 something

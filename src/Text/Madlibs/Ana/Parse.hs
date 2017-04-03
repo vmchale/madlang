@@ -141,12 +141,12 @@ parseTreeM ins = buildTree <$> program ins
 -- | Parse text as a list of functions
 parseTokF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) [(Key, RandTok)]
 parseTokF filename state ins f = (flip execState (filterTemplate state)) <$> runParser (parseTokM ins) filename f 
-    where filterTemplate = map (\(i,j) -> if i == "Template" then (T.pack filename, j) else (i,j)) -- problem: doesn't tell what file we're reading FROM
+    where filterTemplate = map (\(i,j) -> if i == "Template" then (strip filename, j) else (i,j)) -- problem: doesn't tell what file we're reading FROM
 
 -- | Parse text as a list of tokens, suitable for printing as a tree.
 parseTreeF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char Dec) [(Key, RandTok)]
 parseTreeF filename state ins f = (flip execState (filterTemplate state)) <$> runParser (parseTreeM ins) filename f 
-    where filterTemplate = map (\(i,j) -> if i == "Template" then (T.pack filename, j) else (i,j))
+    where filterTemplate = map (\(i,j) -> if i == "Template" then (strip filename, j) else (i,j))
 
 -- | Parse text as a token
 --

@@ -1,5 +1,5 @@
 name:                madlang
-version:             2.1.0.0
+version:             2.1.0.1
 synopsis:            Randomized templating language DSL
 description:         Please see README.md
 homepage:            https://github.com/vmchale/madlang#readme
@@ -15,6 +15,7 @@ extra-source-files:  README.md
                    , test/templates/fortune-teller.mad
                    , test/templates/gambling.mad
                    , test/templates/var.mad
+                   , test/templates/ordered.mad
                    , test/templates/include.mad
                    , test/templates/err/*.mad
                    , bench/templates/*.mad

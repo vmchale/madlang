@@ -13,6 +13,8 @@ import Control.Arrow
 
 --TODO consider moving Ana.ParseUtils to Cata.Sorting
 
+strip = T.pack . reverse . drop 4 . reverse
+
 -- | Get the :return value
 takeTemplate :: [(Key, RandTok)] -> RandTok
 takeTemplate = snd . head . filter (\(i,j) -> i == "Template")
@@ -69,7 +71,6 @@ orderKeys :: (Key, [(Prob, [PreTok])]) -> (Key, [(Prob, [PreTok])]) -> Ordering
 orderKeys (key1, l1) (key2, l2)
     | key1 == "Template" = GT
     | key2 == "Template" = LT
-    | any (\pair -> any (T.isInfixOf key1) (map unTok . snd $ pair)) l1 = LT
-    | any (\pair -> any (T.isInfixOf key2) (map unTok . snd $ pair)) l1 = GT
-    -- issue: if we define nationality, subject object NOW object can't be used in subject?
+    | any (\pair -> any (T.isInfixOf key1) (map unTok . snd $ pair)) l1 = GT
+    | any (\pair -> any (T.isInfixOf key2) (map unTok . snd $ pair)) l1 = LT
     | otherwise = EQ

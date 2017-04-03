@@ -59,7 +59,7 @@ madFileFailure :: IO T.Text
 madFileFailure = readFile' "test/templates/err/bad.mad"
 
 madComplexFile :: IO T.Text
-madComplexFile = readFile' "test/templates/gambling.mad"
+madComplexFile = readFile' "test/templates/ordered.mad"
 
 semErrFile :: IO T.Text
 semErrFile = readFile' "test/templates/err/sem-err.mad"

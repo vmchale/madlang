@@ -1,4 +1,4 @@
-- [ ] :include for file linking?
+- [x] :include for file linking?
   - [ ] package manager lol
 - [ ] `build` command to make it work on a corpus??
 - [x] test instance so it's not backwards....
@@ -59,5 +59,4 @@
   - [x] fixed indentation bug
   - [ ] throw circular reference errors via `Either` so the linter catches them
   - [ ] have linter fix includes
-- [ ] linking 
 - [ ] frontend/gui via purescript/elm?? + shareable templates definitely. 
