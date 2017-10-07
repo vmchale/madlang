@@ -1,22 +1,12 @@
 sudo: false
 language: nix
-cache:
-    directories:
-        - $HOME/.cabal
-        - $HOME/.ghc
-addons:
-    apt:
-        packages:
-            - zlib1g-dev
 before_install:
-- nix-env -i ghc
-- nix-env -i cabal-install
-- export PATH=$HOME/.cabal/bin:$PATH
-- cabal update
-- cabal install madlang --dependencies-only --extra-include-dirs=/usr/include
+- nix-env -i stack
+- export PATH=$HOME/.local/bin:$PATH
+- stack build --dependencies-only
 
 install:
-- cabal install madlang
+- stack install
 
 script:
 - madlang run demo/shakespeare.mad

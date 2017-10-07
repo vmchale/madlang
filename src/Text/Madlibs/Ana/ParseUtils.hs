@@ -105,6 +105,8 @@ hasNoDeps = all isPreTok . (>>= snd)
           isPreTok _        = False
 
 -- FIXME if a depends on b depends on c, then we shouldn't consider a and c to be equal.
+-- Consider some fancy morphism here too. (chronomorphism? - comonad to pop
+-- values off, monad to store things.)
 
 -- | Ordering on the keys to account for dependency
 orderKeys :: (Key, [(Prob, [PreTok])]) -> (Key, [(Prob, [PreTok])]) -> Ordering
