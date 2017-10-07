@@ -17,7 +17,6 @@ extra-source-files:  README.md
                    , test/templates/*.mad
                    , test/templates/err/*.mad
                    , demo/*.mad
-                   , bash/mkCompletions
                    , cabal.project.local
                    , man/madlang.1
 cabal-version:       >=1.10

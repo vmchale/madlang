@@ -1,4 +1,0 @@
-#!/bin/bash
-## You *may* need to do a rm -rf ~/.ghc; rm -rf ~/.cabal if the packages aren't working. The cross-compiler needs to be the *only* compiler
-export PATH=/home/vanessa/programming/arm-bins/cross-compilation/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin:$PATH
-cabal new-build --allow-newer --with-ghc=arm-unknown-linux-gnueabihf-ghc-8.2.0.20170404 --with-ghc-pkg=arm-unknown-linux-gnueabihf-ghc-pkg-8.2.0.20170404 --constraint="madlang +fast-lvvm" --ghc-options="-opta-mcpu=cortex-a53"

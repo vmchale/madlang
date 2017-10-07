@@ -169,14 +169,6 @@ Try this out:
 There is a dog complimenter available to test out at [my
 site](http://blog.vmchale.com/madlang).
 
-## Documentation
-
-You can view manpages for `madlang` on Linux and Mac by typing:
-
-```bash
- $ man madlang
-```
-
 ## Tooling
 
 ### Vim
@@ -196,4 +188,12 @@ and invoke with
 
 ```
  $ pi new madlang story
+```
+
+### Manpages
+
+You can view documentation for `madlang` on Linux, Mac, or BSD by typing:
+
+```bash
+ $ man madlang
 ```

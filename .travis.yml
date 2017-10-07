@@ -14,6 +14,6 @@ install:
 
 script:
 - madlang run demo/shakespeare.mad
-- cabal new-build
-- cabal new-test
-- cabal new-bench
+- cabal new-build -w ghc-8.0.2
+- cabal new-test -w ghc-8.0.2
+- cabal new-bench -w ghc-8.0.2

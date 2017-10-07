@@ -1,9 +1,0 @@
-#!/bin/bash
-mkdir -p ~/.bash_completion.d
-for BINARY in madlang
-do
-    $BINARY --bash-completion-script "$(which $BINARY)" > tmp
-    cp tmp ~/.bash_completion.d/$BINARY
-    rm tmp
-done
-printf "\n##Added by madlang\nfor c in ~/.bash_completion.d/* ; do\n    . \$c\ndone\n" >> ~/.bashrc
