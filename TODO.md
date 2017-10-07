@@ -23,6 +23,7 @@ CODE MAINTENANCE:
 CI:
   - [ ] appveyor builds
   - [ ] automatic deploys w/ releases
+  - [ ] hlint/weeder on travis
 DOCUMENTATION:
   - [ ] mention modifiers in the `README.md`
   - [ ] tutorial

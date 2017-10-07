@@ -1,7 +1,8 @@
 resolver: nightly-2017-10-05
 packages:
 - .
-extra-deps: []
+extra-deps:
+    - composition-prelude-0.1.0.4
 flags: 
     madlang:
         development:
