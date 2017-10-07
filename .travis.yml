@@ -1,6 +1,6 @@
 sudo: false
 language: haskell
-ghc: 8.2.1
+ghc: 8.0.2
 cabal: 2.0.0.2
 
 #before_install:
