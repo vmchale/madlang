@@ -1,7 +1,6 @@
 sudo: false
 language: haskell
 ghc: 8.0.2
-cabal: 2.0.0.2
 
 #before_install:
 #- nix-env -i stack
@@ -14,6 +13,7 @@ cabal: 2.0.0.2
 before_install:
 - export PATH=$HOME/.cabal/bin:$PATH
 - cabal update
+- cabal install cabal-install
 - cabal new-build --dependencies-only
 
 install:
