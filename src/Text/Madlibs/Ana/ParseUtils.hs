@@ -100,7 +100,7 @@ orderHelper :: Key -> [(Prob, [PreTok])] -> Bool
 orderHelper key = any (\pair -> key /= "" && key `elem` (map unTok . snd $ pair))
 
 hasNoDeps :: [(Prob, [PreTok])] -> Bool
-hasNoDeps = all isPreTok . concatMap snd
+hasNoDeps = all isPreTok . join snd
     where isPreTok PreTok{} = True
           isPreTok _        = False
 
@@ -120,4 +120,4 @@ orderKeys (key1, l1) (key2, l2)
     | otherwise = EQ -- FIXME transitive dependencies
 
 flatten :: [(Prob, [PreTok])] -> [Key]
-flatten = concatMap (map unTok . snd)
+flatten = join (fmap unTok . snd)

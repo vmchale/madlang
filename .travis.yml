@@ -1,18 +1,15 @@
 sudo: false
+language: nix
 cache:
     directories:
         - $HOME/.cabal
         - $HOME/.ghc
-addons:
-    apt:
-        packages:
-            - cabal-install
-            - ghc-8.0.2
 
 before_install:
+- nix-env -i ghc-8.2.1
+- nix-env -i cabal-install
 - export PATH=$HOME/.cabal/bin:$PATH
 - cabal update
-- cabal install cabal-install
 - cabal install madlang --dependencies-only
 
 install:
