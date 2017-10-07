@@ -7,6 +7,8 @@ before_install:
 
 install:
 - stack install
+- stack test
+- stack bench
 
 script:
 - madlang run demo/shakespeare.mad
