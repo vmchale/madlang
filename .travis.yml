@@ -3,7 +3,7 @@ language: nix
 before_install:
 - nix-env -i stack
 - export PATH=$HOME/.local/bin:$PATH
-- stack build --dependencies-only
+- stack build --dependencies-only --install-ghc
 
 install:
 - stack install
