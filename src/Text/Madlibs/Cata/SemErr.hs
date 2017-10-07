@@ -27,11 +27,32 @@ data SemanticError = NoReturn | CircularFunctionCalls T.Text T.Text | Insufficie
 
 -- | display a `SemanticError` nicely with coloration & whatnot
 instance Show SemanticError where
-    show (DoubleDefinition f) = show $ semErrStart <> text "File contains two declarations of:" <> indent 4 (yellow (text' f))
-    show NoReturn = show $ semErrStart <> text "File must contain exactly one declaration of :return"
-    show (NoContext f1) = show $ semErrStart <> text "Call in function: " <> indent 4 (yellow (text' f1)) <> "which is not in scope"
-    show (CircularFunctionCalls f1 f2) = show $ semErrStart <> text "Function" </> indent 4 (yellow (text' f2)) <> text' " refers to a function" </> indent 4 (yellow (text' f1)) <> text' ", which is not in scope." </> indent 2 (text' "This may be due to a circular function dependecy.")
-    show (InsufficientArgs i j) = show $ semErrStart <> text "Insufficent arguments from the command line; given " <> (text . show $ i) <> ", expected at least " <> (text . show $ j)
+    show (DoubleDefinition f) = show $
+        semErrStart
+        <> text "File contains two declarations of:"
+        <> indent 4 (yellow (text' f))
+    show NoReturn = show $
+        semErrStart
+        <> text "File must contain exactly one declaration of :return"
+    show (NoContext f1) = show $
+        semErrStart
+        <> text "Call in function: "
+        <> indent 4 (yellow (text' f1))
+        <> "which is not in scope"
+    show (CircularFunctionCalls f1 f2) = show $
+        semErrStart
+        <> text "Function"
+        </> indent 4 (yellow (text' f2))
+        <> text' " refers to a function"
+        </> indent 4 (yellow (text' f1))
+        <> text' ", which is not in scope."
+        </> indent 2 (text' "This may be due to a circular function dependecy.")
+    show (InsufficientArgs i j) = show $
+        semErrStart
+        <> text "Insufficent arguments from the command line; given "
+        <> (text . show $ i)
+        <> ", expected at least "
+        <> (text . show $ j)
 
 -- | Derived via our show instance;
 instance Exception SemanticError where
