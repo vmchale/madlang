@@ -1,0 +1,6 @@
+:define something
+    1.0 "something"
+:define something
+    1.0 "something else"
+:return
+    1.0 something

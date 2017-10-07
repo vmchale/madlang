@@ -1,0 +1,8 @@
+:define scream
+    1.0 "aaa".to_upper
+    1.0 "aa".to_upper
+    1.0 $1.to_upper
+:define sedated
+    1.0 scream.to_lower.to_upper.to_lower
+:return
+    1.0 scream sedated

@@ -1,0 +1,143 @@
+name:                madlang
+version:             2.4.2.1
+synopsis:            Randomized templating language DSL
+description:         Madlang is a text templating language written in Haskell,
+                     meant to explore computational creativity and generative
+                     literature.
+homepage:            https://hub.darcs.net/vmchale/madlang
+license:             BSD3
+license-file:        LICENSE
+author:              Vanessa McHale
+maintainer:          vanessa.mchale@reconfigure.io
+copyright:           Copyright: (c) 2016-2017 Vanessa McHale
+category:            Web
+build-type:          Custom
+stability:           experimental
+extra-source-files:  README.md
+                   , test/templates/*.mad
+                   , test/templates/err/*.mad
+                   , demo/*.mad
+                   , bash/mkCompletions
+                   , cabal.project.local
+                   , man/madlang.1
+cabal-version:       >=1.10
+
+custom-setup
+  setup-depends:   base
+                 , Cabal
+                 , file-embed
+                 , directory
+                 , process
+
+Flag development {
+  Description: Turn on '-Werror'
+  Default: False
+  Manual: True
+}
+
+Flag llvm-fast {
+  Description: Enable build with llvm backend (produces a faster executable)
+  Default: False
+}
+
+Flag library {
+  Description: Don't build an executable
+  Default:     False
+}
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Text.Madlibs
+  other-modules:       Text.Madlibs.Ana.ParseUtils
+                     , Text.Madlibs.Cata.Run
+                     , Text.Madlibs.Ana.Parse
+                     , Text.Madlibs.Ana.Resolve
+                     , Text.Madlibs.Internal.Types
+                     , Text.Madlibs.Generate.TH
+                     , Text.Madlibs.Internal.Utils
+                     , Text.Madlibs.Cata.SemErr
+                     , Text.Madlibs.Cata.Display
+                     , Text.Madlibs.Exec.Main
+                     , Text.Madlibs.Exec.Helpers
+                     , Paths_madlang
+  build-depends:       base >= 4.8 && < 5
+                     , megaparsec >= 6.0
+                     , text
+                     , optparse-applicative
+                     , template-haskell
+                     , MonadRandom
+                     , composition
+                     , composition-extra
+                     , directory
+                     , file-embed
+                     , random-shuffle
+                     , microlens
+                     , mtl
+                     , ansi-wl-pprint
+                     , containers
+                     , bytestring
+                     , http-client
+                     , tar
+                     , zlib
+                     , recursion-schemes
+  default-language:    Haskell2010
+  default-extensions:  OverloadedStrings
+                     , DeriveGeneric
+                     , DeriveFunctor
+                     , DeriveAnyClass
+  if flag(development)
+    ghc-options:       -Werror
+  ghc-options:         -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates
+
+executable madlang
+  if flag(library)
+    Buildable: False
+  else
+    Buildable: True
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  if flag(llvm-fast)
+    ghc-options:       -fllvm -O3 -optlo-O3 -opta-march=native -opta-mtune=native
+  if flag(development)
+    ghc-options:       -Werror
+  ghc-options:         -rtsopts -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates
+  build-depends:       base
+                     , madlang
+  default-language:    Haskell2010
+
+benchmark madlang-bench
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   bench
+  main-is:          Bench.hs
+  build-depends:    base
+                  , criterion
+                  , madlang
+                  , megaparsec
+                  , text
+  if flag(llvm-fast)
+    ghc-options:    -fllvm -optlo-O3 -O3 -fwarn-unused-imports
+  if flag(development)
+    ghc-options:    -Werror
+  ghc-options:      -rtsopts -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -O3
+  default-language: Haskell2010
+
+test-suite madlang-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  other-modules:       Demo
+  build-depends:       base
+                     , madlang
+                     , hspec
+                     , megaparsec
+                     , text
+                     , mtl
+                     , hspec-megaparsec
+  if flag(development)
+    ghc-options:       -Werror
+  ghc-options:         -threaded -rtsopts -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     darcs
+  location: https://hub.darcs.net/vmchale/madlang

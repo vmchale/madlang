@@ -1,0 +1,5 @@
+:define main
+    1.0 "loud string".to_opper
+    1.0 "quiet string"
+:return
+    1.0 main

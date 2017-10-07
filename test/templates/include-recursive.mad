@@ -1,0 +1,5 @@
+:include include.mad
+:define another
+    1.0 include-gambling-something
+:return
+    1.0 another

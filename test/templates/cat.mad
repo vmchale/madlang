@@ -1,0 +1,15 @@
+:category places
+    country
+    state
+
+:define country
+    1.0 "UK"
+    1.0 "USA"
+
+:define state
+    1.0 "Maryland"
+    1.0 "Rhode Island"
+    1.0 "Delaware"
+
+:return
+    1.0 places

@@ -1,0 +1,9 @@
+resolver: nightly-2017-10-05
+packages:
+- .
+extra-deps: []
+flags: 
+    madlang:
+        development:
+            true
+extra-package-dbs: []

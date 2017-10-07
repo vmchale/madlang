@@ -1,0 +1,15 @@
+:define person
+    0.7 "A close friend will "
+    0.3 "You will "
+:define goodfortune
+    0.1 person "make rain on the planet Mars"
+    0.9 "nice things will happen today :)"
+:define fortune
+    0.5 "drink a boatload of milk"
+    0.5 "get h*ckin angry for no reason"
+:return
+    0.8 person fortune
+    0.2 goodfortune
+{#
+block comment
+#}

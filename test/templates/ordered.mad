@@ -1,0 +1,21 @@
+:define somethingelse
+    1.0 "one"
+    1.0 "two"
+    1.0 "three"
+
+:define afourththing
+    1.0 something
+    1.0 "fourth".oulipo
+
+:define something
+    1.0 "heads"
+    1.0 "tails"
+    1.0 somethingelse
+    1.0 athirdthing
+
+:define athirdthing
+    1.0 "third"
+
+:return
+    1.0 something
+    1.0 afourththing

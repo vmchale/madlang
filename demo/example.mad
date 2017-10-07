@@ -1,0 +1,42 @@
+:define mainCharacter
+    1.0 "mechanic"
+    1.0 "professor"
+    1.0 "madonna"
+    1.0 "miner"
+    1.0 "mercenary"
+    1.0 "pilot"
+
+:define mainCharacterTrait
+    1.0 "prolix "
+    1.0 "maudlin "
+    1.0 "pompous "
+    1.0 "prevaricating "
+    1.0 "miniscule "
+    1.0 "preening "
+
+:define superlative
+    1.0 "grandiose "
+    1.0 "accomplished "
+    1.0 "saturnine "
+    1.0 "beautiful "
+    1.0 "gracious "
+    1.0 "lithe "
+
+:define predicate
+    1.0 "fell asleep."
+    1.0 "wishes she could journey around the world."
+    1.0 "falls down on the subway escalator."
+    1.0 "meets a handsome dark stranger."
+    1.0 "suffers because mercury is in powerade."
+    1.0 "charms a prince."
+
+:define subject
+    3.0 "A " mainCharacterTrait mainCharacter " "
+    1.0 "The most " superlative "of " mainCharacterTrait mainCharacter "s "
+
+:define final
+    1.0 subject.to_upper predicate
+    6.0 subject predicate
+:return
+    1.0 final
+    0.02 final.oulipo # removes all mentions of the letter 'e' a small amount of the time
