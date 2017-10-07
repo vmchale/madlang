@@ -51,9 +51,9 @@ concatTok param pretoks = do
     ctx <- get
     let unList (List a) = a
         unList _        = mempty
-    let toRand (Name str f) = apply f . List . snd . head' str param . filter ((== str) . fst) . map (second unList) $ ctx
+    let toRand (Name str f) = apply f . List . snd . head' str param . filter ((== str) . fst) . fmap (second unList) $ ctx
         toRand (PreTok txt) = Value txt
-    fold . map toRand <$> pretoks
+    fold . fmap toRand <$> pretoks
 
 -- | Build token in tree structure, without concatenating.
 buildTok :: T.Text -> Context [PreTok] -> Context RandTok
@@ -61,9 +61,9 @@ buildTok param pretoks = do
     ctx <- get
     let unList (List a) = a
         unList _        = mempty
-    let toRand (Name str f) = apply f . List . snd . head' str param . filter ((== str) . fst) . map (second unList) $ ctx
+    let toRand (Name str f) = apply f . List . snd . head' str param . filter ((== str) . fst) . fmap (second unList) $ ctx
         toRand (PreTok txt) = Value txt
-    List . zip [1..] . map toRand <$> pretoks
+    List . zip [1..] . fmap toRand <$> pretoks
 
 -- | Build the token without concatenating, yielding a `RandTok` suitable to be
 -- printed as a tree.
@@ -71,7 +71,7 @@ buildTree :: [(Key, [(Prob, [PreTok])])] -> Context RandTok
 buildTree [] = pure mempty
 buildTree [(key,pairs)] = do
     toks <- mapM (\(_,j) -> buildTok key (pure j)) pairs
-    let probs = map fst pairs
+    let probs = fmap fst pairs
     let tok = List $ zip probs toks
     state (\s -> (tok,(key,tok):s))
 buildTree (x:xs) = do
@@ -84,7 +84,7 @@ build :: [(Key, [(Prob, [PreTok])])] -> Context RandTok
 build [] = pure mempty
 build [(key,pairs)] = do
     toks <- mapM (\(_,j) -> concatTok key (pure j)) pairs
-    let probs = map fst pairs
+    let probs = fmap fst pairs
     let tok = List $ zip probs toks
     state (\s -> (tok,(key, tok):s))
 build (x:xs) = do
@@ -100,7 +100,7 @@ orderHelper :: Key -> [(Prob, [PreTok])] -> Bool
 orderHelper key = any (\pair -> key /= "" && key `elem` (map unTok . snd $ pair))
 
 hasNoDeps :: [(Prob, [PreTok])] -> Bool
-hasNoDeps = all isPreTok . join snd
+hasNoDeps = all isPreTok . (>>= snd)
     where isPreTok PreTok{} = True
           isPreTok _        = False
 
@@ -120,4 +120,4 @@ orderKeys (key1, l1) (key2, l2)
     | otherwise = EQ -- FIXME transitive dependencies
 
 flatten :: [(Prob, [PreTok])] -> [Key]
-flatten = join (fmap unTok . snd)
+flatten = (>>= (fmap unTok . snd))

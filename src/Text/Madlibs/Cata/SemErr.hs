@@ -83,7 +83,7 @@ text' = text . T.unpack
 -- | big semantics checker that sequences stuff
 checkSemantics :: [(Key, [(Prob, [PreTok])])] -> Parser [(Key, [(Prob, [PreTok])])]
 checkSemantics keys = foldr (<=<) pure (checkKey "Return":[checkKey key | key <- allKeys keys ]) keys
-    where allKeys = fmap name . join snd . join snd--traversal?
+    where allKeys = fmap name . (>>= snd) . (>>= snd)--traversal?
           name (Name str _) = str
           name (PreTok _)   = "Return"
 

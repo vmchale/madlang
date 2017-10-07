@@ -13,7 +13,7 @@ before_install:
 - nix-env -i cabal-install
 - export PATH=$HOME/.cabal/bin:$PATH
 - cabal update
-- cabal install madlang --dependencies-only
+- cabal install madlang --dependencies-only --extra-include-dirs=/usr/include --extra-lib-dirs=/usr/lib
 
 install:
 - cabal install madlang
