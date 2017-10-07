@@ -6,6 +6,7 @@ before_install:
 - export PATH=$HOME/.local/bin:$PATH
 - stack build --dependencies-only --install-ghc
 - stack install cabal-install
+- cabal update
 
 install:
 - stack install
