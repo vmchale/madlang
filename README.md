@@ -147,7 +147,7 @@ Then run it with:
  $ madlang run realistic-gambling.mad
 ```
 
-In fact, `madlang` comes with several libraries prepackaged. You can install
+`madlang` comes with several libraries prepackaged. You can install
 them for the current user with:
 
 ```bash
