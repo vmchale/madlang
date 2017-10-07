@@ -1,6 +1,6 @@
 # Madlang DSL for generating random text
 
-[![Build Status](https://travis-ci.org/vmchale/madlibs.svg?branch=master)](https://travis-ci.org/vmchale/madlibs)
+[![Build Status](https://travis-ci.org/vmchale/madlang.svg?branch=master)](https://travis-ci.org/vmchale/madlang)
 
 This is the Madlang DSL for generating text. You specify a template, and Madlang
 will create randomized text from the template.

@@ -21,6 +21,9 @@ FEATURES:
 CODE MAINTENANCE:
   - [ ] use prisms for errors
   - [ ] test suite for error messages
+CI:
+  - [ ] appveyor builds
+  - [ ] automatic deploys w/ releases
 DOCUMENTATION:
   - [ ] mention modifiers in the `README.md`
   - [ ] tutorial
