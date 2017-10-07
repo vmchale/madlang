@@ -7,7 +7,7 @@ addons:
     apt:
         packages:
             - cabal-install
-            - ghc
+            - ghc-8.0.2
 
 before_install:
 - export PATH=$HOME/.cabal/bin:$PATH

@@ -4,7 +4,7 @@
 --
 -- Madlang is a text-genrating Domain-Specific Language (DSL). It is similar in purpose
 -- to <https://github.com/galaxykate/tracery tracery>, but it is
--- written in Haskell and therefore offers more flexibility. 
+-- written in Haskell and therefore offers more flexibility.
 --
 -- == Example
 --
@@ -24,6 +24,7 @@ module Text.Madlibs (
                       parseTok
                     , parseTokM
                     , runFile
+                    , parseTree
                     , parseFile
                     , makeTree
                     -- * Functions and constructs for the `RandTok` data type
@@ -40,10 +41,10 @@ module Text.Madlibs (
                     , madFile
                     ) where
 
-import Text.Madlibs.Ana.Resolve
-import Text.Madlibs.Ana.Parse
-import Text.Madlibs.Cata.Run
-import Text.Madlibs.Cata.SemErr
-import Text.Madlibs.Exec.Main
-import Text.Madlibs.Internal.Types
-import Text.Madlibs.Generate.TH
+import           Text.Madlibs.Ana.Parse
+import           Text.Madlibs.Ana.Resolve
+import           Text.Madlibs.Cata.Run
+import           Text.Madlibs.Cata.SemErr
+import           Text.Madlibs.Exec.Main
+import           Text.Madlibs.Generate.TH
+import           Text.Madlibs.Internal.Types

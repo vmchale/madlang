@@ -1,0 +1,11 @@
+ - modules:
+   - {name: Debug.Trace, within: []}
+ - functions:
+   - {name: undefined, within: []}
+   - {name: unsafePerformIO, within: []}
+   - {name: error, within: []}
+   - {name: traceShowId, within: []}
+   - {name: traceShow, within: []}
+   - {name: getEnv, within: []}
+ - ignore: {name: Use section, within: [ Text.Madlibs.Internal.Types, Text.Madlibs.Ana.ParseUtils ]}
+ - error: {lhs: concatMap, rhs: join, name: "Use monadic join"}

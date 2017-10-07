@@ -82,8 +82,8 @@ text' = text . T.unpack
 
 -- | big semantics checker that sequences stuff
 checkSemantics :: [(Key, [(Prob, [PreTok])])] -> Parser [(Key, [(Prob, [PreTok])])]
-checkSemantics keys = foldr (<=<) pure ((checkKey "Return"):[checkKey key | key <- allKeys keys ]) keys
-    where allKeys = fmap name . (concatMap snd) . (concatMap snd)--traversal?
+checkSemantics keys = foldr (<=<) pure (checkKey "Return":[checkKey key | key <- allKeys keys ]) keys
+    where allKeys = fmap name . join snd . join snd--traversal?
           name (Name str _) = str
           name (PreTok _)   = "Return"
 
@@ -98,7 +98,7 @@ headNoReturn _     = throw NoReturn
 
 -- | Access argument, or throw error if the list is too short.
 access :: [a] -> Int -> a
-access xs i = if (i >= length xs) then throw (InsufficientArgs (length xs) (i+1)) else xs !! i
+access xs i = if i >= length xs then throw (InsufficientArgs (length xs) (i+1)) else xs !! i
 
 -- | checker to verify there is at most one @:return@ or @:define key@ statement
 checkKey :: Key -> [(Key, [(Prob, [PreTok])])] -> Parser [(Key, [(Prob, [PreTok])])]
@@ -110,7 +110,7 @@ checkKey key keys
 
 -- | Checks that we have at most one `:return` template in the file
 singleInstance :: Key -> [(Key, [(Prob, [PreTok])])] -> Bool
-singleInstance key = singleton . (filter ((==key) . fst))
+singleInstance key = singleton . filter ((==key) . fst)
     where singleton [_] = True
           singleton _   = False
 
