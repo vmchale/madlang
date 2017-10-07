@@ -20,6 +20,8 @@ FEATURES:
 CODE MAINTENANCE:
   - [ ] use prisms for errors
   - [ ] test suite for error messages
+  - [ ] `strip` should be implemented literally any other way than the current
+    implementation
 CI:
   - [ ] appveyor builds
   - [ ] automatic deploys w/ releases

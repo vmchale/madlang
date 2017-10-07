@@ -4,7 +4,10 @@ cache:
     directories:
         - $HOME/.cabal
         - $HOME/.ghc
-
+addons:
+    apt:
+        packages:
+            - zlib1g-dev
 before_install:
 - nix-env -i ghc
 - nix-env -i cabal-install
