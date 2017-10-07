@@ -10,7 +10,6 @@ FEATURES:
   - [ ] user-defined modifiers
   - [ ] index for vim
   - [ ] library/DSL being able to call dependencies
-  - [ ] default project template
   - [ ] don't require exactly one return statement (or allow library pragma
     thing?)
   - [ ] markov chain generator (?)

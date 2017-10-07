@@ -8,13 +8,13 @@ module Text.Madlibs.Ana.Resolve (
   , runText ) where
 
 import           Control.Exception
+import           Control.Lens
 import           Control.Monad               (void)
 import           Control.Monad.Random.Class
 import           Data.Composition
 import           Data.Monoid
 import qualified Data.Text                   as T
 import           Data.Void
-import           Lens.Micro
 import           System.Directory
 import           System.Environment
 import           Text.Madlibs.Ana.Parse

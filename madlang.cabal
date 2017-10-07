@@ -71,7 +71,8 @@ library
                      , directory
                      , file-embed
                      , random-shuffle
-                     , microlens
+                     -- , microlens
+                     , lens
                      , mtl
                      , ansi-wl-pprint
                      , containers

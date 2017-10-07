@@ -80,7 +80,6 @@ semErrStart = dullred (text "\n  Semantic Error: ")
 text' :: T.Text -> Doc
 text' = text . T.unpack
 
---do we need this all in a monad??
 -- | big semantics checker that sequences stuff
 checkSemantics :: [(Key, [(Prob, [PreTok])])] -> Parser [(Key, [(Prob, [PreTok])])]
 checkSemantics keys = foldr (<=<) pure ((checkKey "Return"):[checkKey key | key <- allKeys keys ]) keys

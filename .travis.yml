@@ -1,0 +1,20 @@
+sudo: false
+cache:
+    directories:
+        - $HOME/.cabal
+        - $HOME/.ghc
+addons:
+    apt:
+        packages:
+            - cabal-install
+            - ghc
+
+before_install:
+- cabal install madlang --dependencies-only
+- export PATH=$HOME/.cabal/bin:$PATH
+
+install:
+- cabal install madlang
+
+script:
+- madlang run demo/shakespeare.mad

@@ -6,10 +6,8 @@ This is the Madlang DSL for generating text. You specify a template, and Madlang
 will create randomized text from the template.
 
 Madlang is an interpreted language, written in Haskell. The primary way to use
-Madlang is via the interpreter, but there is also a partially completed library
+Madlang is on the command line using the interpreter, but there is also a partially completed library
 and EDSL.
-
-There is a vim plugin available [here](https://github.com/vmchale/madlang-vim).
 
 Madlang is intended to explore computational creativity and provide an easy
 way to get started with generative literature.
@@ -177,4 +175,25 @@ You can view manpages for `madlang` on Linux and Mac by typing:
 
 ```bash
  $ man madlang
+```
+
+## Tooling
+
+### Vim
+
+There is a vim plugin available [here](https://github.com/vmchale/madlang-vim).
+
+### Project Templates
+
+There is a project template bundled with
+[pi](https://github.com/vmchale/project-init), which you can install with
+
+```bash
+ $ curl -LSfs https://japaric.github.io/trust/install.sh | sh -s -- --git vmchale/project-init
+```
+
+and invoke with
+
+```
+ $ pi new madlang story
 ```
