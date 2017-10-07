@@ -47,7 +47,7 @@ https://github.com/vmchale/madlang-vim
 
 Strings in madlang can be followed by modifiers, for instance
 
-  1.0 "some very bad idea".oulipo
+  1.0 "evil".oulipo
 
 Currently supported modifiers are:
 
@@ -59,4 +59,5 @@ Currently supported modifiers are:
 
 # EXAMPLES
 
-You can examine some examples in 
+You can examine an example using the bundled libraries
+at https://hub.darcs.net/vmchale/madlang-insults.
