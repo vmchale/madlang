@@ -104,7 +104,7 @@ hasNoDeps = all isPreTok . (>>= snd)
     where isPreTok PreTok{} = True
           isPreTok _        = False
 
--- TODO 'somethingelse' shouldn't be less than 'athirdthing'!!
+-- FIXME if a depends on b depends on c, then we shouldn't consider a and c to be equal.
 
 -- | Ordering on the keys to account for dependency
 orderKeys :: (Key, [(Prob, [PreTok])]) -> (Key, [(Prob, [PreTok])]) -> Ordering

@@ -12,8 +12,9 @@ before_install:
 - nix-env -i ghc
 - nix-env -i cabal-install
 - export PATH=$HOME/.cabal/bin:$PATH
+- find / -name zlib.h
 - cabal update
-- cabal install madlang --dependencies-only --extra-include-dirs=/usr/include --extra-lib-dirs=/usr/lib
+- cabal install madlang --dependencies-only
 
 install:
 - cabal install madlang
