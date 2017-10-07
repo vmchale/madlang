@@ -9,12 +9,12 @@
 -- | Module with the type of a random token
 module Text.Madlibs.Internal.Types where
 
+import           Control.Arrow            (second)
 import           Control.Monad.State
 import           Data.Function
 import           Data.Functor.Foldable.TH (makeBaseFunctor)
 import           Data.Monoid
 import qualified Data.Text                as T
-import           Lens.Micro
 
 -- | datatype for a double representing a probability
 type Prob = Double
@@ -40,7 +40,7 @@ data RandTok = List [(Prob, RandTok)] | Value T.Text
 
 apply :: (T.Text -> T.Text) -> RandTok -> RandTok -- TODO make a base functor so we can map f over stuff?
 apply f (Value str) = Value (f str)
-apply f (List l)    = List $ map (over _2 (apply f)) l
+apply f (List l)    = List $ fmap (second (apply f)) l
 
 -- | Make `RandTok` a monoid so we can append them together nicely (since they do generate text).
 --
@@ -49,8 +49,8 @@ apply f (List l)    = List $ map (over _2 (apply f)) l
 instance Monoid RandTok where
     mempty = Value ""
     mappend (Value v1) (Value v2) = Value (T.append v1 v2)
-    mappend (List l1) v@Value{} = List $ map (over _2 (`mappend` v)) l1
-    mappend v@Value{} (List l2) = List $ map (over _2 (mappend v)) l2
+    mappend (List l1) v@Value{} = List $ fmap (second (`mappend` v)) l1
+    mappend v@Value{} (List l2) = List $ fmap (second (mappend v)) l2
     mappend l@List{} (List l2) = List [ (p, l `mappend` tok) | (p,tok) <- l2 ]
 
 -- TODO make this a map instead of keys for faster parse.

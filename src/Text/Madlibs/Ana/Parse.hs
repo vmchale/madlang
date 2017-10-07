@@ -142,7 +142,7 @@ inclusions = many . try $ do
     include
     str <- name
     string ".mad"
-    pure (str <> ".mad")
+    pure (str <> ".mad") <?> "Include statement"
 
 -- | Parse a `define` block
 definition :: [T.Text] -> Parser (Key, [(Prob, [PreTok])])

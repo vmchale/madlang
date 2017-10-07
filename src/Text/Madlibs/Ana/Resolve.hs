@@ -7,6 +7,7 @@ module Text.Madlibs.Ana.Resolve (
   , makeTree
   , runText ) where
 
+import           Control.Arrow               (first)
 import           Control.Composition
 import           Control.Exception
 import           Control.Monad               (void)
@@ -14,7 +15,6 @@ import           Control.Monad.Random.Class
 import           Data.Monoid
 import qualified Data.Text                   as T
 import           Data.Void
-import           Lens.Micro
 import           System.Directory
 import           System.Environment
 import           Text.Madlibs.Ana.Parse
@@ -36,7 +36,7 @@ getInclusionCtx :: Bool -> [T.Text] -> FilePath -> FilePath -> IO (Either (Parse
 getInclusionCtx isTree ins folder filepath = do
     file <- catch (readFile' (folder ++ filepath)) (const (do { home <- getEnv "HOME" ; readFile' (home <> "/.madlang/" <> folder <> filepath) } ) :: IOException -> IO T.Text)
     let filenames = map T.unpack $ either (error . show) id $ parseInclusions filepath file -- TODO pass up errors correctly
-    let resolveKeys file' = map (over _1 ((((T.pack . (<> "-")) . dropExtension) file') <>))
+    let resolveKeys file' = fmap (first ((((T.pack . (<> "-")) . dropExtension) file') <>))
     ctxPure <- mapM (getInclusionCtx isTree ins folder) filenames
     let ctx = (zipWith resolveKeys filenames) <$> sequence ctxPure
     catch

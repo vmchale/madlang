@@ -2,8 +2,10 @@ sudo: false
 language: nix
 before_install:
 - nix-env -i stack
+- nix-env -i ghc
 - export PATH=$HOME/.local/bin:$PATH
 - stack build --dependencies-only --install-ghc
+- stack install cabal-install
 
 install:
 - stack install
@@ -12,3 +14,6 @@ install:
 
 script:
 - madlang run demo/shakespeare.mad
+- cabal new-build
+- cabal new-test
+- cabal new-bench

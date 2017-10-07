@@ -4,9 +4,9 @@
 -- | Internal utils to help out elsewhere
 module Text.Madlibs.Internal.Utils where
 
+import           Control.Arrow               (first)
 import qualified Data.Text                   as T
 import           Data.Void
-import           Lens.Micro
 import           Text.Madlibs.Internal.Types
 import           Text.Megaparsec.Error
 
@@ -32,8 +32,8 @@ getDir = reverse . (dropWhile (/='/')) . reverse
 
 -- | Normalize pre-tokens/corresponding probabilities
 normalize :: [(Prob, [PreTok])] -> [(Prob, [PreTok])]
-normalize list = map (over _1 (/total)) list
-    where total = sum . map fst $ list
+normalize list = fmap (first (/total)) list
+    where total = sum . fmap fst $ list
 
 -- | Helper function for creating a cdf from a pdf
 cdf :: [Prob] -> [Prob]
