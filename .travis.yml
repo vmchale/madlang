@@ -6,7 +6,7 @@ cache:
         - $HOME/.ghc
 
 before_install:
-- nix-env -i ghc-8.2.1
+- nix-env -i ghc
 - nix-env -i cabal-install
 - export PATH=$HOME/.cabal/bin:$PATH
 - cabal update
