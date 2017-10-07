@@ -10,8 +10,9 @@ addons:
             - ghc
 
 before_install:
-- cabal install madlang --dependencies-only
 - export PATH=$HOME/.cabal/bin:$PATH
+- cabal install cabal-install
+- cabal install madlang --dependencies-only
 
 install:
 - cabal install madlang

@@ -66,13 +66,11 @@ library
                      , optparse-applicative
                      , template-haskell
                      , MonadRandom
-                     , composition
-                     , composition-extra
+                     , composition-prelude
                      , directory
                      , file-embed
                      , random-shuffle
-                     -- , microlens
-                     , lens
+                     , microlens
                      , mtl
                      , ansi-wl-pprint
                      , containers

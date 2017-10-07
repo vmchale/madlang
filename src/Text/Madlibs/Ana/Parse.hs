@@ -10,9 +10,9 @@ module Text.Madlibs.Ana.Parse (
   , parseTreeF
   , parseTokM ) where
 
+import           Control.Composition
 import           Control.Monad
 import           Control.Monad.State
-import           Data.Composition
 import qualified Data.Map                    as M
 import           Data.Maybe
 import           Data.Monoid

@@ -4,9 +4,9 @@
 -- | Internal utils to help out elsewhere
 module Text.Madlibs.Internal.Utils where
 
-import           Control.Lens
 import qualified Data.Text                   as T
 import           Data.Void
+import           Lens.Micro
 import           Text.Madlibs.Internal.Types
 import           Text.Megaparsec.Error
 

@@ -9,12 +9,12 @@
 -- | Module with the type of a random token
 module Text.Madlibs.Internal.Types where
 
-import           Control.Lens             hiding (Context, List)
 import           Control.Monad.State
 import           Data.Function
 import           Data.Functor.Foldable.TH (makeBaseFunctor)
 import           Data.Monoid
 import qualified Data.Text                as T
+import           Lens.Micro
 
 -- | datatype for a double representing a probability
 type Prob = Double
