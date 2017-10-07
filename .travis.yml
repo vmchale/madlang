@@ -13,7 +13,6 @@ ghc: 8.0.2
 before_install:
 - export PATH=$HOME/.cabal/bin:$PATH
 - cabal update
-- cabal install cabal-install
 - cabal new-build --dependencies-only
 
 install:
