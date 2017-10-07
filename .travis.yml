@@ -13,12 +13,12 @@ ghc: 8.0.2
 before_install:
 - export PATH=$HOME/.cabal/bin:$PATH
 - cabal update
-- cabal new-build --dependencies-only
+- cabal new-build --dependencies-only -w ghc-8.0.2
 
 install:
-- cabal new-build
+- cabal new-build -w ghc-8.0.2
 
 script:
 - madlang run demo/shakespeare.mad
-- cabal new-test
-- cabal new-bench
+- cabal new-test -w ghc-8.0.2
+- cabal new-bench -w ghc-8.0.2
