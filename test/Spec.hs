@@ -44,7 +44,7 @@ main = hspec $ do
         parallel $ it "parses file with recursive inclusions" $ \_ -> do
             runFile [] "test/templates/include-recursive.mad" >>= (`shouldSatisfy` (\a -> any (a==) ["HEADS","tails","on its side"]))
         parallel $ it "runs on a file out of order" $ \_ -> do
-            runFile [] "test/templates/ordered.mad" >>= (`shouldSatisfy` (\a -> any (a==) ["heads","tails","one","two","three","third"]))
+            runFile [] "test/templates/ordered.mad" >>= (`shouldSatisfy` (\a -> any (a==) ["heads","tails","one","two","three","third","fourth"]))
     describe "readFileQ" $ do
         parallel $ it "executes embedded code" $ do
             runTest >>= (`shouldSatisfy` (\a -> any (a==) ["HEADS","tails"]))
