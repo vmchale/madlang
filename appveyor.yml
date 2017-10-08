@@ -1,13 +1,3 @@
-clone_folder: "c:\\stack"
-environment:
-  global:
-    STACK_ROOT: "c:\\sr"
-
-test_script:
-- stack setup > nul
-- echo "" | stack --no-terminal test
-- echo "" | stack --no-terminal install
-
 build: off
 
 before_test:
