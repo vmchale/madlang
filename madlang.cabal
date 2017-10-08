@@ -26,7 +26,7 @@ custom-setup
                  , Cabal
                  , file-embed
                  , directory
-                 , process >= 2.4.2.2
+                 , process >= 1.4.0.0
 
 Flag development {
   Description: Turn on '-Werror'
@@ -65,7 +65,7 @@ library
                      , optparse-applicative
                      , template-haskell
                      , MonadRandom
-                     , composition-prelude >= 2.4.2.2
+                     , composition-prelude >= 0.1.1.0
                      , directory
                      , file-embed
                      , random-shuffle
