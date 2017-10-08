@@ -18,10 +18,10 @@ before_install:
 - cabal new-build --dependencies-only -w ghc-8.0.2
 
 install:
-- cabal new-build -w ghc-8.0.2
+- cabal new-build -w ghc-8.0.2 --constraints='madlang -llvm-fast'
 - cp $(find -name madlang -executable | tail -n1) $HOME/.cabal/bin
 
 script:
 - madlang run demo/shakespeare.mad
-- cabal new-test -w ghc-8.0.2
-- cabal new-bench -w ghc-8.0.2
+- cabal new-test -w ghc-8.0.2 --constraints='madlang -llvm-fast'
+- cabal new-bench -w ghc-8.0.2 --constraints='madlang -llvm-fast'
