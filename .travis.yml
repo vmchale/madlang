@@ -16,6 +16,7 @@ matrix:
 
     # OS X
     - env: TARGET=x86_64-apple-darwin
+      language: haskell
       # ghc: 7.10.3
       os: osx
 
