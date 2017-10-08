@@ -22,6 +22,7 @@ matrix:
       ghc: 8.2.1
 
 before_install:
+- mkdir -p $HOME/.cabal/bin
 - export PATH=$HOME/.cabal/bin:$PATH
 - cabal update
 - cabal new-build --dependencies-only -w ghc-8.0.2
