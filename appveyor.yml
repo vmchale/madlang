@@ -19,9 +19,8 @@ test_script:
   - echo "" | stack --no-terminal install
 
 deploy:
+  artifact: /C:\\Users\\appveyor\\AppData\\Roaming\\local\\bin\\madlang.exe/
   provider: GitHub
   appveyor_repo_tag: true
   auth_token:
     secure: 0qzMr6xmEwRoj/9TJOgDuW/LXWfGVM/4A7kvAXGe0BAwWCF13AWE2SARrYkyc3ji
-  artifact: /C:\\Users\\appveyor\\AppData\\Roaming\\local\\bin\\madlang.exe/
-  # /.*madlang\.exe$/
