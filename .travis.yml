@@ -2,15 +2,19 @@ sudo: false
 language: haskell
 ghc: 8.0.2
 
+env:
+  global:
+    - PACKAGE_NAME=madlang
+
 matrix:
-    include:
+  include:
 
-        # Linux
-        - env: TARGET=x86_64-unknown-linux-gnu
+    # Linux
+    - env: TARGET=x86_64-unknown-linux-gnu
 
-        # OS X
-        - env: TARGET=x86_64-apple-darwin
-          os: osx
+    # OS X
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
 
 before_install:
 - export PATH=$HOME/.cabal/bin:$PATH
@@ -19,9 +23,31 @@ before_install:
 
 install:
 - cabal new-build -w ghc-8.0.2 --constraint='madlang -llvm-fast'
+- find -name madlang -executable | tail -n1
 - cp $(find -name madlang -executable | tail -n1) $HOME/.cabal/bin
 
 script:
 - madlang run demo/shakespeare.mad
 - cabal new-test -w ghc-8.0.2 --constraint='madlang -llvm-fast'
 - cabal new-bench -w ghc-8.0.2 --constraint='madlang -llvm-fast'
+- export BINPATH=$(find -name madlang -executable | tail -n1)
+
+deploy:
+  api_key:
+    secure: "NeVULHPFKjRIvwrY1ewVXZo/LOKihKs1FQh2QU+s7jwgfT/d82cgQqmj0FJzT/cHmIkL+KhSJY5Nb+7kiwSyhH1qBCI3qNmGCkZ1oQsvosLnBu/s/nVhZ6CspbGTt3SxuumK0dRYyLDrKg4x4mFL/1QYU4bwr0N1moz3HZeI3Il0tu8Demse604hrMtCfAcs7uhaq+UN4y6hlBnWRgJup7fUrVgkihUQ+LQgOm1BeqozELjuRbgwJOuro3JdWYgLMTTF62+eQsMdYBUIJ6j3hpQ/YOjCankute/wHfGbbMOHsa5HLkSqhPMq8UB62potbKgLDC4C1P4q++i9mzgA6vwF/r42CQAwd05g/zuE4yjtNgMwjrS6gKuzONRFXMj1Dqm/AQFsnI8ecjHVm5Qh624xoskWZGm8L7gIeFPAhfngrhZZ+DJkEiHkmoGWigyiB9RO3m8nRaSDLyEZL733mnS+ufLjaUGXBoVymbx43wVbx91+4ZZgaSk7KkXOQlLSQx1/HyNPD/TL+LbrX0V4QI7zNcjgMEUmwnGV66H/diw2Hsg+OyS7rEA9QrEiLX5N/jQd9pw32WxqX5CgcoouRd1hgcIjq8b4koX+PXiz+GmjmbBNiJovV4saZpFHnsPEeTKZqkEp6bgMfHn9xPgObrT4fnCJUHozi6Txxfdv8Tc="
+  file: $BINPATH
+  on:
+    tags: true
+  provider: releases
+  skip_cleanup: true
+
+branches:
+  only:
+    # release tags
+    - /\d+\.\d+\.\d+.*$/
+    - /^v\d+\.\d+\.\d+.*$/
+    - master
+
+notifications:
+  email:
+    on_succees: never

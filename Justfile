@@ -1,3 +1,7 @@
+next:
+    export VERSION=$(cat madlang.cabal | grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | awk -F. '{$NF+=1; print $0}' | sed 's/ /\./g')
+    sed "s/\d+.\d+.\d+.\d+/$VERSION/"
+
 ci:
     cabal new-build
     cabal new-test
@@ -13,6 +17,8 @@ upload:
     rm -rf dist/
     cabal sdist
     cabal upload --publish $(fd '\.tar\.gz$')
+    git tag $(grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal)
+    git push origin --tags
 
 install:
     cabal new-build
