@@ -26,7 +26,7 @@ custom-setup
                  , Cabal
                  , file-embed
                  , directory
-                 , process
+                 , process >= 1.3.0.0
 
 Flag development {
   Description: Turn on '-Werror'
@@ -77,11 +77,9 @@ library
                      , tar
                      , zlib
                      , recursion-schemes
+  if impl(ghc < 7.10)
+    build-depends:     void
   default-language:    Haskell2010
-  default-extensions:  OverloadedStrings
-                     , DeriveGeneric
-                     , DeriveFunctor
-                     , DeriveAnyClass
   if flag(development)
     ghc-options:       -Werror
   if impl(ghc >= 8.0)

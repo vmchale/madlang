@@ -1,3 +1,5 @@
+---
+
 sudo: false
 language: haskell
 
@@ -10,23 +12,24 @@ matrix:
 
     # Linux
     - env: TARGET=x86_64-unknown-linux-gnu
-      ghc: 8.0.2
+      ghc: 8.0
 
     # OS X
     - env: TARGET=x86_64-apple-darwin
+      ghc:
+        - 7.10
       os: osx
 
 before_install:
-  - mkdir -p $HOME/.cabal/bin
-  - export PATH=$HOME/.cabal/bin:$PATH
+  - mkdir -p $HOME/.local/bin
+  - export PATH=$HOME/.local/bin:$PATH
   - cabal update
   - cabal new-build --dependencies-only -w ghc-8.0.2
 
 install:
   - cabal new-build -w ghc-8.0.2 --constraint='madlang -llvm-fast'
   - find -name madlang -executable | tail -n1
-  - cp $(find -name madlang -executable | tail -n1) $HOME/.cabal/bin
-  - ls $HOME/.cabal/bin
+  - cp $(find -name madlang -executable | tail -n1) $HOME/.local/bin
 
 script:
   - madlang run demo/shakespeare.mad

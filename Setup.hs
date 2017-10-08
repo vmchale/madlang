@@ -1,5 +1,9 @@
+{-# LANGUAGE CPP             #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+#if __GLASGOW_HASKELL__ <= 783
+import           Control.Applicative (pure)
+#endif
 import           Control.Monad       (unless, void)
 import           Data.FileEmbed      (embedStringFile)
 import           Data.Maybe

@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 -- | Helper functions to sort out parsing
 module Text.Madlibs.Ana.ParseUtils (
     modifierList

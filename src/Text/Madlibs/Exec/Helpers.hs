@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Text.Madlibs.Exec.Helpers (fetchPackages, cleanPackages) where
 
 import qualified Codec.Archive.Tar      as Tar
