@@ -24,7 +24,7 @@ CODE MAINTENANCE:
   - [ ] `strip` should be implemented literally any other way than the current
     implementation
 CI:
-  - [ ] appveyor builds
+  - [ ] appveyor builds (+ tweet needs travis!)
   - [ ] automatic deploys w/ releases
   - [ ] hlint/weeder on travis
 DOCUMENTATION:
