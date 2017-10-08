@@ -1,6 +1,5 @@
 next:
-    export VERSION=$(cat madlang.cabal | grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | awk -F. '{$NF+=1; print $0}' | sed 's/ /\./g')
-    sed "s/\d+.\d+.\d+.\d+/$VERSION/"
+    @export VERSION=$(cat madlang.cabal | grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | awk -F. '{$NF+=1; print $0}' | sed 's/ /\./g') && echo $VERSION && sed -i "s/[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/$VERSION/" madlang.cabal
 
 ci:
     cabal new-build
@@ -21,7 +20,7 @@ upload:
     git push origin --tags
 
 install:
-    cabal new-build
+    cabal new-build --constraint='madlang +llvm-fast'
     cp $(fd 'madlang$' -I | tail -n1) ~/.local/bin
 
 clean:
