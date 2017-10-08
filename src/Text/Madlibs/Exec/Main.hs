@@ -18,13 +18,14 @@ import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec
 
 -- | datatype for the program
-data Program = Program { sub :: Subcommand }
+newtype Program = Program { sub :: Subcommand }
 
 -- | datatype for the subcommands
 data Subcommand = Debug { input :: FilePath }
                 | Run { _rep :: Maybe Int , clInputs :: [String] , input :: FilePath }
                 | Lint { clInputs :: [String] , input :: FilePath }
                 | Install
+                | VimInstall
 
 -- | Parser for command-line options for the program
 orders :: Parser Program
@@ -34,6 +35,7 @@ orders = Program
         <> command "debug" (info debug (progDesc "Debug a template"))
         <> command "lint" (info lint (progDesc "Lint a file"))
         <> command "install" (info (pure Install) (progDesc "Install/update prebundled libraries."))
+        <> command "vim" (info (pure VimInstall) (progDesc "Install vim plugin."))
         ))
 
 -- | Parser for the run subcommand
@@ -93,16 +95,17 @@ wrapper = info (helper <*> versionInfo <*> orders)
 
 -- | given a parsed record perform the appropriate IO action
 template :: Program -> IO ()
-template rec = do
+template rec =
     case sub rec of
         Install -> fetchPackages >> cleanPackages
+        VimInstall -> installVimPlugin
         _ -> do
             let toFolder = input . sub $ rec
             if getDir toFolder == "" then pure () else setCurrentDirectory (getDir toFolder)
             let filepath = reverse . (takeWhile (/='/')) . reverse $ toFolder
             let ins = map T.pack (clInputs . sub $ rec)
             case sub rec of
-                (Run reps _ _) -> do
+                (Run reps _ _) ->
                     replicateM_ (fromMaybe 1 reps) $ runFile ins filepath >>= TIO.putStrLn
                 (Debug _) -> putStr . (either show displayTree) =<< makeTree ins "" filepath
                 (Lint _ _) -> do

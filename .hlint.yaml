@@ -8,4 +8,6 @@
    - {name: traceShow, within: []}
    - {name: getEnv, within: []}
  - ignore: {name: Use section, within: [ Text.Madlibs.Internal.Types, Text.Madlibs.Ana.ParseUtils ]}
+ - ignore: {name: Move brackets to avoid $, within: [Text.Madlibs.Exec.Main] }
+ - ignore: {name: Redundant bracket, within: [Text.Madlibs.Exec.Main] }
  - error: {lhs: concatMap, rhs: (=<<), name: "Use monadic join"}

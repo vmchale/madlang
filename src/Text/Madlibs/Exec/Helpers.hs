@@ -1,11 +1,29 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Text.Madlibs.Exec.Helpers (fetchPackages, cleanPackages) where
+module Text.Madlibs.Exec.Helpers (fetchPackages, cleanPackages, installVimPlugin) where
 
 import qualified Codec.Archive.Tar      as Tar
+import           Codec.Archive.Zip      (ZipOption (..),
+                                         extractFilesFromArchive, toArchive)
 import           Codec.Compression.GZip (decompress)
 import           Network.HTTP.Client    hiding (decompress)
 import           System.Environment     (getEnv)
+
+installVimPlugin :: IO ()
+installVimPlugin = do
+
+    putStrLn "fetching latest vim plugin..."
+    manager <- newManager defaultManagerSettings
+    initialRequest <- parseRequest "https://github.com/vmchale/madlang-vim/archive/master.zip"
+    response <- httpLbs (initialRequest { method = "GET" }) manager
+    let byteStringResponse = responseBody response
+
+    putStrLn "installing locally..."
+    home <- getEnv "HOME"
+    let packageDir = home ++ "/.vim"
+    let archive = toArchive byteStringResponse
+    let options = OptDestination packageDir
+    extractFilesFromArchive [options] archive
 
 -- TODO set remote package url flexibly
 fetchPackages :: IO ()

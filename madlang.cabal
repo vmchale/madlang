@@ -76,6 +76,7 @@ library
                      , http-client
                      , tar
                      , zlib
+                     , zip-archive
                      , recursion-schemes
   default-language:    Haskell2010
   if flag(development)
