@@ -35,6 +35,7 @@ script:
   - cabal new-test -w ghc-8.0.2 --constraint='madlang -llvm-fast'
   #  - cabal new-bench -w ghc-8.0.2 --constraint='madlang -llvm-fast'
   - export BINPATH="$(find -name madlang -executable | tail -n1)-x86_64-unknown-linux"
+  - mv $(find -name madlang -executable | tail -n1) BINPATH
 
 deploy:
   api_key:
