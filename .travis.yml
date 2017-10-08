@@ -16,8 +16,7 @@ matrix:
 
     # OS X
     - env: TARGET=x86_64-apple-darwin
-      ghc:
-        - 7.10
+      ghc: 7.10.3
       os: osx
 
 before_install:
