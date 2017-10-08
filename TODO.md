@@ -23,6 +23,7 @@ CODE MAINTENANCE:
   - [ ] test suite for error messages
   - [ ] `strip` should be implemented literally any other way than the current
     implementation
+  - [ ] self-updating based on github releases!
 CI:
   - [ ] appveyor builds (+ tweet needs travis!)
   - [ ] automatic deploys w/ releases
