@@ -3,12 +3,6 @@
 sudo: false
 language: haskell
 
-cache:
-  directories:
-    - $HOME/.ghc
-    - $HOME/.cabal
-    - $HOME/.stack
-
 env:
   global:
     - PACKAGE_NAME=madlang
