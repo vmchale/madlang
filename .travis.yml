@@ -40,7 +40,7 @@ script:
   - madlang run demo/shakespeare.mad
   - cabal new-test -w ghc-8.0.2 --constraint='madlang -llvm-fast'
   #  - cabal new-bench -w ghc-8.0.2 --constraint='madlang -llvm-fast'
-  - export BINPATH=$(find -name madlang -executable | tail -n1)
+  - export BINPATH="$(find -name madlang -executable | tail -n1)-x86_64-unknown-linux"
 
 deploy:
   api_key:
@@ -55,4 +55,4 @@ branches:
   only:
     # release tags
     - /\d+\.\d+\.\d+\.\d+.*$/
-    - master
+ V>   - master
