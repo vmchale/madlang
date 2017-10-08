@@ -16,3 +16,10 @@ test_script:
 - stack setup > nul
 - echo "" | stack --no-terminal test
 - echo "" | stack --no-terminal install
+
+deploy:
+  provider: GitHub
+  appveyor_repo_tag: true
+  auth_token:
+    secure: GmKAQNxSIcdI6rigCu6DZmYt6tSNR62cQdcogvhItCE5ONoG69Uhdm5s6g5ROOsA
+  artifact: /.*madlang$/

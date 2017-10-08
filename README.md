@@ -1,5 +1,6 @@
 # Madlang DSL for generating random text
 
+[![Windows build status](https://ci.appveyor.com/api/projects/status/github/vmchale/madlang?svg=true)](https://ci.appveyor.com/project/vmchale/madlang)
 [![Build Status](https://travis-ci.org/vmchale/madlang.svg?branch=master)](https://travis-ci.org/vmchale/madlang)
 
 This is the Madlang DSL for generating text. You specify a template, and Madlang
