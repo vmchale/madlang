@@ -16,28 +16,23 @@ matrix:
     - env: TARGET=x86_64-apple-darwin
       os: osx
 
-  allow_failures:
-    - env: TARGET=x86_64-unknown-linux-gnu
-      addons: {apt: {packages: [ghc-8.2.1], sources: [hvr-ghc]}}
-      ghc: 8.2.1
-
 before_install:
-- mkdir -p $HOME/.cabal/bin
-- export PATH=$HOME/.cabal/bin:$PATH
-- cabal update
-- cabal new-build --dependencies-only -w ghc-8.0.2
+  - mkdir -p $HOME/.cabal/bin
+  - export PATH=$HOME/.cabal/bin:$PATH
+  - cabal update
+  - cabal new-build --dependencies-only -w ghc-8.0.2
 
 install:
-- cabal new-build -w ghc-8.0.2 --constraint='madlang -llvm-fast'
-- find -name madlang -executable | tail -n1
-- cp $(find -name madlang -executable | tail -n1) $HOME/.cabal/bin
-- ls $HOME/.cabal/bin
+  - cabal new-build -w ghc-8.0.2 --constraint='madlang -llvm-fast'
+  - find -name madlang -executable | tail -n1
+  - cp $(find -name madlang -executable | tail -n1) $HOME/.cabal/bin
+  - ls $HOME/.cabal/bin
 
 script:
-- madlang run demo/shakespeare.mad
-- cabal new-test -w ghc-8.0.2 --constraint='madlang -llvm-fast'
-- cabal new-bench -w ghc-8.0.2 --constraint='madlang -llvm-fast'
-- export BINPATH=$(find -name madlang -executable | tail -n1)
+  - madlang run demo/shakespeare.mad
+  - cabal new-test -w ghc-8.0.2 --constraint='madlang -llvm-fast'
+  - cabal new-bench -w ghc-8.0.2 --constraint='madlang -llvm-fast'
+  - export BINPATH=$(find -name madlang -executable | tail -n1)
 
 deploy:
   api_key:
@@ -53,7 +48,3 @@ branches:
     # release tags
     - /\d+\.\d+\.\d+\.\d+.*$/
     - master
-
-notifications:
-  email:
-    on_succees: never
