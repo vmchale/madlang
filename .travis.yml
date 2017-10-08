@@ -3,6 +3,12 @@
 sudo: false
 language: haskell
 
+cache:
+  directories:
+    - $HOME/.ghc
+    - $HOME/.cabal
+    - $HOME/.stack
+
 env:
   global:
     - PACKAGE_NAME=madlang
@@ -33,7 +39,7 @@ install:
 script:
   - madlang run demo/shakespeare.mad
   - cabal new-test -w ghc-8.0.2 --constraint='madlang -llvm-fast'
-  - cabal new-bench -w ghc-8.0.2 --constraint='madlang -llvm-fast'
+  #  - cabal new-bench -w ghc-8.0.2 --constraint='madlang -llvm-fast'
   - export BINPATH=$(find -name madlang -executable | tail -n1)
 
 deploy:
