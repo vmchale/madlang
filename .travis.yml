@@ -49,4 +49,4 @@ branches:
   only:
     # release tags
     - /\d+\.\d+\.\d+\.\d+.*$/
- V>   - master
+    - master
