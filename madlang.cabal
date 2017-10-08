@@ -111,8 +111,6 @@ benchmark madlang-bench
                   , madlang
                   , megaparsec
                   , text
-  if flag(llvm-fast)
-    ghc-options:    -fllvm -optlo-O3 -O3 -fwarn-unused-imports
   if flag(development)
     ghc-options:    -Werror
   ghc-options:      -rtsopts -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -O3
