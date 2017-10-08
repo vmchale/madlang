@@ -8,19 +8,20 @@ import           Codec.Archive.Zip      (ZipOption (..),
 import           Codec.Compression.GZip (decompress)
 import           Network.HTTP.Client    hiding (decompress)
 import           System.Environment     (getEnv)
+import           System.Info            (os)
 
 installVimPlugin :: IO ()
 installVimPlugin = do
 
     putStrLn "fetching latest vim plugin..."
     manager <- newManager defaultManagerSettings
-    initialRequest <- parseRequest "https://github.com/vmchale/madlang-vim/archive/master.zip"
+    initialRequest <- parseRequest "http://vmchale.com/static/vim.zip"
     response <- httpLbs (initialRequest { method = "GET" }) manager
     let byteStringResponse = responseBody response
 
     putStrLn "installing locally..."
     home <- getEnv "HOME"
-    let packageDir = home ++ "/.vim"
+    let packageDir = if os /= "mingw32" then home ++ "/.vim" else home ++ "\\vimfiles"
     let archive = toArchive byteStringResponse
     let options = OptDestination packageDir
     extractFilesFromArchive [options] archive
@@ -37,7 +38,7 @@ fetchPackages = do
 
     putStrLn "unpacking libraries..."
     home <- getEnv "HOME"
-    let packageDir = home ++ "/.madlang"
+    let packageDir = if os /= "mingw32" then home ++ "/.madlang" else home ++ "\\.madlang"
     Tar.unpack packageDir . Tar.read . decompress $ byteStringResponse
 
 cleanPackages :: IO ()

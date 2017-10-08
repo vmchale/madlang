@@ -17,6 +17,7 @@ import qualified Data.Text                   as T
 import           Data.Void
 import           System.Directory
 import           System.Environment
+import           System.Info                 (os)
 import           Text.Madlibs.Ana.Parse
 import           Text.Madlibs.Ana.ParseUtils
 import           Text.Madlibs.Cata.Run
@@ -34,7 +35,8 @@ parseFile = fmap (fmap takeTemplate) .** (getInclusionCtx False)
 -- | Generate text from file with inclusions
 getInclusionCtx :: Bool -> [T.Text] -> FilePath -> FilePath -> IO (Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)])
 getInclusionCtx isTree ins folder filepath = do
-    file <- catch (readFile' (folder ++ filepath)) (const (do { home <- getEnv "HOME" ; readFile' (home <> "/.madlang/" <> folder <> filepath) } ) :: IOException -> IO T.Text)
+    libDir <- do { home <- getEnv "HOME" ; if os /= home then pure (home <> "/.madlang") else pure (home <> "\\.madlang") }
+    file <- catch (readFile' (folder ++ filepath)) (const (readFile' (libDir <> folder <> filepath)) :: IOException -> IO T.Text)
     let filenames = map T.unpack $ either (error . show) id $ parseInclusions filepath file -- TODO pass up errors correctly
     let resolveKeys file' = fmap (first ((((T.pack . (<> "-")) . dropExtension) file') <>))
     ctxPure <- mapM (getInclusionCtx isTree ins folder) filenames
