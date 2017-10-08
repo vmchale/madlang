@@ -1,5 +1,5 @@
 name:                madlang
-version:             2.4.2.8
+version:             2.4.2.9
 synopsis:            Randomized templating language DSL
 description:         Madlang is a text templating language written in Haskell,
                      meant to explore computational creativity and generative
