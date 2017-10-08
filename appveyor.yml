@@ -22,6 +22,6 @@ deploy:
   provider: GitHub
   appveyor_repo_tag: true
   auth_token:
-    secure: eX6D8QH3Rhp7the830ZWHWgx+EYDGZvXQlmEAUUmK/FykfquKwv6g+XnAejc3+dB
+    secure: 0qzMr6xmEwRoj/9TJOgDuW/LXWfGVM/4A7kvAXGe0BAwWCF13AWE2SARrYkyc3ji
   artifact: /C:\Users\appveyor\AppData\Roaming\local\bin\madlang.exe/
   # /.*madlang\.exe$/
