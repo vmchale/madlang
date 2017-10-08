@@ -14,11 +14,10 @@ matrix:
     - env: TARGET=x86_64-unknown-linux-gnu
       ghc: 8.0.2
 
-    # OS X
-    - env: TARGET=x86_64-apple-darwin
-      language: haskell
-      # ghc: 7.10.3
-      os: osx
+# OS X
+# - env: TARGET=x86_64-apple-darwin
+#   ghc: 7.10.3
+#   os: osx
 
 before_install:
   - mkdir -p $HOME/.local/bin

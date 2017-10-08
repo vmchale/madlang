@@ -77,8 +77,6 @@ library
                      , tar
                      , zlib
                      , recursion-schemes
-  if impl(ghc < 7.10)
-    build-depends:     void
   default-language:    Haskell2010
   if flag(development)
     ghc-options:       -Werror

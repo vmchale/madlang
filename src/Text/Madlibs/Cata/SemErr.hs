@@ -1,9 +1,5 @@
-{-# LANGUAGE CPP                #-}
-{-# LANGUAGE FlexibleContexts   #-}
-{-# LANGUAGE OverloadedStrings  #-}
-#if __GLASGOW_HASKELL <= 783
-{-# LANGUAGE DeriveDataTypeable #-}
-#endif
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 -- | Module defining the SemErr data type
 module Text.Madlibs.Cata.SemErr (
@@ -14,9 +10,6 @@ module Text.Madlibs.Cata.SemErr (
   , head'
   , headNoReturn ) where
 
-#if __GLASGOW_HASKELL <= 783
-import           Control.Applicative          (pure)
-#endif
 import           Control.Exception
 import           Control.Monad
 import qualified Data.Text                    as T
