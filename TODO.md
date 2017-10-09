@@ -6,6 +6,7 @@ DEFICIENCIES:
   - [ ] dependency management should work better
   - [ ] circular dependencies error should be more specific
   - [ ] documentation for library functionality
+  - [ ] overlapping categories?
   - [ ] vim syntax should work in quasi-quotes
 FEATURES:
   - [ ] user-defined modifiers
