@@ -19,6 +19,7 @@ FEATURES:
   - [ ] making (verb) agreement work?
   - [ ] `--explain` flag for error messages
   - [ ] alliteration
+  - [ ] generate tagfiles for vim
 CODE MAINTENANCE:
   - [ ] use prisms for errors
   - [ ] test suite for error messages
