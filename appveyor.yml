@@ -17,10 +17,17 @@ test_script:
   - stack setup > nul
   - echo "" | stack --no-terminal test
   - echo "" | stack --no-terminal install
+  - ps: Get-ChildItem . -name -recurse madlang.exe
 
 deploy:
-  artifact: /C:\\Users\\appveyor\\AppData\\Roaming\\local\\bin\\madlang.exe/
+  artifact: .stack-work\\install\\x86_64-linux-nopie\\nightly-2017-10-05\\8.2.1\\bin\\madlang.exe
   provider: GitHub
-  appveyor_repo_tag: true
+  on:
+    apveyor_repo_tag: true
   auth_token:
     secure: 0qzMr6xmEwRoj/9TJOgDuW/LXWfGVM/4A7kvAXGe0BAwWCF13AWE2SARrYkyc3ji
+
+branches:
+  only:
+    # Release tags
+    - /\d+\.\d+\.\d+\.\d+.*$/
