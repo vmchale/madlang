@@ -198,3 +198,21 @@ You can view documentation for `madlang` on Linux, Mac, or BSD by typing:
 ```bash
  $ man madlang
 ```
+
+## Contributions
+
+### Release Naming
+
+Releases are named using the `releases.mad` file found
+[here](https://hub.darcs.net/vmchale/madlang-releases). You will need to install
+the standard libraries using
+
+```bash
+ $ madlang install
+```
+
+before running
+
+```bash
+ $ just name
+```

@@ -23,6 +23,9 @@ install:
     cabal new-build --constraint='madlang +llvm-fast'
     cp $(fd 'madlang$' -I | tail -n1) ~/.local/bin
 
+name:
+    github-release edit -s $(cat .git-token) -u vmchale -r madlang -n "$(madlang run ~/programming/madlang/releases/releases.mad)" -t "$(grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1)"
+
 clean:
     sn c .
     rm -f man/madlang.1 tags
