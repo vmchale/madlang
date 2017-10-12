@@ -17,9 +17,11 @@ test_script:
   - stack setup > nul
   - echo "" | stack --no-terminal install
   - ps: Get-ChildItem . -name -recurse madlang.exe
+  - ps: Copy-Item c:\\stack\\.stack-work\\install\\afd8a623\\bin\\madlang.exe madlang-x86_64-pc-windows.exe
+  - ps: Push-AppveyorArtifact madlang-x86_64-pc-windows.exe
 
 deploy:
-  artifact: .stack-work\\install\\x86_64-linux-nopie\\nightly-2017-10-05\\8.2.1\\bin\\madlang.exe
+  artifacts: madlang-x86_64-pc-windows.exe
   provider: GitHub
   on:
     appveyor_repo_tag: true
@@ -29,4 +31,5 @@ deploy:
 branches:
   only:
     # Release tags
+    - master
     - /\d+\.\d+\.\d+\.\d+.*$/

@@ -16,6 +16,8 @@ upload:
     rm -rf dist/
     cabal sdist
     cabal upload --publish $(fd '\.tar\.gz$' -I)
+
+release:
     git tag "$(grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1)"
     git push origin --tags
 
