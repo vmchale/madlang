@@ -25,4 +25,4 @@ install:
 
 clean:
     sn c .
-    rm -f madlang.1 tags
+    rm -f man/madlang.1 tags
