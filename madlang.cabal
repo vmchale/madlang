@@ -1,5 +1,5 @@
 name:                madlang
-version:             2.4.2.21
+version:             2.4.2.22
 synopsis:            Randomized templating language DSL
 description:         Madlang is a text templating language written in Haskell,
                      meant to explore computational creativity and generative
@@ -72,7 +72,6 @@ library
                      , mtl
                      , ansi-wl-pprint
                      , containers
-                     , bytestring
                      , http-client
                      , tar
                      , zlib
@@ -127,9 +126,7 @@ test-suite madlang-test
   build-depends:       base
                      , madlang
                      , hspec
-                     , megaparsec
                      , text
-                     , mtl
                      , hspec-megaparsec
   if flag(development)
     ghc-options:       -Werror
