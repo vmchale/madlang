@@ -13,11 +13,11 @@ import           Text.Megaparsec.Error
 
 -- | Drop file Extension
 dropExtension :: FilePath -> FilePath
-dropExtension = reverse . drop 1 . (dropWhile (/='.')) . reverse
+dropExtension = reverse . drop 1 . dropWhile (/='.') . reverse
 
 -- | Get directory associated to a file
 getDir :: FilePath -> FilePath
-getDir = reverse . (dropWhile (/='/')) . reverse
+getDir = reverse . dropWhile (/='/') . reverse
 
 -- | Function to apply a value on both arguments, e.g.
 --
@@ -38,11 +38,11 @@ normalize list = fmap (first (/total)) list
 
 -- | Helper function for creating a cdf from a pdf
 cdf :: [Prob] -> [Prob]
-cdf = (drop 2) . (scanl (+) 0) . ((:) 0)
+cdf = drop 2 . scanl (+) 0 . (:) 0
 
 -- | Show as a T.Text
 show' :: (Show a) => a -> T.Text
-show' = (T.drop 1) . T.init . T.pack . show
+show' = T.drop 1 . T.init . T.pack . show
 
 -- | Pretty-print a ParseError
 parseErrorPretty' :: ParseError Char (ErrorFancy Void) -> T.Text
@@ -55,4 +55,4 @@ unTok (Name txt _) = txt
 
 -- | Read a file in as a `Text`
 readFile' :: FilePath -> IO T.Text
-readFile' = (fmap T.pack) . readFile
+readFile' = fmap T.pack . readFile

@@ -42,5 +42,5 @@ fetchPackages = do
     Tar.unpack packageDir . Tar.read . decompress $ byteStringResponse
 
 cleanPackages :: IO ()
-cleanPackages = do
+cleanPackages =
     putStrLn "done."

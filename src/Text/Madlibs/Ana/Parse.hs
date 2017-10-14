@@ -96,7 +96,7 @@ name = (lexeme . fmap T.pack) (some (letterChar <|> oneOf ("-/" :: String))) <?>
 modifier :: Parser (T.Text -> T.Text)
 modifier = do
     char '.'
-    str <- foldr (<|>) (pure "") $ map (try . string) ["to_upper", "to_lower", "reverse", "reverse_words", "oulipo", "capitalize"]
+    str <- foldr ((<|>) . try . string) (pure "") ["to_upper", "to_lower", "reverse", "reverse_words", "oulipo", "capitalize"]
     pure (fromMaybe id (M.lookup (T.unpack str) modifierList)) <?> "modifier"
 
 -- | Parse template into a `PreTok` of referents and strings
@@ -185,12 +185,12 @@ parseTreeM ins = buildTree <$> program ins
 
 -- | Parse text as a list of functions
 parseTokF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)]
-parseTokF filename state' ins f = (flip execState (filterTemplate state')) <$> runParser (parseTokM ins) filename f
+parseTokF filename state' ins f = flip execState (filterTemplate state') <$> runParser (parseTokM ins) filename f
     where filterTemplate = map (\(i,j) -> if i == "Return" then (strip filename, j) else (i,j)) -- TODO fix the extras
 
 -- | Parse text as a list of tokens, suitable for printing as a tree.
 parseTreeF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)]
-parseTreeF filename state' ins f = (flip execState (filterTemplate state')) <$> runParser (parseTreeM ins) filename f
+parseTreeF filename state' ins f = flip execState (filterTemplate state') <$> runParser (parseTreeM ins) filename f
     where filterTemplate = map (\(i,j) -> if i == "Return" then (strip filename, j) else (i,j))
 
 -- | Parse text given a context
@@ -205,11 +205,11 @@ parseTok :: FilePath -- ^ File name to use for parse errors
     -> [T.Text] -- ^ list of variables to substitute into the template
     -> T.Text -- ^ Actaul text to parse
     -> Either (ParseError Char (ErrorFancy Void)) RandTok -- ^ Result
-parseTok = (fmap takeTemplate) .*** parseTokF
+parseTok = fmap takeTemplate .*** parseTokF
 
 -- | Parse text as a token, suitable for printing as a tree..
 parseTree :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char (ErrorFancy Void)) RandTok
-parseTree = (fmap takeTemplate) .*** parseTreeF
+parseTree = fmap takeTemplate .*** parseTreeF
 
 -- | Parse inclustions
 parseInclusions :: FilePath -> T.Text -> Either (ParseError Char (ErrorFancy Void)) [T.Text]

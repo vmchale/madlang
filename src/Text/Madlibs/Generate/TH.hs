@@ -42,7 +42,7 @@ madlang = QuasiQuoter { quoteExp = textToExpression
 textToExpression :: String -> Q Exp
 textToExpression txt = do
     parse' <- [|parseTok "source" [] []|]
-    pure $ (VarE 'errorgen) `AppE` (parse' `AppE` ((VarE 'T.pack) `AppE` (LitE (StringL (txt)))))
+    pure $ VarE 'errorgen `AppE` (parse' `AppE` (VarE 'T.pack `AppE` LitE (StringL txt)))
 
 -- | Turn a parse error into an error that will be caught when Template Haskell compiles at runtime.
 errorgen :: Either (ParseError Char (ErrorFancy Void)) a -> a
@@ -59,6 +59,6 @@ errorgen = either (error . T.unpack . show') id
 -- Note that the embedded code cannot have any inclusions.
 madFile :: FilePath -> Q Exp
 madFile path = do
-    file <- (embedFile path)
-    parse' <- [|(parseTok "source" [] []) . decodeUtf8|] -- TODO make this recurse but still work!
-    pure $ (VarE 'errorgen) `AppE` (parse' `AppE` file)
+    file <- embedFile path
+    parse' <- [|parseTok "source" [] [] . decodeUtf8|] -- TODO make this recurse but still work!
+    pure $ VarE 'errorgen `AppE` (parse' `AppE` file)
