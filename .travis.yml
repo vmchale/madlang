@@ -39,7 +39,7 @@ script:
   - stack --no-terminal build --haddock --no-haddock-deps
   - stack test
   - stack bench
-  - hlint .
+    # - hlint .
   - weeder .
   - |
     if [ `uname` = "Darwin" ]
