@@ -1,0 +1,10 @@
+- package:
+  - name: madlang
+  - section:
+    - name: library
+    - message:
+      - name: Weeds exported
+      - module:
+        - name: Text.Madlibs.Ana.ParseUtils
+        - identifier: jumble
+
