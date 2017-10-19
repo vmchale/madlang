@@ -13,7 +13,7 @@ manpages:
     pandoc man/MANPAGE.md -s -t man -o man/madlang.1
 
 upload:
-    rm -rf dist/
+    rm -rf dist/ .ghc.environment.*
     cabal sdist
     cabal upload --publish $(fd '\.tar\.gz$' -I)
 
@@ -30,4 +30,4 @@ name:
 
 clean:
     sn c .
-    rm -f .ghc.environment.x86_64-linux-8.2.1 man/madlang.1 tags
+    rm -f .ghc.environment.* man/madlang.1 tags
