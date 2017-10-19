@@ -104,8 +104,8 @@ groups of identifiers. We can define one like so:
     1.0 "dimpled"
 
 :category adjective
-    color
-    texture
+    | color
+    | texture
 
 :return
     1.0 adjective
