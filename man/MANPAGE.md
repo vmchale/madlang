@@ -39,7 +39,11 @@ You can also download prebundled packages using
 
 # EDITOR INTEGRATION
 
-A vim plugin is available from
+You can install a vim plugin for Madlang using
+
+  madlang vim
+
+Alternately, it is available from
 
 https://github.com/vmchale/madlang-vim
 
