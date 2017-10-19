@@ -30,6 +30,9 @@ import qualified Text.Megaparsec.Char.Lexer  as L
 lexeme :: Parser a -> Parser a
 lexeme = L.lexeme spaceConsumer
 
+spaceOnly :: Parser ()
+spaceOnly = L.space (void . some $ oneOf ("\t " :: String)) (L.skipLineComment "#") (L.skipBlockComment "{#" "#}")
+
 -- | space consumer with awareness for comments
 spaceConsumer :: Parser ()
 spaceConsumer = L.space (void . some $ spaceChar) (L.skipLineComment "#") (L.skipBlockComment "{#" "#}")
@@ -104,26 +107,26 @@ preStr :: [T.Text] -> Parser PreTok
 preStr ins = do {
         n <- name ;
         mod' <- many modifier ;
-        spaceConsumer ;
+        spaceOnly ;
         pure $ Name n (foldr (.) id mod')
     } <|>
     do {
         v <- var ;
         mod' <- many modifier ;
-        spaceConsumer ;
-        pure . PreTok . foldr (.) id mod' $ ins `access` (v-1) -- ins !! (v - 1)
+        spaceOnly ;
+        pure . PreTok . foldr (.) id mod' $ ins `access` (v-1)
     } <|>
     do {
         s <- quote (many $ noneOf ("\n\"" :: String)) ;
         mod' <- many modifier ;
-        spaceConsumer ;
+        spaceOnly ;
         pure . PreTok . foldr (.) id mod' . T.pack $ s
     }
     <?> "string or function name"
 
 -- | Parse a probability/corresponding template
 pair :: [T.Text] -> Parser (Prob, [PreTok])
-pair ins = do
+pair ins = lexeme $ do
     indentGuard
     p <- float
     str <- some (preStr ins)
@@ -131,10 +134,12 @@ pair ins = do
 
 -- | Parse a function name for a `:category` block.
 function :: Parser (Prob, [PreTok])
-function = do
+function = lexeme $ do
     indentGuard
-    str <- preStr mempty
-    pure (1.0, [str]) <?> "Function name"
+    char '|'
+    spaceOnly
+    str <- some (preStr mempty)
+    pure (1.0, str) <?> "Function name"
 
 -- | Parse an `include`
 inclusions :: Parser [T.Text]

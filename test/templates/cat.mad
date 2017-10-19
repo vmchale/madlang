@@ -1,6 +1,6 @@
 :category places
-    country
-    state
+    | "Country: " country
+    | "State: " state
 
 :define country
     1.0 "UK"

@@ -30,4 +30,4 @@ name:
 
 clean:
     sn c .
-    rm -f man/madlang.1 tags
+    rm -f .ghc.environment.x86_64-linux-8.2.1 man/madlang.1 tags
