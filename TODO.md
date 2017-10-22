@@ -11,6 +11,7 @@ DEFICIENCIES:
 FEATURES:
   - [ ] user-defined modifiers
   - [ ] index for vim
+  - [ ] install `madlang-miso` template for pi?
   - [ ] library/DSL being able to call dependencies
   - [ ] don't require exactly one return statement (or allow library pragma
     thing?)
