@@ -99,7 +99,7 @@ name = (lexeme . fmap T.pack) (some (letterChar <|> oneOf ("-/" :: String))) <?>
 modifier :: Parser (T.Text -> T.Text)
 modifier = do
     char '.'
-    str <- foldr ((<|>) . try . string) (pure "") ["to_upper", "to_lower", "reverse", "reverse_words", "oulipo", "capitalize"]
+    str <- foldr ((<|>) . try . string) (pure "") ["to_upper", "to_lower", "reverse", "reverse_words", "oulipo", "capitalize", "titlecase"]
     pure (fromMaybe id (M.lookup (T.unpack str) modifierList)) <?> "modifier"
 
 -- | Parse template into a `PreTok` of referents and strings

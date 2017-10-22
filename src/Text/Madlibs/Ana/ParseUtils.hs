@@ -32,6 +32,7 @@ modifierList = M.fromList [("to_upper", T.map toUpper)
     , ("to_lower", T.map toLower)
     , ("capitalize", \t -> toUpper (T.head t) `T.cons` T.tail t)
     , ("reverse", T.reverse)
+    , ("titlecase", T.unwords . fmap (\t -> toUpper (T.head t) `T.cons` (T.tail t)) . T.words)
     , ("reverse_words", T.unwords . reverse . T.words)
     , ("oulipo", T.filter (/='e'))]
 
