@@ -72,6 +72,7 @@ library
                      , ansi-wl-pprint
                      , containers
                      , titlecase
+                     , th-lift-instances
                      , http-client
                      , tar
                      , zlib

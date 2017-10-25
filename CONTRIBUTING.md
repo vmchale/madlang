@@ -26,4 +26,5 @@ version 8.2.1. On Ubuntu, you can use hvr's [ppa
 repository](https://launchpad.net/~hvr/+archive/ubuntu/ghc) to get them.
 You can use stack as well, so long as it passes CI. 
 
-You may wish to install [just](https://github.com/casey/just) as well.
+You may wish to install [just](https://github.com/casey/just) for some nice
+command-line recipes as well.

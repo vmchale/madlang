@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveFoldable       #-}
 {-# LANGUAGE DeriveFunctor        #-}
+{-# LANGUAGE DeriveLift           #-}
 {-# LANGUAGE DeriveTraversable    #-}
 {-# LANGUAGE FlexibleInstances    #-}
 {-# LANGUAGE OverloadedStrings    #-}
@@ -10,12 +11,14 @@
 -- | Module with the type of a random token
 module Text.Madlibs.Internal.Types where
 
-import           Control.Arrow            (second)
+import           Control.Arrow              (second)
 import           Control.Monad.State
 import           Data.Function
-import           Data.Functor.Foldable.TH (makeBaseFunctor)
+import           Data.Functor.Foldable.TH   (makeBaseFunctor)
 import           Data.Monoid
-import qualified Data.Text                as T
+import qualified Data.Text                  as T
+import           Instances.TH.Lift          ()
+import           Language.Haskell.TH.Syntax (Lift (..))
 
 -- | datatype for a double representing a probability
 type Prob = Double
@@ -37,7 +40,7 @@ instance Eq PreTok where
 
 -- | datatype for a token returning a random string
 data RandTok = List [(Prob, RandTok)] | Value T.Text
-    deriving (Show, Eq)
+    deriving (Show, Eq, Lift)
 
 apply :: (T.Text -> T.Text) -> RandTok -> RandTok -- TODO make a base functor so we can map f over stuff?
 apply f (Value str) = Value (f str)
