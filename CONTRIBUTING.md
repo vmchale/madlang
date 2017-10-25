@@ -1,8 +1,8 @@
 # Contributing to Madlang
 
-I emphatically welcome bug reports, issues you may encounter, documentation, and pull requests. I also welcome feature
-requests, though whether we will incorporate them depends on contributors'
-schedules.
+I emphatically welcome bug reports, issues you may encounter, documentation, and
+pull requests. I also emphatically welcome feature requests, as I do not always
+have the ability to see what's missing in my own work :)
 
 ## Getting started
 

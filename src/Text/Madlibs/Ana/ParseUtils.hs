@@ -111,9 +111,8 @@ hasNoDeps = all isPreTok . (>>= snd)
           isPreTok _        = False
 
 allDeps :: [(Key, [(Prob, [PreTok])])] -> Key -> [Key]
-allDeps context key = let deps = (catMaybes . fmap maybeName . getNames) context in deps <> (=<<) (allDeps context) deps
-    where getNames :: [(Key, [(Prob, [PreTok])])] -> [PreTok]
-          getNames = (=<<) snd . fromJust . lookup key
+allDeps context key = let deps = (catMaybes . fmap maybeName . getNames) context in deps <> (allDeps context =<< deps)
+    where getNames = (=<<) snd . fromJust . lookup key
           maybeName (Name n _) = Just n
           maybeName _          = Nothing
 
