@@ -3,6 +3,10 @@
     1.0 "two"
     1.0 "three"
 
+:define afifththing
+    1.0 afourththing
+    1.0 athirdthing
+
 :define afourththing
     1.0 something
     1.0 "fourth".oulipo
@@ -18,4 +22,5 @@
 
 :return
     1.0 something
+    1.0 afifththing
     1.0 afourththing

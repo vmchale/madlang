@@ -1,5 +1,5 @@
 name:                madlang
-version:             3.0.0.2
+version:             3.0.0.3
 synopsis:            Randomized templating language DSL
 description:         Madlang is a text templating language written in Haskell,
                      meant to explore computational creativity and generative
@@ -24,7 +24,6 @@ cabal-version:       >=1.10
 custom-setup
   setup-depends:   base
                  , Cabal
-                 , file-embed
                  , directory
                  , process >= 1.4.0.0
 
@@ -72,6 +71,7 @@ library
                      , mtl
                      , ansi-wl-pprint
                      , containers
+                     , titlecase
                      , http-client
                      , tar
                      , zlib

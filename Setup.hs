@@ -1,15 +1,12 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 import           Control.Monad       (unless, void)
-import           Data.FileEmbed      (embedStringFile)
 import           Data.Maybe
 import           Distribution.Simple
 import           System.Directory    (createDirectoryIfMissing)
 import           System.Environment  (lookupEnv)
 import           System.Process      (readCreateProcessWithExitCode, shell)
 
-manpage :: String
-manpage = $(embedStringFile "man/madlang.1")
+manpage :: IO String
+manpage = readFile "man/madlang.1"
 
 main :: IO ()
 main = setManpath >>
@@ -36,7 +33,7 @@ writeManpages = do
         Just x -> do
             let manPath = x ++ "/.local/share/man/man1"
             createDirectoryIfMissing True manPath
-            writeFile (manPath ++ "/madlang.1") manpage
+            writeFile (manPath ++ "/madlang.1") =<< manpage
         Nothing -> pure ()
 
 -- TODO only write if we can't find our own thing!

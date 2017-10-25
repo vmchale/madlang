@@ -18,7 +18,10 @@ import           Data.Char
 import           Data.Foldable
 import           Data.List
 import qualified Data.Map                    as M
+import           Data.Maybe                  (catMaybes, fromJust)
+import           Data.Monoid
 import qualified Data.Text                   as T
+import           Data.Text.Titlecase
 import           System.Random.Shuffle
 import           Text.Madlibs.Cata.SemErr
 import           Text.Madlibs.Internal.Types
@@ -32,7 +35,7 @@ modifierList = M.fromList [("to_upper", T.map toUpper)
     , ("to_lower", T.map toLower)
     , ("capitalize", \t -> toUpper (T.head t) `T.cons` T.tail t)
     , ("reverse", T.reverse)
-    , ("titlecase", T.unwords . fmap (\t -> toUpper (T.head t) `T.cons` T.tail t) . T.words) -- FIXME this improperly trims spaces at beginning/end of a word
+    , ("titlecase", T.pack . titlecase . T.unpack) -- FIXME this improperly trims spaces at beginning/end of a word
     , ("reverse_words", T.unwords . reverse . T.words)
     , ("oulipo", T.filter (/='e'))]
 
@@ -97,7 +100,7 @@ build (x:xs) = do
 
 -- | Sort the keys that we have parsed so that dependencies are in the correct places
 sortKeys :: [(Key, [(Prob, [PreTok])])] -> [(Key, [(Prob, [PreTok])])]
-sortKeys = sortBy orderKeys
+sortKeys = sortBy =<< orderKeys
 
 orderHelper :: Key -> [(Prob, [PreTok])] -> Bool
 orderHelper key = any (\pair -> key /= "" && key `elem` (map unTok . snd $ pair))
@@ -107,13 +110,16 @@ hasNoDeps = all isPreTok . (>>= snd)
     where isPreTok PreTok{} = True
           isPreTok _        = False
 
--- FIXME if a depends on b depends on c, then we shouldn't consider a and c to be equal.
--- Consider some fancy morphism here too. (chronomorphism? - comonad to pop
--- values off, monad to store things.)
+allDeps :: [(Key, [(Prob, [PreTok])])] -> Key -> [Key]
+allDeps context key = let deps = (catMaybes . fmap maybeName . getNames) context in deps <> (=<<) (allDeps context) deps
+    where getNames :: [(Key, [(Prob, [PreTok])])] -> [PreTok]
+          getNames = (=<<) snd . fromJust . lookup key
+          maybeName (Name n _) = Just n
+          maybeName _          = Nothing
 
 -- | Ordering on the keys to account for dependency
-orderKeys :: (Key, [(Prob, [PreTok])]) -> (Key, [(Prob, [PreTok])]) -> Ordering
-orderKeys (key1, l1) (key2, l2)
+orderKeys :: [(Key, [(Prob, [PreTok])])] -> (Key, [(Prob, [PreTok])]) -> (Key, [(Prob, [PreTok])]) -> Ordering
+orderKeys context (key1, l1) (key2, l2)
     | key1 == "Return" = GT
     | key2 == "Return" = LT
     | orderHelper key1 l2 = LT
@@ -122,7 +128,9 @@ orderKeys (key1, l1) (key2, l2)
     | any (flip orderHelper l2) (flatten l1) = GT
     | hasNoDeps l1 = LT
     | hasNoDeps l2 = GT
-    | otherwise = EQ -- FIXME transitive dependencies
+    | key2 `elem` allDeps context key1 = LT
+    | key1 `elem` allDeps context key2 = GT
+    | otherwise = EQ
 
 flatten :: [(Prob, [PreTok])] -> [Key]
 flatten = (>>= (fmap unTok . snd))
