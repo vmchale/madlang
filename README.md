@@ -167,7 +167,7 @@ Try this out:
 
 ### Examples
 
-There is a dog complimenter available to test out at [my
+There is a Shakespearean insult generator available to test out at [my
 site](http://blog.vmchale.com/madlang).
 
 ## Tooling

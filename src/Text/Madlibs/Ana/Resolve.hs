@@ -5,7 +5,8 @@ module Text.Madlibs.Ana.Resolve (
     parseFile
   , runFile
   , makeTree
-  , runText ) where
+  , runText
+  , getInclusionCtx ) where
 
 import           Control.Arrow               (first)
 import           Control.Composition

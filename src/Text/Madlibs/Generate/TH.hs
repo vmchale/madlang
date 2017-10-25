@@ -4,6 +4,7 @@
 module Text.Madlibs.Generate.TH
     ( madFile
     , madlang
+    , madEmbed
     ) where
 
 import           Data.FileEmbed
@@ -13,6 +14,7 @@ import           Data.Void
 import           Language.Haskell.TH         hiding (Dec)
 import           Language.Haskell.TH.Quote
 import           Text.Madlibs.Ana.Parse
+import           Text.Madlibs.Ana.Resolve
 import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec
 
@@ -47,6 +49,9 @@ textToExpression txt = do
 -- | Turn a parse error into an error that will be caught when Template Haskell compiles at runtime.
 errorgen :: Either (ParseError Char (ErrorFancy Void)) a -> a
 errorgen = either (error . T.unpack . show') id
+
+madEmbed :: FilePath -> FilePath -> Q Exp
+madEmbed folder filepath = [| errorgen <$> runIO (getInclusionCtx False [] folder filepath) |]
 
 -- | Splice for embedding a '.mad' file, e.g.
 --

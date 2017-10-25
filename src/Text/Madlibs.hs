@@ -31,6 +31,7 @@ module Text.Madlibs (
                     , run
                     , runText
                     , RandTok (..)
+                    , Key
                     -- * Types associated with the parser
                     , Context
                     , SemanticError (..)
@@ -39,6 +40,7 @@ module Text.Madlibs (
                     -- * Template Haskell EDSL
                     , madlang
                     , madFile
+                    , madEmbed
                     ) where
 
 import           Text.Madlibs.Ana.Parse

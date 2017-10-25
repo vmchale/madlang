@@ -18,7 +18,7 @@ import           Data.Char
 import           Data.Foldable
 import           Data.List
 import qualified Data.Map                    as M
-import           Data.Maybe                  (catMaybes, fromJust)
+import           Data.Maybe                  (catMaybes)
 import           Data.Monoid
 import qualified Data.Text                   as T
 import           Data.Text.Titlecase
@@ -26,8 +26,6 @@ import           System.Random.Shuffle
 import           Text.Madlibs.Cata.SemErr
 import           Text.Madlibs.Internal.Types
 import           Text.Madlibs.Internal.Utils
-
---TODO consider moving Ana.ParseUtils to Cata.Sorting
 
 -- | A map with all the modifiers for Madlang
 modifierList :: M.Map String (T.Text -> T.Text)
@@ -110,9 +108,13 @@ hasNoDeps = all isPreTok . (>>= snd)
     where isPreTok PreTok{} = True
           isPreTok _        = False
 
+maybeList :: Maybe [a] -> [a]
+maybeList (Just x) = x
+maybeList Nothing  = []
+
 allDeps :: [(Key, [(Prob, [PreTok])])] -> Key -> [Key]
-allDeps context key = let deps = (catMaybes . fmap maybeName . getNames) context in deps <> (allDeps context =<< deps)
-    where getNames = (=<<) snd . fromJust . lookup key
+allDeps context key = let deps = (maybeList . fmap (catMaybes . (fmap maybeName)) . getNames) context in deps <> (allDeps context =<< deps)
+    where getNames = fmap ((=<<) snd) . lookup key
           maybeName (Name n _) = Just n
           maybeName _          = Nothing
 
