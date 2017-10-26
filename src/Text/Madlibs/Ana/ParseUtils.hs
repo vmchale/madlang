@@ -26,6 +26,7 @@ import           System.Random.Shuffle
 import           Text.Madlibs.Cata.SemErr
 import           Text.Madlibs.Internal.Types
 import           Text.Madlibs.Internal.Utils
+import Debug.Trace
 
 -- | A map with all the modifiers for Madlang
 modifierList :: M.Map String (T.Text -> T.Text)
@@ -103,11 +104,6 @@ sortKeys = sortBy =<< orderKeys
 orderHelper :: Key -> [(Prob, [PreTok])] -> Bool
 orderHelper key = any (\pair -> key /= "" && key `elem` (map unTok . snd $ pair))
 
-hasNoDeps :: [(Prob, [PreTok])] -> Bool
-hasNoDeps = all isPreTok . (>>= snd)
-    where isPreTok PreTok{} = True
-          isPreTok _        = False
-
 maybeList :: Maybe [a] -> [a]
 maybeList (Just x) = x
 maybeList Nothing  = []
@@ -125,13 +121,6 @@ orderKeys context (key1, l1) (key2, l2)
     | key2 == "Return" = LT
     | orderHelper key1 l2 = LT
     | orderHelper key2 l1 = GT
-    | any (flip orderHelper l1) (flatten l2) = LT
-    | any (flip orderHelper l2) (flatten l1) = GT
-    | hasNoDeps l1 = LT
-    | hasNoDeps l2 = GT
-    | key2 `elem` allDeps context key1 = LT
-    | key1 `elem` allDeps context key2 = GT
+    | key2 `elem` (traceShow (key1, key2, GT) $ allDeps context key1) = GT
+    | key1 `elem` (traceShow (key1, key2, LT) $ allDeps context key2) = LT
     | otherwise = EQ
-
-flatten :: [(Prob, [PreTok])] -> [Key]
-flatten = (>>= (fmap unTok . snd))
