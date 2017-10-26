@@ -49,6 +49,14 @@ Alternately, it is available from
 
 https://github.com/vmchale/madlang-vim
 
+# LIBRARIES
+
+You can install third-party libraries with
+  
+  madlang get user/repo
+
+The library will then be installed to $HOME/.madlang/repo
+
 # MODIFIERS
 
 Strings in madlang can be followed by modifiers, for instance
@@ -67,3 +75,7 @@ Currently supported modifiers are:
 
 You can examine an example using the bundled libraries
 at https://hub.darcs.net/vmchale/madlang-insults.
+
+# COPYRIGHT
+
+Copyright 2017. Vanessa McHale. All Rights Reserved.

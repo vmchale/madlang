@@ -1,6 +1,7 @@
 BUGS:
   - [ ] scoping/ordering should be handled correctly
   - [ ] show enough precision when displaying tree w/ small probabilities
+  - [ ] unpacking fails on 'ç'
 LIBRARIES:
   - [ ] English nouns
   - [ ] Place for staging libraries before they're released
@@ -11,6 +12,7 @@ DEFICIENCIES:
   - [ ] Improve circular dependency error message
     - [ ] specify what exactly went wrong
     - [ ] Should include location information
+    - [ ] error test suite
   - [ ] dependency management should work better
   - [ ] overlapping categories?
 TOOLING:

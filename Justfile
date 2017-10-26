@@ -18,12 +18,13 @@ next:
     sn c .
 
 ci:
-    cabal new-build
-    cabal new-test
-    cabal new-bench
-    stack build --test --no-run-tests
-    stack bench --no-bench
+    @cabal new-build
+    @cabal new-test
+    @cabal new-bench
+    @stack build --test --no-run-tests
+    @stack bench --no-bench
     weeder .
+    hlint .
 
 size:
     sn d $(fd 'madlang$' -I | tail -n1)

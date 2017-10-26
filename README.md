@@ -201,6 +201,11 @@ You can view documentation for `madlang` on Linux, Mac, or BSD by typing:
 
 ## Contributions
 
+### Guide
+
+Contributions, bug reports, and feature requests are emphatically welcome.
+Please see the `CONTRIBUTING.md` guide for more specific details.
+
 ### Release Naming
 
 Releases are named using the `releases.mad` file found
