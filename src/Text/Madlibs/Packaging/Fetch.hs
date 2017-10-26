@@ -6,16 +6,16 @@ module Text.Madlibs.Packaging.Fetch ( fetchGithub
                                     , installVimPlugin
                                     ) where
 
-import Control.Monad (unless)
-import qualified Codec.Archive.Tar      as Tar
-import           Codec.Archive.Zip      (ZipOption (..),
-                                         extractFilesFromArchive, toArchive)
-import           Codec.Compression.GZip (decompress)
-import           Network.HTTP.Client    hiding (decompress)
-import           System.Directory       (removeFile, renameDirectory)
-import           System.Environment     (getEnv)
-import           System.Info            (os)
-import Network.HTTP.Client.TLS (tlsManagerSettings)
+import qualified Codec.Archive.Tar       as Tar
+import           Codec.Archive.Zip       (ZipOption (..),
+                                          extractFilesFromArchive, toArchive)
+import           Codec.Compression.GZip  (decompress)
+import           Control.Monad           (unless)
+import           Network.HTTP.Client     hiding (decompress)
+import           Network.HTTP.Client.TLS (tlsManagerSettings)
+import           System.Directory        (removeFile, renameDirectory)
+import           System.Environment      (getEnv)
+import           System.Info             (os)
 
 -- https://hub.darcs.net/vmchale/madlang-libraries/dist
 
@@ -27,7 +27,7 @@ fetchGithub :: String -> IO ()
 fetchGithub s = unless (invalid s) $ do
 
     putStrLn $ "fetching library at " ++ s
-    
+
     manager <- newManager tlsManagerSettings
     initialRequest <- parseRequest $ "https://github.com/" ++ s ++ "/archive/master.zip"
     response <- responseBody <$> httpLbs (initialRequest { method = "GET" }) manager

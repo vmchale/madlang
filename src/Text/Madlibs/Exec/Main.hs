@@ -5,16 +5,16 @@ module Text.Madlibs.Exec.Main (
 import           Control.Monad
 import           Data.Maybe
 import           Data.Monoid
-import qualified Data.Text                   as T
-import qualified Data.Text.IO                as TIO
+import qualified Data.Text                    as T
+import qualified Data.Text.IO                 as TIO
 import           Data.Version
-import           Options.Applicative         hiding (ParseError)
+import           Options.Applicative          hiding (ParseError)
 import           Paths_madlang
 import           System.Directory
 import           Text.Madlibs.Ana.Resolve
 import           Text.Madlibs.Cata.Display
-import           Text.Madlibs.Packaging.Fetch
 import           Text.Madlibs.Internal.Utils
+import           Text.Madlibs.Packaging.Fetch
 import           Text.Megaparsec
 
 -- | datatype for the program

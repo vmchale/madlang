@@ -4,6 +4,9 @@ latest:
     @echo 'hackage:'
     @cabal list madlang | grep -P -o '\d+\.\d+\.\d+\.\d+' | head -n1
 
+check:
+    git diff master origin/master
+
 timed:
     time madlang sample demo/shakespeare.mad
 
