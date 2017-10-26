@@ -4,6 +4,7 @@ BUGS:
   - [ ] unpacking fails on 'ç'
 LIBRARIES:
   - [ ] English nouns
+  - [ ] Verbs
   - [ ] Place for staging libraries before they're released
   - [ ] Documentation for standard libraries
   - [ ] Bundled libraries with `data-files` field of cabal?
@@ -37,10 +38,6 @@ CODE MAINTENANCE:
   - [ ] `strip` should be implemented literally any other way than the current
     implementation
   - [ ] self-updating based on github releases!
-CI:
-  - [ ] appveyor builds (+ tweet needs travis!)
-  - [ ] automatic deploys w/ releases
-  - [ ] hlint/weeder on travis
 DOCUMENTATION:
   - [ ] mention modifiers in the `README.md`
   - [ ] tutorial

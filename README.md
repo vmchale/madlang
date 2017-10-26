@@ -119,12 +119,11 @@ Finally, one of the most powerful features of `madlang` is the ability to
 include libraries in a file. Open the following and save it as `gambling.mad`:
 
 ```madlang
+:library
+
 :define coin
     1.0 "heads"
     1.0 "tails"
-
-:return
-    1.0 ""
 ```
 
 Then, open the following and save it in the same directory as
@@ -134,7 +133,7 @@ Then, open the following and save it in the same directory as
 :include gambling.mad
 
 :define realisticGambling
-    1.0 coin
+    1.0 gambling-coin
     0.03 "on its side"
 
 :return

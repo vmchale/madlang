@@ -27,7 +27,7 @@
     1.0 "wishes she could journey around the world."
     1.0 "falls down on the subway escalator."
     1.0 "meets a handsome dark stranger."
-    1.0 "suffers because mercury is in gatorade."
+    1.0 "suffers because mercury is in retrograde."
     1.0 "charms a prince."
 
 :define subject
@@ -37,6 +37,7 @@
 :define final
     1.0 subject.to_upper predicate
     6.0 subject predicate
+
 :return
     1.0 final
     0.02 final.oulipo # removes all mentions of the letter 'e' occasionally

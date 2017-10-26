@@ -14,6 +14,8 @@ madlang tree <file>
 madlang check <file>
 .PP
 madlang get <repo>
+.PP
+madlang sample <repo>
 .SH DESCRIPTION
 .PP
 \f[B]madlang\f[] is an interpreted language for generative literature
@@ -39,13 +41,21 @@ Set an input to the template
 Place files in $HOME/.madlang for them to be available globally as
 libraries.
 You can also download prebundled packages using
-.PP
-madlang install
+.IP
+.nf
+\f[C]
+madlang\ install
+\f[]
+.fi
 .SH EDITOR INTEGRATION
 .PP
 You can install a vim plugin for Madlang using
-.PP
-madlang vim
+.IP
+.nf
+\f[C]
+madlang\ vim
+\f[]
+.fi
 .PP
 Alternately, it is available from
 .PP
@@ -53,15 +63,23 @@ https://github.com/vmchale/madlang\-vim
 .SH LIBRARIES
 .PP
 You can install third\-party libraries with
-.PP
-madlang get user/repo
+.IP
+.nf
+\f[C]
+madlang\ get\ user/repo
+\f[]
+.fi
 .PP
 The library will then be installed to $HOME/.madlang/repo
 .SH MODIFIERS
 .PP
 Strings in madlang can be followed by modifiers, for instance
-.PP
-1.0 "evil".oulipo
+.IP
+.nf
+\f[C]
+1.0\ "evil".oulipo
+\f[]
+.fi
 .PP
 Currently supported modifiers are:
 .IP \[bu] 2
@@ -74,6 +92,17 @@ capitalize
 reverse
 .IP \[bu] 2
 oulipo (removes all instances of the letter \[aq]e\[aq])
+.SH DISPLAYING TREES
+.PP
+You may wish to use the command
+.IP
+.nf
+\f[C]
+madlang\ tree\ file.mad\ |\ less
+\f[]
+.fi
+.PP
+for larger trees.
 .SH EXAMPLES
 .PP
 You can examine an example using the bundled libraries at
