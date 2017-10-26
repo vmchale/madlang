@@ -17,6 +17,8 @@ import           System.Environment     (getEnv)
 import           System.Info            (os)
 import Network.HTTP.Client.TLS (tlsManagerSettings)
 
+-- https://hub.darcs.net/vmchale/madlang-libraries/dist
+
 invalid :: String -> Bool
 invalid = not . ('/' `elem`)
 

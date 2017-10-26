@@ -165,6 +165,14 @@ category = do
     val <- fmap normalize . some $ function
     pure (str, val) <?> "category block"
 
+-- | Parse a `:library` declaration
+preLibrary :: Parser ()
+preLibrary = void (nonIndented (keyword "library"))
+    <?> "library declaration"
+
+library :: Parser (Key, [(Prob, [PreTok])])
+library = preLibrary >> pure ("Return", [(1, [])])
+
 -- | Parse the `:return` block
 final :: [T.Text] -> Parser [(Prob, [PreTok])]
 final ins = do
@@ -176,7 +184,7 @@ final ins = do
 program :: [T.Text] -> Parser [(Key, [(Prob, [PreTok])])]
 program ins = sortKeys <$> (checkSemantics =<< do
     inclusions
-    p <- many (try (definition ins) <|> try category <|> ((,) "Return" <$> final ins))
+    p <- many (try (definition ins) <|> try category <|> try ((,) "Return" <$> final ins) <|> library)
     lexeme eof
     pure p)
 

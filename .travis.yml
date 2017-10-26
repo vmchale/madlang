@@ -1,10 +1,10 @@
 ---
-
 sudo: false
 language: default
 cache:
   directories:
     - $HOME/.stack
+    - $HOME/.madlang
 addons:
   apt:
     packages:
@@ -36,11 +36,13 @@ install:
   - stack install hlint weeder
 
 script:
-  - stack --no-terminal build --haddock --no-haddock-deps
+  - stack --no-terminal build --haddock --no-haddock-deps --copy-bins
   - stack test --no-terminal
   - stack bench --no-terminal
   - hlint .
   - weeder .
+  - madlang install
+  - madlang run demo/example.mad
   - |
     if [ `uname` = "Darwin" ]
     then
@@ -54,7 +56,7 @@ script:
 
 deploy:
   api_key:
-     secure: "NeVULHPFKjRIvwrY1ewVXZo/LOKihKs1FQh2QU+s7jwgfT/d82cgQqmj0FJzT/cHmIkL+KhSJY5Nb+7kiwSyhH1qBCI3qNmGCkZ1oQsvosLnBu/s/nVhZ6CspbGTt3SxuumK0dRYyLDrKg4x4mFL/1QYU4bwr0N1moz3HZeI3Il0tu8Demse604hrMtCfAcs7uhaq+UN4y6hlBnWRgJup7fUrVgkihUQ+LQgOm1BeqozELjuRbgwJOuro3JdWYgLMTTF62+eQsMdYBUIJ6j3hpQ/YOjCankute/wHfGbbMOHsa5HLkSqhPMq8UB62potbKgLDC4C1P4q++i9mzgA6vwF/r42CQAwd05g/zuE4yjtNgMwjrS6gKuzONRFXMj1Dqm/AQFsnI8ecjHVm5Qh624xoskWZGm8L7gIeFPAhfngrhZZ+DJkEiHkmoGWigyiB9RO3m8nRaSDLyEZL733mnS+ufLjaUGXBoVymbx43wVbx91+4ZZgaSk7KkXOQlLSQx1/HyNPD/TL+LbrX0V4QI7zNcjgMEUmwnGV66H/diw2Hsg+OyS7rEA9QrEiLX5N/jQd9pw32WxqX5CgcoouRd1hgcIjq8b4koX+PXiz+GmjmbBNiJovV4saZpFHnsPEeTKZqkEp6bgMfHn9xPgObrT4fnCJUHozi6Txxfdv8Tc="
+    secure: "NeVULHPFKjRIvwrY1ewVXZo/LOKihKs1FQh2QU+s7jwgfT/d82cgQqmj0FJzT/cHmIkL+KhSJY5Nb+7kiwSyhH1qBCI3qNmGCkZ1oQsvosLnBu/s/nVhZ6CspbGTt3SxuumK0dRYyLDrKg4x4mFL/1QYU4bwr0N1moz3HZeI3Il0tu8Demse604hrMtCfAcs7uhaq+UN4y6hlBnWRgJup7fUrVgkihUQ+LQgOm1BeqozELjuRbgwJOuro3JdWYgLMTTF62+eQsMdYBUIJ6j3hpQ/YOjCankute/wHfGbbMOHsa5HLkSqhPMq8UB62potbKgLDC4C1P4q++i9mzgA6vwF/r42CQAwd05g/zuE4yjtNgMwjrS6gKuzONRFXMj1Dqm/AQFsnI8ecjHVm5Qh624xoskWZGm8L7gIeFPAhfngrhZZ+DJkEiHkmoGWigyiB9RO3m8nRaSDLyEZL733mnS+ufLjaUGXBoVymbx43wVbx91+4ZZgaSk7KkXOQlLSQx1/HyNPD/TL+LbrX0V4QI7zNcjgMEUmwnGV66H/diw2Hsg+OyS7rEA9QrEiLX5N/jQd9pw32WxqX5CgcoouRd1hgcIjq8b4koX+PXiz+GmjmbBNiJovV4saZpFHnsPEeTKZqkEp6bgMfHn9xPgObrT4fnCJUHozi6Txxfdv8Tc="
   file: madlang-$TARGET
   on:
     tags: true

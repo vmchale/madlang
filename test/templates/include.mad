@@ -1,6 +1,7 @@
-:include gambling.mad
+:include lib.mad
+
 :define realistic
-    1.0 gambling-something.to_lower
+    1.0 lib-something.to_lower
     0.03 "on its side"
 :return
     1.0 realistic
