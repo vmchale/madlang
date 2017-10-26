@@ -19,8 +19,15 @@
     | adjectives-oadjective.capitalize " " animals-oanimal.capitalize
     | adjectives-padjective.capitalize " " animals-panimal.capitalize
     | adjectives-qadjective.capitalize " " animals-qanimal.capitalize
+    | adjectives-radjective.capitalize " " animals-ranimal.capitalize
     | adjectives-sadjective.capitalize " " animals-sanimal.capitalize
+    | adjectives-tadjective.capitalize " " animals-tanimal.capitalize
+    | adjectives-uadjective.capitalize " " animals-uanimal.capitalize
     | adjectives-vadjective.capitalize " " animals-vanimal.capitalize
+    | adjectives-wadjective.capitalize " " animals-wanimal.capitalize
+    | adjectives-xadjective.capitalize " " animals-xanimal.capitalize
+    | adjectives-yadjective.capitalize " " animals-yanimal.capitalize
+    | adjectives-zadjective.capitalize " " animals-zanimal.capitalize
 
 :return
     1.0 release
