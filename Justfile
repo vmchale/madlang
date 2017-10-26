@@ -1,3 +1,8 @@
+darcs:
+    darcs optimize clean
+    darcs optimize pristine
+    darcs optimize cache
+
 tokei:
     tokei . .travis.yml
 
