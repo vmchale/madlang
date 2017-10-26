@@ -26,7 +26,6 @@ import           System.Random.Shuffle
 import           Text.Madlibs.Cata.SemErr
 import           Text.Madlibs.Internal.Types
 import           Text.Madlibs.Internal.Utils
-import Debug.Trace
 
 -- | A map with all the modifiers for Madlang
 modifierList :: M.Map String (T.Text -> T.Text)
@@ -121,6 +120,6 @@ orderKeys context (key1, l1) (key2, l2)
     | key2 == "Return" = LT
     | orderHelper key1 l2 = LT
     | orderHelper key2 l1 = GT
-    | key2 `elem` (traceShow (key1, key2, GT) $ allDeps context key1) = GT
-    | key1 `elem` (traceShow (key1, key2, LT) $ allDeps context key2) = LT
+    | key2 `elem` allDeps context key1 = GT
+    | key1 `elem` allDeps context key2 = LT
     | otherwise = EQ
