@@ -15,8 +15,6 @@ DEFICIENCIES:
     - [ ] error test suite
   - [ ] dependency management should work better
   - [ ] overlapping categories?
-TOOLING:
-  - [ ] vim syntax should work in quasi-quotes
 FEATURES:
   - [ ] user-defined modifiers
   - [ ] a "perhaps you meant..." think would be quite nice
