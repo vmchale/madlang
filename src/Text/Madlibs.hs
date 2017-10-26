@@ -40,7 +40,6 @@ module Text.Madlibs (
                     -- * Template Haskell EDSL
                     , madlang
                     , madFile
-                    , madEmbed
                     ) where
 
 import           Text.Madlibs.Ana.Parse
