@@ -1,4 +1,4 @@
----
+ta--
 
 sudo: false
 language: default
@@ -37,8 +37,8 @@ install:
 
 script:
   - stack --no-terminal build --haddock --no-haddock-deps
-  - stack test
-  - stack bench
+  - stack test --no-terminal
+  - stack bench --no-terminal
   - hlint .
   - weeder .
   - |
