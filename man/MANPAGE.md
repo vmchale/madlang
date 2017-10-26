@@ -13,6 +13,8 @@ madlang - a text templating language for generative literature
 
   madlang check \<file\>
 
+  madlang get \<repo\>
+
 # DESCRIPTION
 
 **madlang** is an interpreted language for generative literature and
