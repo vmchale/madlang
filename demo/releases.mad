@@ -1,0 +1,26 @@
+:include animals.mad
+:include adjectives.mad
+
+# TODO make a neat little site for this?
+:category release
+    | adjectives-aadjective.capitalize " " animals-aanimal.capitalize
+    | adjectives-badjective.capitalize " " animals-banimal.capitalize
+    | adjectives-cadjective.capitalize " " animals-canimal.capitalize
+    | adjectives-dadjective.capitalize " " animals-danimal.capitalize
+    | adjectives-eadjective.capitalize " " animals-eanimal.capitalize
+    | adjectives-fadjective.capitalize " " animals-fanimal.capitalize
+    | adjectives-gadjective.capitalize " " animals-ganimal.capitalize
+    | adjectives-hadjective.capitalize " " animals-hanimal.capitalize
+    | adjectives-iadjective.capitalize " " animals-ianimal.capitalize
+    | adjectives-ladjective.capitalize " " animals-lanimal.capitalize
+    | adjectives-kadjective.capitalize " " animals-kanimal.capitalize
+    | adjectives-madjective.capitalize " " animals-manimal.capitalize
+    | adjectives-nadjective.capitalize " " animals-nanimal.capitalize
+    | adjectives-oadjective.capitalize " " animals-oanimal.capitalize
+    | adjectives-padjective.capitalize " " animals-panimal.capitalize
+    | adjectives-qadjective.capitalize " " animals-qanimal.capitalize
+    | adjectives-sadjective.capitalize " " animals-sanimal.capitalize
+    | adjectives-vadjective.capitalize " " animals-vanimal.capitalize
+
+:return
+    1.0 release
