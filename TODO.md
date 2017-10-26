@@ -30,6 +30,7 @@ FEATURES:
   - [ ] generate tagfiles for vim
 CODE MAINTENANCE:
   - [ ] use prisms for errors
+  - [ ] use a catamorphism + better monad for randomness
   - [ ] monorepo w/ main libraries
   - [ ] test suite for error messages
   - [ ] `strip` should be implemented literally any other way than the current

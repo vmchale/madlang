@@ -24,6 +24,7 @@ newtype Program = Program { sub :: Subcommand }
 data Subcommand = Debug { input :: FilePath }
                 | Run { _rep :: Maybe Int , clInputs :: [String] , input :: FilePath }
                 | Lint { clInputs :: [String] , input :: FilePath }
+                | Sample { clInputs :: [String], input :: FilePath }
                 | Install
                 | VimInstall
 
@@ -34,6 +35,7 @@ orders = Program
         (command "run" (info temp (progDesc "Generate text from a .mad file"))
         <> command "tree" (info debug (progDesc "Display a tree with all possible paths"))
         <> command "check" (info lint (progDesc "Check a file"))
+        <> command "sample" (info sample (progDesc "Sample a template by generating text many times."))
         <> command "install" (info (pure Install) (progDesc "Install/update prebundled libraries."))
         <> command "vim" (info (pure VimInstall) (progDesc "Install vim plugin."))
         ))
@@ -47,6 +49,18 @@ temp = Run
         <> metavar "REPETITIONS"
         <> help "Number of times to repeat"))
     <*> (many $ strOption
+        (short 'i'
+        <> metavar "VAR"
+        <> help "command-line inputs to the template."))
+    <*> (argument str
+        (metavar "FILEPATH"
+        <> completer (bashCompleter "file -X '!*.mad' -o plusdirs")
+        <> help "File path to madlang template"))
+
+-- | Parser for the sample subcommand
+sample :: Parser Subcommand
+sample = Sample
+    <$> (many $ strOption
         (short 'i'
         <> metavar "VAR"
         <> help "command-line inputs to the template."))
@@ -107,6 +121,8 @@ template rec =
             case sub rec of
                 (Run reps _ _) ->
                     replicateM_ (fromMaybe 1 reps) $ runFile ins filepath >>= TIO.putStrLn
+                (Sample _ _) ->
+                    replicateM_ 60 $ runFile ins filepath >>= TIO.putStrLn
                 (Debug _) -> putStr . (either show displayTree) =<< makeTree ins "" filepath
                 (Lint _ _) -> do
                     parsed <- parseFile ins "" filepath

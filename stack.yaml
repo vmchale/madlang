@@ -1,12 +1,11 @@
 ---
-
-resolver: nightly-2017-10-05
+resolver: nightly-2017-10-26
 packages:
-- .
+  - .
 extra-deps:
-    - composition-prelude-0.1.1.0
-flags: 
-    madlang:
-        development:
-            true
+  - composition-prelude-0.1.1.0
+flags:
+  madlang:
+    development:
+      true
 extra-package-dbs: []
