@@ -32,8 +32,8 @@ orders :: Parser Program
 orders = Program
     <$> (hsubparser
         (command "run" (info temp (progDesc "Generate text from a .mad file"))
-        <> command "debug" (info debug (progDesc "Debug a template"))
-        <> command "lint" (info lint (progDesc "Lint a file"))
+        <> command "tree" (info debug (progDesc "Display a tree with all possible paths"))
+        <> command "check" (info lint (progDesc "Check a file"))
         <> command "install" (info (pure Install) (progDesc "Install/update prebundled libraries."))
         <> command "vim" (info (pure VimInstall) (progDesc "Install vim plugin."))
         ))
@@ -110,5 +110,5 @@ template rec =
                 (Debug _) -> putStr . (either show displayTree) =<< makeTree ins "" filepath
                 (Lint _ _) -> do
                     parsed <- parseFile ins "" filepath
-                    putStrLn $ either parseErrorPretty (const "No syntax errors found.") parsed
+                    putStrLn $ either (parseErrorPretty) (const "No syntax errors found.") parsed
                 _ -> pure ()

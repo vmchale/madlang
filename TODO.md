@@ -3,6 +3,9 @@ BUGS:
   - [ ] show enough precision when displaying tree w/ small probabilities
 DEFICIENCIES:
   - [ ] linter should be more thorough
+  - [ ] Improve circular dependency error message
+    - [ ] specify what exactly went wrong
+    - [ ] 
   - [ ] dependency management should work better
   - [ ] circular dependencies error should be more specific
   - [ ] documentation for library functionality
@@ -10,6 +13,7 @@ DEFICIENCIES:
   - [ ] vim syntax should work in quasi-quotes
 FEATURES:
   - [ ] user-defined modifiers
+  - [ ] a "perhaps you meant..." think would be quite nice
   - [ ] index for vim
   - [ ] install `madlang-miso` template for pi?
   - [ ] library/DSL being able to call dependencies
@@ -23,6 +27,7 @@ FEATURES:
   - [ ] generate tagfiles for vim
 CODE MAINTENANCE:
   - [ ] use prisms for errors
+  - [ ] monorepo w/ main libraries
   - [ ] test suite for error messages
   - [ ] `strip` should be implemented literally any other way than the current
     implementation

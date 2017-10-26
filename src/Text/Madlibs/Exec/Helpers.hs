@@ -7,6 +7,7 @@ import           Codec.Archive.Zip      (ZipOption (..),
                                          extractFilesFromArchive, toArchive)
 import           Codec.Compression.GZip (decompress)
 import           Network.HTTP.Client    hiding (decompress)
+import           System.Directory       (removeFile)
 import           System.Environment     (getEnv)
 import           System.Info            (os)
 
@@ -25,6 +26,12 @@ installVimPlugin = do
     let archive = toArchive byteStringResponse
     let options = OptDestination packageDir
     extractFilesFromArchive [options] archive
+
+    putStrLn "cleaning junk..."
+    removeFile (packageDir ++ "/TODO.md")
+    removeFile (packageDir ++ "/vim-screenshot.png")
+    removeFile (packageDir ++ "/README.md")
+    removeFile (packageDir ++ "/LICENSE")
 
 -- TODO set remote package url flexibly
 fetchPackages :: IO ()

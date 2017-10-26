@@ -39,4 +39,4 @@
     6.0 subject predicate
 :return
     1.0 final
-    0.02 final.oulipo # removes all mentions of the letter 'e' a small amount of the time
+    0.02 final.oulipo # removes all mentions of the letter 'e' occasionally
