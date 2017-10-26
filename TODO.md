@@ -28,8 +28,10 @@ FEATURES:
   - [ ] `--explain` flag for error messages
   - [ ] alliteration
   - [ ] generate tagfiles for vim
+  - [ ] download from git + add to your libraries
 CODE MAINTENANCE:
   - [ ] use prisms for errors
+  - [ ] better test suite, e.g. run `madlang install` on Appveyor.
   - [ ] use a catamorphism + better monad for randomness
   - [ ] monorepo w/ main libraries
   - [ ] test suite for error messages

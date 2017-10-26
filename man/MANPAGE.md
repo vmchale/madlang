@@ -9,9 +9,9 @@ madlang - a text templating language for generative literature
 
   madlang run \<file\>
 
-  madlang debug \<file\>
+  madlang tree \<file\>
 
-  madlang lint \<file\>
+  madlang check \<file\>
 
 # DESCRIPTION
 

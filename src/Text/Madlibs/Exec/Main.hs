@@ -13,7 +13,7 @@ import           Paths_madlang
 import           System.Directory
 import           Text.Madlibs.Ana.Resolve
 import           Text.Madlibs.Cata.Display
-import           Text.Madlibs.Exec.Helpers
+import           Text.Madlibs.Packaging.Fetch
 import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec
 
@@ -25,6 +25,7 @@ data Subcommand = Debug { input :: FilePath }
                 | Run { _rep :: Maybe Int , clInputs :: [String] , input :: FilePath }
                 | Lint { clInputs :: [String] , input :: FilePath }
                 | Sample { clInputs :: [String], input :: FilePath }
+                | Get { _remote :: String }
                 | Install
                 | VimInstall
 
@@ -37,6 +38,7 @@ orders = Program
         <> command "check" (info lint (progDesc "Check a file"))
         <> command "sample" (info sample (progDesc "Sample a template by generating text many times."))
         <> command "install" (info (pure Install) (progDesc "Install/update prebundled libraries."))
+        <> command "get" (info fetch (progDesc "Sample a template by generating text many times."))
         <> command "vim" (info (pure VimInstall) (progDesc "Install vim plugin."))
         ))
 
@@ -68,6 +70,12 @@ sample = Sample
         (metavar "FILEPATH"
         <> completer (bashCompleter "file -X '!*.mad' -o plusdirs")
         <> help "File path to madlang template"))
+
+fetch :: Parser Subcommand
+fetch = Get
+    <$> (argument str
+        (metavar "REPOSITORY"
+        <> help "Repository to fetch, e.g. vmchale/some-library"))
 
 debug :: Parser Subcommand
 debug = Debug
@@ -113,6 +121,7 @@ template rec =
     case sub rec of
         Install -> fetchPackages >> cleanPackages
         VimInstall -> installVimPlugin
+        Get remote -> fetchGithub remote
         _ -> do
             let toFolder = input . sub $ rec
             if getDir toFolder == "" then pure () else setCurrentDirectory (getDir toFolder)

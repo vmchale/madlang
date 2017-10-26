@@ -113,7 +113,7 @@ maybeList (Just x) = x
 maybeList Nothing  = []
 
 allDeps :: [(Key, [(Prob, [PreTok])])] -> Key -> [Key]
-allDeps context key = let deps = (maybeList . fmap (catMaybes . (fmap maybeName)) . getNames) context in deps <> (allDeps context =<< deps)
+allDeps context key = let deps = (maybeList . fmap (catMaybes . fmap maybeName) . getNames) context in deps <> (allDeps context =<< deps)
     where getNames = fmap ((=<<) snd) . lookup key
           maybeName (Name n _) = Just n
           maybeName _          = Nothing

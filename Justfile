@@ -3,11 +3,15 @@ darcs:
     darcs optimize pristine
     darcs optimize cache
 
+shrink:
+    upx $(fd 'madlang$' -I | tail -n1)
+
 tokei:
     tokei . .travis.yml
 
 next:
     @export VERSION=$(cat madlang.cabal | grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1 | awk -F. '{$NF+=1; print $0}' | sed 's/ /\./g') && echo $VERSION && sed -i "2s/[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/$VERSION/" madlang.cabal
+    git commit -am "next"
 
 ci:
     cabal new-build
@@ -28,6 +32,8 @@ upload:
 release:
     git tag "$(grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1)"
     git push origin --tags
+    git tag -d "$(grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1)"
+    git push origin master
 
 install:
     cabal new-build --constraint='madlang +llvm-fast'
