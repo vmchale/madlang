@@ -38,8 +38,14 @@ script:
   - stack --no-terminal build --haddock --no-haddock-deps --copy-bins
   - stack test --no-terminal
   - stack bench --no-terminal
-  - curl -sL https://raw.github.com/ndmitchell/hlint/master/misc/travis.sh | sh -s .
-  - curl -sL https://raw.github.com/ndmitchell/weeder/master/misc/travis.sh | sh -s .
+  - |
+    if [ `uname` = "Linux" ]
+    then
+      curl -sL https://raw.github.com/ndmitchell/hlint/master/misc/travis.sh | sh -s .
+      curl -sL https://raw.github.com/ndmitchell/weeder/master/misc/travis.sh | sh -s .
+    else
+      echo 'skipping hlint/weeder...'
+    fi
   - madlang install
   - madlang run demo/example.mad
   - |
