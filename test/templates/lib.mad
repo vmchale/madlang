@@ -1,0 +1,5 @@
+:library
+
+:define something
+    0.5 "heads".to_upper.to_upper
+    0.5 "tailS".to_lower

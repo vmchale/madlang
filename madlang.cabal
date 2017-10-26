@@ -71,7 +71,7 @@ library
                      , mtl
                      , ansi-wl-pprint
                      , containers
-                     , titlecase
+                     , titlecase >= 1.0
                      , th-lift-instances
                      , http-client
                      , http-client-tls

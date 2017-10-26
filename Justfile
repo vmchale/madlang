@@ -1,3 +1,9 @@
+latest:
+    @echo 'github:'
+    @hub release | head -n2 | tail -n1
+    @echo 'hackage:'
+    @cabal list madlang | grep -P -o '\d+\.\d+\.\d+\.\d+' | head -n1
+
 timed:
     time madlang sample demo/shakespeare.mad
 

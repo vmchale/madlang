@@ -15,28 +15,29 @@ way to get started with generative literature.
 
 ## Installation
 
-### Stack
+### Binary Releases
 
-Download `stack` with
+Head over to the [releases
+page](https://github.com/vmchale/madlang/releases/latest) and grab a binary for
+your platform. 
 
-```
-curl -sSL http://haskellstack.org | sh
-```
+### Cabal
 
-Then run `stack install madlang --resolver nightly`. This is the recommended way
-to install `madlang`, but it may take awhile.
+If you do not see you platform listed, you will have to install from source.
+Download [cabal](https://www.haskell.org/cabal/download.html) and
+[GHC](https://www.haskell.org/ghc/download.html). Then:
 
-### Nix
-
-If you're on linux or mac, you can get binaries via nix.
-
-Download nix with
-
-```
-curl https://nixos.org/nix/install | sh
+```bash
+ $ cabal update
+ $ cabal install madlang
 ```
 
-From there, `nix-env -i madlang` will install the executable.
+You may need to add `$HOME/.cabal/bin` to your `PATH`. To do so:
+
+```
+ $ echo 'export PATH=$HOME/.cabal/bin:$PATH' >> $HOME/.bashrc
+ $ source $HOME/.bashrc
+```
 
 ## Tutorial
 
