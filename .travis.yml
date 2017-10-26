@@ -33,14 +33,13 @@ before_install:
 
 install:
   - stack --no-terminal --install-ghc test --only-dependencies
-  - stack install hlint weeder
 
 script:
   - stack --no-terminal build --haddock --no-haddock-deps --copy-bins
   - stack test --no-terminal
   - stack bench --no-terminal
-  - hlint .
-  - weeder .
+  - curl -sL https://raw.github.com/ndmitchell/hlint/master/misc/travis.sh | sh -s .
+  - curl -sL https://raw.github.com/ndmitchell/weeder/master/misc/travis.sh | sh -s .
   - madlang install
   - madlang run demo/example.mad
   - |
