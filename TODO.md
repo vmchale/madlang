@@ -5,6 +5,7 @@ LIBRARIES:
   - [ ] English nouns
   - [ ] Place for staging libraries before they're released
   - [ ] Documentation for standard libraries
+  - [ ] Bundled libraries with `data-files` field of cabal?
 DEFICIENCIES:
   - [ ] linter should be more thorough
   - [ ] Improve circular dependency error message
