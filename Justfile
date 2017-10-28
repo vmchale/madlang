@@ -34,6 +34,11 @@ ci:
     @stack bench --no-bench
     weeder .
     hlint .
+    yamllint stack.yaml
+    yamllint .travis.yml
+    yamllint appveyor.yml
+    yamllint .stylish-haskell.yml
+    yamllint .hlint.yaml
 
 size:
     sn d $(fd 'madlang$' -I | tail -n1)
