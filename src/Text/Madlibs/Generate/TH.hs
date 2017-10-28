@@ -26,7 +26,8 @@ import           Text.Megaparsec
 --     1.0 "hello"
 --     1.0 "goodbye"
 -- :return
---     1.0 something|]
+--     1.0 something
+-- |]
 -- @
 --
 -- Note that this is in general much faster than running interpreted code, though inclusions
@@ -56,8 +57,7 @@ errorgen = either (error . T.unpack . show') id
 --     $(madFile "twitter-bot.mad")
 -- @
 --
--- Note that the embedded code cannot have any inclusions from the standard
--- library.
+-- Note that the embedded code cannot have any inclusions
 madFile :: FilePath -> Q Exp
 madFile path = do
     file <- embedFile path
