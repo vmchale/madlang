@@ -37,7 +37,7 @@ ci:
     yamllint stack.yaml
     yamllint .travis.yml
     yamllint appveyor.yml
-    yamllint .stylish-haskell.yml
+    yamllint .stylish-haskell.yaml
     yamllint .hlint.yaml
 
 size:

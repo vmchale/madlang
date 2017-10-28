@@ -2,75 +2,75 @@
 sudo: false
 cache:
   directories:
-    - $HOME/.stack
-    - $HOME/.madlang
+  - $HOME/.stack
+  - $HOME/.madlang
 addons:
   apt:
     packages:
-      - libgmp3-dev
+    - libgmp3-dev
 matrix:
   include:
 
-    # Linux
-    - env: TARGET=x86_64-unkown-linux-gnu
-      language: python
+  # Linux
+  - env: TARGET=x86_64-unkown-linux-gnu
+    language: python
 
-    # OS X
-    - env: TARGET=x86_64-apple-darwin
-      os: osx
-      language: default
+  # OS X
+  - env: TARGET=x86_64-apple-darwin
+    os: osx
+    language: default
 
 before_install:
-  - mkdir -p ~/.local/bin
-  - export PATH=$HOME/.local/bin:$PATH
-  - |
-    if [ `uname` = "Darwin" ]
-    then
-      curl --insecure -L https://www.stackage.org/stack/osx-x86_64 | tar xz --strip-components=1 --include '*/stack' -C ~/.local/bin
-    else
-      curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-    fi
-  - chmod a+x ~/.local/bin/stack
+- mkdir -p ~/.local/bin
+- export PATH=$HOME/.local/bin:$PATH
+- |
+  if [ `uname` = "Darwin" ]
+  then
+    curl --insecure -L https://www.stackage.org/stack/osx-x86_64 | tar xz --strip-components=1 --include '*/stack' -C ~/.local/bin
+  else
+    curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+  fi
+- chmod a+x ~/.local/bin/stack
 
 install:
-  - stack --no-terminal --install-ghc test --only-dependencies
+- stack --no-terminal --install-ghc test --only-dependencies
 
 script:
-  - |
-    if [ `uname` = "Linux" ]
-    then
-      yamllint stack.yaml
-      yamllint appveyor.yml
-      yamllint .travis.yml
-      yamllint .hlint.yaml
-      yamllint .stylish-haskell.yaml
-      yamllint .weeder.yaml
-    else
-      echo "skipping yaml verification..."
-    fi
-  - stack --no-terminal build --haddock --no-haddock-deps --copy-bins
-  - stack test --no-terminal
-  - stack bench --no-terminal --no-run-benchmarks
-  - |
-    if [ `uname` = "Linux" ]
-    then
-      curl -sL https://raw.github.com/ndmitchell/hlint/master/misc/travis.sh | sh -s .
-      curl -sL https://raw.github.com/ndmitchell/weeder/master/misc/travis.sh | sh -s .
-    else
-      echo 'skipping hlint/weeder...'
-    fi
-  - madlang install
-  - madlang run demo/example.mad
-  - |
-    if [ `uname` = "Darwin" ]
-    then
-      export BINPATH="$(find . -name madlang -perm 755 | tail -n1)"
-    else
-      export BINPATH="$(find -name madlang -executable | tail -n2 | head -n1)"
-    fi
-  - echo $BINPATH
-  - mv $BINPATH madlang-$TARGET
-  - ls madlang-$TARGET
+- |
+  if [ `uname` = "Linux" ]
+  then
+    yamllint stack.yaml
+    yamllint appveyor.yml
+    yamllint .travis.yml
+    yamllint .hlint.yaml
+    yamllint .stylish-haskell.yaml
+    yamllint .weeder.yaml
+  else
+    echo "skipping yaml verification..."
+  fi
+- stack --no-terminal build --haddock --no-haddock-deps --copy-bins
+- stack test --no-terminal
+- stack bench --no-terminal --no-run-benchmarks
+- |
+  if [ `uname` = "Linux" ]
+  then
+    curl -sL https://raw.github.com/ndmitchell/hlint/master/misc/travis.sh | sh -s .
+    curl -sL https://raw.github.com/ndmitchell/weeder/master/misc/travis.sh | sh -s .
+  else
+    echo 'skipping hlint/weeder...'
+  fi
+- madlang install
+- madlang run demo/example.mad
+- |
+  if [ `uname` = "Darwin" ]
+  then
+    export BINPATH="$(find . -name madlang -perm 755 | tail -n1)"
+  else
+    export BINPATH="$(find -name madlang -executable | tail -n2 | head -n1)"
+  fi
+- echo $BINPATH
+- mv $BINPATH madlang-$TARGET
+- ls madlang-$TARGET
 
 deploy:
   api_key:
@@ -83,5 +83,5 @@ deploy:
 
 branches:
   only:
-    - /\d+\.\d+\.\d+\.\d+.*$/
-    - master
+  - /\d+\.\d+\.\d+\.\d+.*$/
+  - master
