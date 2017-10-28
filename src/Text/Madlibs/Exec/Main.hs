@@ -112,7 +112,7 @@ versionInfo = infoOption ("madlang version: " ++ showVersion version) (short 'v'
 wrapper :: ParserInfo Program
 wrapper = info (helper <*> versionInfo <*> orders)
     (fullDesc
-    <> progDesc "Madlang templating language"
+    <> progDesc "Madlang templating language. For more detailed help, use 'man madlang'"
     <> header ("Madlang - templating text made easy"))
 
 -- | given a parsed record perform the appropriate IO action

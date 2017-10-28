@@ -56,9 +56,11 @@ errorgen = either (error . T.unpack . show') id
 --     $(madFile "twitter-bot.mad")
 -- @
 --
--- Note that the embedded code cannot have any inclusions.
+-- Note that the embedded code cannot have any inclusions from the standard
+-- library.
 madFile :: FilePath -> Q Exp
 madFile path = do
     file <- embedFile path
+    -- dependencies <- parse inclusions
     parse' <- [|parseTok "source" [] [] . decodeUtf8|] -- TODO make this recurse but still work!
     pure $ VarE 'errorgen `AppE` (parse' `AppE` file)

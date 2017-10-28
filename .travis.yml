@@ -1,6 +1,5 @@
 ---
 sudo: false
-language: default
 cache:
   directories:
     - $HOME/.stack
@@ -14,10 +13,12 @@ matrix:
 
     # Linux
     - env: TARGET=x86_64-unkown-linux-gnu
+      language: python
 
     # OS X
     - env: TARGET=x86_64-apple-darwin
       os: osx
+      language: default
 
 before_install:
   - mkdir -p ~/.local/bin
@@ -35,9 +36,21 @@ install:
   - stack --no-terminal --install-ghc test --only-dependencies
 
 script:
+  - |
+    if [ `uname` = "Linux" ]
+    then
+      yamllint stack.yaml
+      yamllint appveyor.yml
+      yamllint .travis.yml
+      yamllint .hlint.yaml
+      yamllint .stylish-haskell.yaml
+      yamllint .weeder.yaml
+    else
+      echo "skipping yaml verification..."
+    fi
   - stack --no-terminal build --haddock --no-haddock-deps --copy-bins
   - stack test --no-terminal
-  - stack bench --no-terminal
+  - stack bench --no-terminal --no-run-benchmarks
   - |
     if [ `uname` = "Linux" ]
     then
