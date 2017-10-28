@@ -31,6 +31,13 @@ before_install:
     curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
   fi
 - chmod a+x ~/.local/bin/stack
+- |
+  if [ `uname` = "Linux" ]
+  then
+    pip install yamllint
+  else
+    echo "skipping yaml verification..."
+  fi
 
 install:
 - stack --no-terminal --install-ghc test --only-dependencies
