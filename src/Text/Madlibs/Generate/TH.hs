@@ -1,4 +1,8 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# LANGUAGE DeriveLift                 #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE StandaloneDeriving         #-}
+{-# LANGUAGE TemplateHaskell            #-}
 
 -- | Module containing Quasi-Quoter and Template Haskell splice for use as an EDSL.
 module Text.Madlibs.Generate.TH
@@ -6,15 +10,21 @@ module Text.Madlibs.Generate.TH
     , madlang
     ) where
 
+import           Control.Monad.IO.Class      (MonadIO, liftIO)
 import           Data.FileEmbed
 import qualified Data.Text                   as T
 import           Data.Text.Encoding
 import           Data.Void
 import           Language.Haskell.TH         hiding (Dec)
 import           Language.Haskell.TH.Quote
+--import           Language.Haskell.TH.Syntax  (Lift, lift)
 import           Text.Madlibs.Ana.Parse
+--import           Text.Madlibs.Ana.Resolve
 import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec
+
+instance MonadIO Q where
+    liftIO = runIO
 
 -- | `QuasiQuoter` for an EDSL, e.g.
 --
@@ -48,6 +58,9 @@ textToExpression txt = do
 -- | Turn a parse error into an error that will be caught when Template Haskell compiles at runtime.
 errorgen :: Either (ParseError Char (ErrorFancy Void)) a -> a
 errorgen = either (error . T.unpack . show') id
+
+-- embedFancy :: FilePath -> FilePath -> Q Exp
+-- embedFancy file folder = parseFile [] file folder >>= ((VarE 'errorgen `AppE`) . lift)
 
 -- | Splice for embedding a '.mad' file, e.g.
 --

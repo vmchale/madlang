@@ -31,7 +31,7 @@ ci:
     @cabal new-test
     @cabal new-bench
     @stack build --test --no-run-tests
-    @stack bench --no-bench
+    @stack bench --no-run-benchmarks
     weeder .
     hlint .
     yamllint stack.yaml
@@ -58,7 +58,7 @@ release:
     git push origin master
 
 install:
-    cabal new-build --constraint='madlang +llvm-fast'
+    cabal new-build
     cp $(fd 'madlang$' -I | tail -n1) ~/.local/bin
 
 name:

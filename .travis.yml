@@ -18,7 +18,7 @@ matrix:
   # OS X
   - env: TARGET=x86_64-apple-darwin
     os: osx
-    language: default
+    language: haskell
 
 before_install:
 - mkdir -p ~/.local/bin
@@ -53,7 +53,7 @@ script:
     yamllint .stylish-haskell.yaml
     yamllint .weeder.yaml
   else
-    echo "skipping yaml verification..."
+    cabal check
   fi
 - stack --no-terminal build --haddock --no-haddock-deps --copy-bins
 - stack test --no-terminal

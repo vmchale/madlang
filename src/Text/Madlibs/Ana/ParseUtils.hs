@@ -20,6 +20,7 @@ import           Data.List
 import qualified Data.Map                    as M
 import           Data.Maybe                  (catMaybes)
 import           Data.Monoid
+import qualified Data.Set                    as S
 import qualified Data.Text                   as T
 import           Data.Text.Titlecase
 import           System.Random.Shuffle
@@ -107,9 +108,9 @@ maybeList :: Maybe [a] -> [a]
 maybeList (Just x) = x
 maybeList Nothing  = []
 
-allDeps :: [(Key, [(Prob, [PreTok])])] -> Key -> [Key]
-allDeps context key = let deps = (maybeList . fmap (catMaybes . fmap maybeName) . getNames) context in deps <> (allDeps context =<< deps)
-    where getNames = fmap ((=<<) snd) . lookup key
+allDeps :: M.Map Key [(Prob, [PreTok])] -> Key -> S.Set Key
+allDeps context key = let deps = (maybeList . fmap (catMaybes . fmap maybeName) . getNames) context in S.fromList (deps <> (S.toList . allDeps context =<< deps))
+    where getNames = fmap ((=<<) snd) . M.lookup key
           maybeName (Name n _) = Just n
           maybeName _          = Nothing
 
@@ -120,6 +121,6 @@ orderKeys context (key1, l1) (key2, l2)
     | key2 == "Return" = LT
     | orderHelper key1 l2 = LT
     | orderHelper key2 l1 = GT
-    | key2 `elem` allDeps context key1 = GT
-    | key1 `elem` allDeps context key2 = LT
+    | key2 `S.member` allDeps (M.fromList context) key1 = GT
+    | key1 `S.member` allDeps (M.fromList context) key2 = LT
     | otherwise = EQ

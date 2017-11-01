@@ -12,6 +12,7 @@ import           Control.Arrow               (first)
 import           Control.Composition
 import           Control.Exception
 import           Control.Monad               (void)
+import           Control.Monad.IO.Class      (MonadIO, liftIO)
 import           Control.Monad.Random.Class
 import           Data.Monoid
 import qualified Data.Text                   as T
@@ -27,15 +28,16 @@ import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec             hiding (parseErrorPretty', try)
 
 -- | Parse a template file into the `RandTok` data type
-parseFile :: [T.Text] -- ^ variables to substitute into the template
+parseFile :: MonadIO m
+    => [T.Text] -- ^ variables to substitute into the template
     -> FilePath -- ^ folder
     -> FilePath -- ^ filepath within folder
-    -> IO (Either (ParseError Char (ErrorFancy Void)) RandTok) -- ^ parsed `RandTok`
+    -> m (Either (ParseError Char (ErrorFancy Void)) RandTok) -- ^ parsed `RandTok`
 parseFile = fmap (fmap takeTemplate) .** getInclusionCtx False
 
 -- | Generate text from file with inclusions
-getInclusionCtx :: Bool -> [T.Text] -> FilePath -> FilePath -> IO (Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)])
-getInclusionCtx isTree ins folder filepath = do
+getInclusionCtx :: (MonadIO m) => Bool -> [T.Text] -> FilePath -> FilePath -> m (Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)])
+getInclusionCtx isTree ins folder filepath = liftIO $ do
     libDir <- do { home <- getEnv "HOME" ; if os /= home then pure (home <> "/.madlang/") else pure (home <> "\\.madlang\\") }
     file <- catch (readFile' (folder ++ filepath)) (const (readFile' (libDir <> folder <> filepath)) :: IOException -> IO T.Text)
     let filenames = map T.unpack $ either (error . show) id $ parseInclusions filepath file -- TODO pass up errors correctly
@@ -52,7 +54,7 @@ runFile :: [T.Text] -- ^ List of variables to substitute into the template
     -> IO T.Text -- ^ Result
 runFile ins toFolder = do
     void $ doesDirectoryExist (getDir toFolder)
-    let filepath = reverse . takeWhile (/='/') . reverse $ toFolder
+    let filepath = reverse . takeWhile (/= '/') . reverse $ toFolder
     runInFolder ins (getDir toFolder) filepath
 
 -- | Run in the appropriate folder
@@ -64,9 +66,9 @@ runText :: (MonadRandom m) => [T.Text] -> String -> T.Text -> m T.Text
 runText vars name = either (pure . parseErrorPretty') id . fmap run . parseTok name [] vars
 
 -- | Get file as context
-parseCtx :: Bool -> [T.Text] -> [(Key, RandTok)] -> FilePath -> IO (Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)])
+parseCtx :: (MonadIO m) => Bool -> [T.Text] -> [(Key, RandTok)] -> FilePath -> m (Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)])
 parseCtx isTree ins state filepath = do
-    txt <- readFile' filepath
+    txt <- liftIO $ readFile' filepath
     let keys = (if isTree then parseTreeF else parseTokF) filepath state ins txt
     pure keys
 
