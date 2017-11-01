@@ -62,8 +62,9 @@ script:
     yamllint .hlint.yaml
     yamllint .stylish-haskell.yaml
     yamllint .weeder.yaml
-  else
     cabal check
+  else
+    echo 'skipping checks...'
   fi
 - stack --no-terminal build --haddock --no-haddock-deps --copy-bins
 - stack test --no-terminal
