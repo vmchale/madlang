@@ -89,8 +89,8 @@ script:
   else
     echo 'skipping hlint/weeder...'
   fi
-- madlang install
-- madlang run demo/example.mad
+  # - madlang install
+  # - madlang run demo/example.mad
 - |
   if [ `uname` = "Darwin" ]
   then

@@ -4,6 +4,7 @@ packages:
 - .
 extra-deps:
 - composition-prelude-0.1.1.0
+- recursion-schemes-ext-0.2.1.0
 flags:
   madlang:
     development:

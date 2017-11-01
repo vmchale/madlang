@@ -15,11 +15,8 @@ darcs:
     darcs optimize pristine
     darcs optimize cache
 
-shrink:
-    upx $(fd 'madlang$' -I | tail -n1)
-
 tokei:
-    tokei . .*.yml .*.yaml
+    tokei . .*.yml .*.yaml -e Justfile
 
 next:
     @export VERSION=$(cat madlang.cabal | grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1 | awk -F. '{$NF+=1; print $0}' | sed 's/ /\./g') && echo $VERSION && sed -i "2s/[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/$VERSION/" madlang.cabal
@@ -65,5 +62,5 @@ name:
     github-release edit -s $(cat .git-token) -u vmchale -r madlang -n "$(madlang run ~/programming/madlang/releases/releases.mad)" -t "$(grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1)"
 
 clean:
-    sn c .
-    rm -f .ghc.environment.* man/madlang.1 tags
+    sn c . -g
+    rm -f man/madlang.1

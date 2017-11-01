@@ -29,6 +29,7 @@ module Text.Madlibs (
                     , makeTree
                     -- * Functions and constructs for the `RandTok` data type
                     , run
+                    , runCata
                     , runText
                     , RandTok (..)
                     , Key
