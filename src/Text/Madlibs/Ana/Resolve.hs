@@ -6,12 +6,13 @@ module Text.Madlibs.Ana.Resolve (
   , runFile
   , makeTree
   , runText
+  , runFileN
   ) where
 
 import           Control.Arrow               (first)
 import           Control.Composition
 import           Control.Exception
-import           Control.Monad               (void)
+import           Control.Monad               (replicateM, void)
 import           Control.Monad.IO.Class      (MonadIO, liftIO)
 import           Control.Monad.Random.Class
 import           Data.Monoid
@@ -48,14 +49,28 @@ getInclusionCtx isTree ins folder filepath = liftIO $ do
         (parseCtx isTree ins (concat . either (const []) id $ ctx) (folder ++ filepath))
         (const (do { home <- getEnv "HOME" ; parseCtx isTree ins (concat . either (const []) id $ ctx) (home <> "/.madlang/" <> folder <> filepath) }) :: IOException -> IO (Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)]))
 
+pathSep :: Char
+pathSep | os == "windows" = '\\'
+        | otherwise = '/'
+
 -- | Generate randomized text from a file containing a template
 runFile :: [T.Text] -- ^ List of variables to substitute into the template
     -> FilePath -- ^ Path to @.mad@ file.
     -> IO T.Text -- ^ Result
 runFile ins toFolder = do
     void $ doesDirectoryExist (getDir toFolder)
-    let filepath = reverse . takeWhile (/= '/') . reverse $ toFolder
+    let filepath = reverse . takeWhile (/= pathSep) . reverse $ toFolder
     runInFolder ins (getDir toFolder) filepath
+
+runFileN :: Int -> [T.Text] -> FilePath -> IO [T.Text]
+runFileN n ins toFolder = do
+    void $ doesDirectoryExist (getDir toFolder)
+    let filepath = reverse . takeWhile (/= pathSep) . reverse $ toFolder
+    runInFolderN n ins (getDir toFolder) filepath
+
+-- | Run 'n' times.
+runInFolderN :: Int -> [T.Text] -> FilePath -> FilePath -> IO [T.Text]
+runInFolderN n = replicateM n .** runInFolder
 
 -- | Run in the appropriate folder
 runInFolder :: [T.Text] -> FilePath -> FilePath -> IO T.Text

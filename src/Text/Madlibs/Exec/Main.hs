@@ -2,7 +2,6 @@
 module Text.Madlibs.Exec.Main (
     runMadlang ) where
 
-import           Control.Monad
 import           Data.Maybe
 import           Data.Monoid
 import qualified Data.Text                    as T
@@ -129,9 +128,9 @@ template rec =
             let ins = map T.pack (clInputs . sub $ rec)
             case sub rec of
                 (Run reps _ _) ->
-                    replicateM_ (fromMaybe 1 reps) $ runFile ins filepath >>= TIO.putStrLn
+                    (T.init . T.unlines <$> runFileN (fromMaybe 1 reps) ins filepath) >>= TIO.putStrLn
                 (Sample _ _) ->
-                    replicateM_ 60 $ runFile ins filepath >>= TIO.putStrLn
+                    (T.init . T.unlines <$> runFileN 60 ins filepath) >>= TIO.putStrLn
                 (Debug _) -> putStr . (either show displayTree) =<< makeTree ins "" filepath
                 (Lint _ _) -> do
                     parsed <- parseFile ins "" filepath
