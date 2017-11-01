@@ -5,7 +5,8 @@ module Text.Madlibs.Exec.Main (
 import           Data.Maybe
 import           Data.Monoid
 import qualified Data.Text                    as T
-import qualified Data.Text.IO                 as TIO
+import qualified Data.Text.Lazy               as TL
+import qualified Data.Text.Lazy.IO            as TLIO
 import           Data.Version
 import           Options.Applicative          hiding (ParseError)
 import           Paths_madlang
@@ -128,9 +129,9 @@ template rec =
             let ins = map T.pack (clInputs . sub $ rec)
             case sub rec of
                 (Run reps _ _) ->
-                    (T.init . T.unlines <$> runFileN (fromMaybe 1 reps) ins filepath) >>= TIO.putStrLn
+                    (TL.init . TL.unlines . fmap TL.fromStrict <$> runFileN (fromMaybe 1 reps) ins filepath) >>= TLIO.putStrLn
                 (Sample _ _) ->
-                    (T.init . T.unlines <$> runFileN 60 ins filepath) >>= TIO.putStrLn
+                    (TL.init . TL.unlines . fmap TL.fromStrict <$> runFileN 60 ins filepath) >>= TLIO.putStrLn
                 (Debug _) -> putStr . (either show displayTree) =<< makeTree ins "" filepath
                 (Lint _ _) -> do
                     parsed <- parseFile ins "" filepath
