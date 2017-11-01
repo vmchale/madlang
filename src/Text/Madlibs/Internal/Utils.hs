@@ -6,8 +6,10 @@
 module Text.Madlibs.Internal.Utils where
 
 import           Control.Arrow               (first)
+import           Control.Exception           (IOException, catch, throw)
 import qualified Data.Text                   as T
 import           Data.Void
+import           Text.Madlibs.Cata.SemErr
 import           Text.Madlibs.Internal.Types
 import           Text.Megaparsec.Error
 
@@ -46,6 +48,9 @@ parseErrorPretty' = T.pack . parseErrorPretty
 unTok :: PreTok -> T.Text
 unTok PreTok{}     = ""
 unTok (Name txt _) = txt
+
+readLibFile :: FilePath -> IO T.Text
+readLibFile path = catch (fmap T.pack . readFile $ path) (throw (ImportNotFound path) :: IOException -> IO T.Text)
 
 -- | Read a file in as a `Text`
 readFile' :: FilePath -> IO T.Text

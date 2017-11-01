@@ -22,7 +22,7 @@ import           Text.PrettyPrint.ANSI.Leijen
 type Parser = Parsec (ErrorFancy Void) T.Text
 
 -- | Datatype for a semantic error
-data SemanticError = NoReturn | CircularFunctionCalls T.Text T.Text | InsufficientArgs Int Int | DoubleDefinition T.Text | NoContext T.Text
+data SemanticError = NoReturn | CircularFunctionCalls T.Text T.Text | InsufficientArgs Int Int | DoubleDefinition T.Text | NoContext T.Text | ImportNotFound FilePath
     deriving (Typeable)
 
 -- | display a `SemanticError` nicely with coloration & whatnot
@@ -53,6 +53,10 @@ instance Show SemanticError where
         <> (text . show $ i)
         <> ", expected at least "
         <> (text . show $ j)
+    show (ImportNotFound p) = show $
+        semErrStart
+        <> text "Import file not found: "
+        </> indent 4 (yellow $ text p)
 
 -- | Derived via our show instance;
 instance Exception SemanticError where
