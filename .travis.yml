@@ -48,6 +48,7 @@ before_install:
   else
     echo "skipping yaml verification..."
   fi
+- cabal update
 
 install:
 - stack --no-terminal --install-ghc test --only-dependencies
