@@ -31,7 +31,7 @@ matrix:
 
 before_install:
 - mkdir -p ~/.local/bin
-- export PATH=/opt/ghc/$GHCVER/bin:$PATH
+- export PATH=/opt/ghc/8.2.1/bin:$PATH
 - export PATH=$HOME/.local/bin:$PATH
 - |
   if [ `uname` = "Darwin" ]
