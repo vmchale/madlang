@@ -33,7 +33,7 @@ ci:
     @stack build --test --no-run-tests
     @stack bench --no-run-benchmarks
     weeder .
-    hlint .
+    hlint src app test bench
     yamllint stack.yaml
     yamllint .travis.yml
     yamllint appveyor.yml
