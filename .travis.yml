@@ -20,7 +20,7 @@ matrix:
         sources:
         - hvr-ghc
         packages:
-        - ghc-8.2.2
+        - ghc-8.2.1
         - cabal-install-head
     language: python
 
