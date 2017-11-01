@@ -66,9 +66,18 @@ script:
   else
     echo 'skipping checks...'
   fi
-- stack --no-terminal build --haddock --no-haddock-deps --copy-bins
-- stack test --no-terminal
-- stack bench --no-terminal --no-run-benchmarks
+- |
+  if [ `uname` = "Linux" ]
+  then
+    cabal new-build
+    cabal new-test
+    cabal new-bench
+    stack --no-terminal build --haddock --no-haddock-deps --copy-bins
+  else
+    stack --no-terminal build --haddock --no-haddock-deps --copy-bins
+    stack test --no-terminal
+    stack bench --no-terminal --no-run-benchmarks
+  fi
 - |
   if [ `uname` = "Linux" ]
   then
