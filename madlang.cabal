@@ -1,5 +1,5 @@
 name:                madlang
-version:             3.1.1.16
+version:             3.1.1.17
 synopsis:            Randomized templating language DSL
 description:         Madlang is a text templating language written in Haskell,
                      meant to explore computational creativity and generative
@@ -26,6 +26,11 @@ custom-setup
                  , Cabal
                  , directory
                  , process >= 1.4.0.0
+
+Flag profile {
+  Description: Build for profiling
+  Default: False
+}
 
 Flag development {
   Description: Turn on '-Werror'
@@ -79,7 +84,7 @@ library
   if flag(development)
     ghc-options:       -Werror
   if impl(ghc >= 8.0)
-    ghc-options: -Wincomplete-uni-patterns -Wincomplete-record-updates
+    ghc-options:       -Wincomplete-uni-patterns -Wincomplete-record-updates
   ghc-options:         -Wall
 
 executable madlang
@@ -89,6 +94,8 @@ executable madlang
     Buildable: True
   hs-source-dirs:      app
   main-is:             Main.hs
+  if flag(profile)
+    ghc-options:       -rtsopts -fprof-auto -prof
   if flag(development)
     ghc-options:       -Werror
   if impl(ghc >= 8.0)
