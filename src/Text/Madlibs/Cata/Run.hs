@@ -30,7 +30,7 @@ runCata :: (MonadRandom m) => RandTok -> m T.Text
 runCata = cataM alg where
     alg (ListF tok) = do
         value <- getRandomR (0,1)
-        pure $ ((snd . head) . filter ((>= value) . fst)) $ mkCdf' tok
+        pure $ ((snd . head) . filter ((>= value) . fst)) $ mkCdfCata tok
     alg (ValueF txt) = pure txt
 
 -- | Helper function to compute the cdf when we have a pdf
@@ -39,5 +39,5 @@ mkCdf (List rs) = zip (cdf . fmap fst $ rs) (fmap snd rs)
 mkCdf v@Value{} = [(1, v)]
 
 -- | Another helper function, this time for use with our catamorphism.
-mkCdf' :: [(Prob, T.Text)] -> [(Prob, T.Text)]
-mkCdf' rs = zip (cdf . fmap fst $ rs) (fmap snd rs)
+mkCdfCata :: [(Prob, T.Text)] -> [(Prob, T.Text)]
+mkCdfCata rs = zip (cdf . fmap fst $ rs) (fmap snd rs)
