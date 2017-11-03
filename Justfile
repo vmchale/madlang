@@ -63,4 +63,4 @@ name:
 
 clean:
     sn c . -g
-    rm -f man/madlang.1
+    rm -f man/madlang.1 madlang.hp madlang.ps madlang.aux
