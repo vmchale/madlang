@@ -63,6 +63,7 @@ script:
     yamllint .hlint.yaml
     yamllint .stylish-haskell.yaml
     yamllint .weeder.yaml
+    yamllint .yamllint
     cabal check
   else
     echo 'skipping checks...'

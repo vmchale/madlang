@@ -7,6 +7,9 @@ latest:
 check:
     git diff master origin/master
 
+deps:
+    stack list-dependencies | less
+
 timed:
     time madlang sample demo/shakespeare.mad
 
@@ -16,7 +19,7 @@ darcs:
     darcs optimize cache
 
 tokei:
-    tokei . .*.yml .*.yaml -e Justfile
+    tokei . .*.yml .*.yaml .yamllint -e Justfile
 
 next:
     @export VERSION=$(cat madlang.cabal | grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1 | awk -F. '{$NF+=1; print $0}' | sed 's/ /\./g') && echo $VERSION && sed -i "2s/[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/$VERSION/" madlang.cabal
@@ -36,6 +39,7 @@ ci:
     yamllint appveyor.yml
     yamllint .stylish-haskell.yaml
     yamllint .hlint.yaml
+    yamllint .yamllint
 
 size:
     sn d $(fd 'madlang$' -I | tail -n1)
@@ -59,7 +63,7 @@ install:
     cp $(fd 'madlang$' -I | tail -n1) ~/.local/bin
 
 name:
-    github-release edit -s $(cat .git-token) -u vmchale -r madlang -n "$(madlang run ~/programming/madlang/releases/releases.mad)" -t "$(grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1)"
+    github-release edit -s $(cat ~/.git-token) -u vmchale -r madlang -n "$(madlang run ~/programming/madlang/releases/releases.mad)" -t "$(grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1)"
 
 clean:
     sn c . -g
