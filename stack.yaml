@@ -1,5 +1,5 @@
 ---
-resolver: nightly-2017-10-31
+resolver: nightly-2017-11-15
 packages:
 - .
 extra-deps:

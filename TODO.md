@@ -2,6 +2,7 @@ BUGS:
   - [ ] scoping/ordering should be handled correctly
   - [ ] show enough precision when displaying tree w/ small probabilities
   - [ ] unpacking fails on 'ç'
+  - [ ] if you do `madlang run` on a directory, the error is stupid
 LIBRARIES:
   - [ ] English nouns
   - [ ] Verbs

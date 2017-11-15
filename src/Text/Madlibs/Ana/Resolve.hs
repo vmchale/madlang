@@ -26,7 +26,7 @@ import           Text.Madlibs.Ana.ParseUtils
 import           Text.Madlibs.Cata.Run
 import           Text.Madlibs.Internal.Types
 import           Text.Madlibs.Internal.Utils
-import           Text.Megaparsec             hiding (parseErrorPretty', try)
+import           Text.Megaparsec             hiding (parseErrorPretty')
 
 -- | Parse a template file into the `RandTok` data type
 parseFile :: MonadIO m

@@ -27,11 +27,9 @@ next:
     sn c .
 
 ci:
-    @cabal new-build
+    @cabal new-build all
     @cabal new-test
-    @cabal new-bench
-    @stack build --test --no-run-tests
-    @stack bench --no-run-benchmarks
+    @stack build --test --bench --no-run-tests --no-run-benchmarks
     weeder .
     hlint src app test bench
     yamllint stack.yaml
