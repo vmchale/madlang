@@ -16,7 +16,7 @@ test_script:
 - stack setup > nul
 - echo "" | stack --no-terminal install
 - ps: Get-ChildItem . -name -recurse madlang.exe
-- ps: Copy-Item c:\\stack\\.stack-work\\install\\f7ab49cd\\bin\\madlang.exe madlang-x86_64-pc-windows.exe
+- ps: Copy-Item c:\\stack\\.stack-work\\install\\fa27059f\\bin\\madlang.exe madlang-x86_64-pc-windows.exe
 - ps: Push-AppveyorArtifact madlang-x86_64-pc-windows.exe
 
 deploy:
