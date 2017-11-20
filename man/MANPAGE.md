@@ -24,10 +24,10 @@ computational creativity.
 
 # OPTIONS
 
-**-h** **--help**
+**-h** **-\-help**
 :   Display help
 
-**-r** **--rep**
+**-r** **-\-rep**
 :   Generate output more than once
 
 **-i**
