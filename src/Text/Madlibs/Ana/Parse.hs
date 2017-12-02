@@ -8,7 +8,10 @@ module Text.Madlibs.Ana.Parse (
   , parseInclusions
   , parseTree
   , parseTreeF
-  , parseTokM ) where
+  , parseTokM
+  , parseTokInternal
+  , parseTokFInternal
+  ) where
 
 import           Control.Composition
 import           Control.Monad
@@ -198,13 +201,14 @@ parseTreeM ins = buildTree <$> program ins
 
 -- | Parse text as a list of functions
 parseTokF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)]
-parseTokF filename state' ins f = flip execState (filterTemplate state') <$> runParser (parseTokM ins) filename f
-    where filterTemplate = map (\(i,j) -> if i == "Return" then (strip filename, j) else (i,j)) -- TODO fix the extras
+parseTokF filename state' ins f = flip execState (filterTemplate filename state') <$> runParser (parseTokM ins) filename f
 
 -- | Parse text as a list of tokens, suitable for printing as a tree.
 parseTreeF :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)]
-parseTreeF filename state' ins f = flip execState (filterTemplate state') <$> runParser (parseTreeM ins) filename f
-    where filterTemplate = map (\(i,j) -> if i == "Return" then (strip filename, j) else (i,j))
+parseTreeF filename state' ins f = flip execState (filterTemplate filename state') <$> runParser (parseTreeM ins) filename f
+
+filterTemplate :: String -> [(T.Text, t)] -> [(T.Text, t)]
+filterTemplate filename = map (\(i,j) -> if i == "Return" then (strip filename, j) else (i,j)) -- TODO fix the extras
 
 -- | Parse text given a context
 --
@@ -220,10 +224,20 @@ parseTok :: FilePath -- ^ File name to use for parse errors
     -> Either (ParseError Char (ErrorFancy Void)) RandTok -- ^ Result
 parseTok = fmap takeTemplate .*** parseTokF
 
+parseTokInternal :: FilePath
+                 -> [T.Text]
+                 -> [[(Key, RandTok)]]
+                 -> T.Text
+                 -> Either (ParseError Char (ErrorFancy Void)) RandTok
+parseTokInternal path ins ctx = parseTok path (join ctx) ins
+
+parseTokFInternal :: FilePath -> [T.Text] -> [[(Key, RandTok)]] -> T.Text -> Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)]
+parseTokFInternal path ins ctx = parseTokF path (join ctx) ins
+
 -- | Parse text as a token, suitable for printing as a tree..
 parseTree :: FilePath -> [(Key, RandTok)] -> [T.Text] -> T.Text -> Either (ParseError Char (ErrorFancy Void)) RandTok
 parseTree = fmap takeTemplate .*** parseTreeF
 
--- | Parse inclustions
+-- | Parse inclusions
 parseInclusions :: FilePath -> T.Text -> Either (ParseError Char (ErrorFancy Void)) [T.Text]
 parseInclusions = runParser inclusions

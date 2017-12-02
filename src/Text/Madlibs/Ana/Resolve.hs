@@ -7,6 +7,7 @@ module Text.Madlibs.Ana.Resolve (
   , makeTree
   , runText
   , runFileN
+  , pathSep
   ) where
 
 import           Control.Arrow               (first)

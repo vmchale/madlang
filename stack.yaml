@@ -1,10 +1,12 @@
 ---
-resolver: nightly-2017-11-15
+resolver: lts-9.11
 packages:
 - .
 extra-deps:
 - composition-prelude-0.1.1.0
 - recursion-schemes-ext-0.2.1.0
+- megaparsec-6.2.0
+- hspec-megaparsec-1.0.0
 flags:
   madlang:
     development:

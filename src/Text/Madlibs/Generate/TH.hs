@@ -10,16 +10,20 @@ module Text.Madlibs.Generate.TH
     , madlang
     ) where
 
+import           Control.Arrow               (first)
 import           Control.Monad.IO.Class      (MonadIO, liftIO)
-import           Data.FileEmbed
+import           Data.FileEmbed              (embedStringFile)
+import           Data.Monoid
 import qualified Data.Text                   as T
-import           Data.Text.Encoding
+import qualified Data.Text.IO                as TIO
 import           Data.Void
 import           Language.Haskell.TH         hiding (Dec)
 import           Language.Haskell.TH.Quote
---import           Language.Haskell.TH.Syntax  (Lift, lift)
+import           Language.Haskell.TH.Syntax  (lift)
+import           System.Directory            (doesFileExist)
+import           System.Environment          (getEnv)
 import           Text.Madlibs.Ana.Parse
---import           Text.Madlibs.Ana.Resolve
+import           Text.Madlibs.Internal.Types (Key, RandTok)
 import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec
 
@@ -47,20 +51,46 @@ madlang = QuasiQuoter { quoteExp = textToExpression
                       , quotePat = error "quasi-quoter does not support patterns"
                       , quoteType = error "quasi-quoter does not support types"
                       , quoteDec = error "quasi-quoter does not support top-level quotes"
-                      } -- TODO add quasiQuoter w/inclusions or context
+                      }
 
 -- | Convert a `String` containing  to a `Q Exp` with the parsed syntax tree.
+-- Embedded code can contain inclusions.
 textToExpression :: String -> Q Exp
 textToExpression txt = do
-    parse' <- [|parseTok "source" [] []|]
-    pure $ VarE 'errorgen `AppE` (parse' `AppE` (VarE 'T.pack `AppE` LitE (StringL txt)))
+    parse' <- [|parseTokInternal "haskell quasi-quote" []|]
+    inclusions <- parseInclusions "haskell quasi-quote" <$> pure (T.pack txt)
+    let context = fmap (traverse (madCtx ".")) (fmap T.unpack <$> inclusions)
+    erroredFiles <- errorgen context
+    inclusions' <- lift (T.unpack <$> errorgen inclusions)
+    pure $ VarE 'errorgen `AppE` (parse' `AppE` (VarE 'ctx `AppE` inclusions' `AppE` ListE erroredFiles) `AppE` (VarE 'T.pack `AppE` LitE (StringL txt)))
 
 -- | Turn a parse error into an error that will be caught when Template Haskell compiles at runtime.
 errorgen :: Either (ParseError Char (ErrorFancy Void)) a -> a
 errorgen = either (error . T.unpack . show') id
 
--- embedFancy :: FilePath -> FilePath -> Q Exp
--- embedFancy file folder = parseFile [] file folder >>= ((VarE 'errorgen `AppE`) . lift)
+embedFileCheck :: FilePath -> FilePath -> Q Exp
+embedFileCheck folder path = do
+    let tryPath = folder ++ path
+    local <- runIO $ doesFileExist tryPath
+    home <- runIO $ getEnv "HOME"
+    if local then
+        embedStringFile tryPath
+    else
+        embedStringFile (home ++ "/.madlang/" ++ path) -- FIXME windows
+
+ctx :: [FilePath] -> [[(Key, RandTok)]] -> [[(Key, RandTok)]]
+ctx = zipWith resolveKeys
+    where resolveKeys file = fmap (first (((T.pack . (<> "-")) . dropExtension) file <>))
+
+madCtx :: FilePath -> FilePath -> Q Exp
+madCtx folder path = do
+    file <- embedFileCheck folder path
+    let tryPath = folder ++ "/" ++ path
+    inclusions <- parseInclusions tryPath <$> runIO (TIO.readFile tryPath)
+    parse' <- [|parseTokFInternal path []|]
+    dependencies <- traverse (madCtx folder) (T.unpack <$> errorgen inclusions)
+    inclusions' <- lift (T.unpack <$> errorgen inclusions)
+    pure $ VarE 'errorgen `AppE` (parse' `AppE` (VarE 'ctx `AppE` inclusions' `AppE` ListE dependencies) `AppE` file)
 
 -- | Splice for embedding a '.mad' file, e.g.
 --
@@ -70,10 +100,13 @@ errorgen = either (error . T.unpack . show') id
 --     $(madFile "twitter-bot.mad")
 -- @
 --
--- Note that the embedded code cannot have any inclusions
+-- Embedded code can contain inclusions.
 madFile :: FilePath -> Q Exp
 madFile path = do
-    file <- embedFile path
-    -- dependencies <- parse inclusions
-    parse' <- [|parseTok "source" [] [] . decodeUtf8|] -- TODO make this recurse but still work!
-    pure $ VarE 'errorgen `AppE` (parse' `AppE` file)
+    inclusions <- parseInclusions path <$> runIO (TIO.readFile path)
+    file <- embedStringFile path
+    let context = fmap (traverse (madCtx (getDir path))) (fmap T.unpack <$> inclusions)
+    erroredFiles <- errorgen context
+    parse' <- [|parseTokInternal path []|]
+    inclusions' <- lift (T.unpack <$> errorgen inclusions)
+    pure $ VarE 'errorgen `AppE` (parse' `AppE` (VarE 'ctx `AppE` inclusions' `AppE` ListE erroredFiles) `AppE` file)

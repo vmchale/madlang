@@ -7,7 +7,7 @@
   - {name: error, within: [Text.Madlibs.Generate.TH, Text.Madlibs.Ana.Resolve]}
   - {name: traceShowId, within: []}
   - {name: traceShow, within: []}
-  - {name: getEnv, within: [Text.Madlibs.Packaging.Fetch, Text.Madlibs.Ana.Resolve, Paths_madlang]}
+  - {name: getEnv, within: [Text.Madlibs.Packaging.Fetch, Text.Madlibs.Ana.Resolve, Paths_madlang, Text.Madlibs.Generate.TH]}
 - ignore: {name: Use section, within: [Text.Madlibs.Internal.Types, Text.Madlibs.Ana.ParseUtils]}
 - ignore: {name: Move brackets to avoid $, within: [Text.Madlibs.Exec.Main]}
 - ignore: {name: Redundant bracket, within: [Text.Madlibs.Exec.Main]}

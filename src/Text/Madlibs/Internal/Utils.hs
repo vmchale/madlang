@@ -20,6 +20,7 @@ dropExtension = reverse . drop 1 . dropWhile (/='.') . reverse
 -- | Get directory associated to a file
 getDir :: FilePath -> FilePath
 getDir = reverse . dropWhile (/='/') . reverse
+-- FIXME should work on Windows
 
 -- | Function to apply a value on both arguments, e.g.
 --

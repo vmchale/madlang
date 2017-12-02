@@ -18,6 +18,7 @@ DEFICIENCIES:
   - [ ] dependency management should work better
   - [ ] overlapping categories?
 FEATURES:
+  - [ ] bytecode would be p. easy.
   - [ ] user-defined modifiers
   - [ ] a "perhaps you meant..." think would be quite nice
   - [ ] index for vim

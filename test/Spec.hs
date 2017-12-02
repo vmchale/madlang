@@ -47,7 +47,7 @@ main = hspec $ do
             runFile [] "test/templates/ordered.mad" >>= (`shouldSatisfy` (\a -> elem a ["heads","tails","one","two","three","third","fourth"]))
     describe "readFileQ" $
         parallel $ it "executes embedded code" $
-        runTest >>= (`shouldSatisfy` (\a -> elem a ["HEADS","tails"]))
+        runTest >>= (`shouldSatisfy` (\a -> elem a ["heads","tails", "on its side"]))
     describe "madlang" $
         parallel $ it "provides a quasi-quoter" $
         runTestQQ >>= (`shouldSatisfy` (\a -> elem a ["hello","goodbye"]))
