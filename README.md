@@ -6,9 +6,8 @@
 This is the Madlang DSL for generating text. You specify a template, and Madlang
 will create randomized text from the template.
 
-Madlang is an interpreted language, written in Haskell. The primary way to use
-Madlang is on the command line using the interpreter, but there is also a partially completed library
-and EDSL.
+Madlang is an interpreted language, written in Haskell. Madlang can be used as
+an EDSL for Haskell or using the command-line interpreter.
 
 Madlang is intended to explore computational creativity and provide an easy
 way to get started with generative literature.
@@ -163,6 +162,36 @@ Try this out:
 
 :return
     1.0 "On my walk today I saw a " weirdDog "."
+```
+
+### EDSL
+
+You can use Madlang as a Haskell EDSL, generating values of type `RandTok`.
+This can be done a couple ways. One is to use the file embedder:
+
+```haskell
+randomText :: RandTok
+randomText = $(madFile "mad-src/some-bot.mad")
+```
+
+While the other is to use the `madlang` quasi-quoter:
+
+```haskell
+randomText :: RandTok
+randomText = [madlang|
+:define truth
+    1.0 "true"
+    1.0 "false"
+:return
+    1.0 truth
+|]
+```
+
+You can then transform this into a random text file with:
+
+```haskell
+generateText :: IO Text
+generateText = run randomText
 ```
 
 ### Examples

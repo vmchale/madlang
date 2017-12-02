@@ -9,7 +9,7 @@ import qualified Data.Text    as T
 import           Text.Madlibs
 
 demo :: RandTok
-demo = $(madFile "test/templates/include.mad")
+demo = $(madFile "test/templates/include-recursive.mad")
 
 -- demoDir :: [(Key, RandTok)]
 -- demoDir = $(madEmbed "test/templates" "gambling.mad")
