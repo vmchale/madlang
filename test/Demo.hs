@@ -11,9 +11,6 @@ import           Text.Madlibs
 demo :: RandTok
 demo = $(madFile "test/templates/include-recursive.mad")
 
--- demoDir :: [(Key, RandTok)]
--- demoDir = $(madEmbed "test/templates" "gambling.mad")
-
 demoQQ :: RandTok
 demoQQ = [madlang|
 :define something

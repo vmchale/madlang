@@ -23,6 +23,7 @@ import           Language.Haskell.TH.Syntax  (lift)
 import           System.Directory            (doesFileExist)
 import           System.Environment          (getEnv)
 import           Text.Madlibs.Ana.Parse
+import           Text.Madlibs.Ana.Resolve    (pathSep)
 import           Text.Madlibs.Internal.Types (Key, RandTok)
 import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec
@@ -76,7 +77,7 @@ madCtxCheck folder path = do
     if local then
         madCtx folder path
     else
-        madCtx (home ++ "/.madlang/") path
+        madCtx (home ++ (pathSep : (".madlang" ++ pure pathSep))) path
 
 ctx :: [FilePath] -> [[(Key, RandTok)]] -> [[(Key, RandTok)]]
 ctx = zipWith resolveKeys
