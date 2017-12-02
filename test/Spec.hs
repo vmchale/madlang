@@ -40,14 +40,14 @@ main = hspec $ do
         parallel $ it "parses nested modifiers and modifiers on variables correctly" $ \_ ->
             runFile ["aa"] "test/templates/modifiers.mad" >>= (`shouldSatisfy` (\a -> elem a ["AAAaaa","AAAaa","AAaaa","AAaa"]))
         parallel $ it "parses file with inclusions and modifiers on functions" $ \_ ->
-            runFile [] "test/templates/include.mad" >>= (`shouldSatisfy` (\a -> elem a ["HEADS","tails","on its side"]))
+            runFile [] "test/templates/include.mad" >>= (`shouldSatisfy` (\a -> elem a ["heads","tails","on its side"]))
         parallel $ it "parses file with recursive inclusions" $ \_ ->
             runFile [] "test/templates/include-recursive.mad" >>= (`shouldSatisfy` (\a -> elem a ["HEADS","tails","on its side"]))
         parallel $ it "runs on a file out of order" $ \_ ->
             runFile [] "test/templates/ordered.mad" >>= (`shouldSatisfy` (\a -> elem a ["heads","tails","one","two","three","third","fourth"]))
     describe "readFileQ" $
         parallel $ it "executes embedded code" $
-        runTest >>= (`shouldSatisfy` (\a -> elem a ["heads","tails", "on its side"]))
+        runTest >>= (`shouldSatisfy` (\a -> elem a ["HEADS","tails", "on its side"]))
     describe "madlang" $
         parallel $ it "provides a quasi-quoter" $
         runTestQQ >>= (`shouldSatisfy` (\a -> elem a ["hello","goodbye"]))

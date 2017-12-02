@@ -179,11 +179,10 @@ While the other is to use the `madlang` quasi-quoter:
 ```haskell
 randomText :: RandTok
 randomText = [madlang|
-:define truth
-    1.0 "true"
-    1.0 "false"
+:include adjectives.mad
+
 :return
-    1.0 truth
+    1.0 "I am feeling very " adjectives-adjective " today."
 |]
 ```
 
@@ -197,7 +196,9 @@ generateText = run randomText
 ### Examples
 
 There is a Shakespearean insult generator available to test out at [my
-site](http://blog.vmchale.com/madlang).
+site](http://blog.vmchale.com/madlang). For a look at using Madlang as an EDSL,
+check out my [recursion scheme
+generator](https://github.com/vmchale/recursion-schemata)
 
 ## Tooling
 

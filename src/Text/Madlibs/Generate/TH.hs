@@ -59,7 +59,7 @@ textToExpression :: String -> Q Exp
 textToExpression txt = do
     parse' <- [|parseTokInternal "haskell quasi-quote" []|]
     inclusions <- parseInclusions "haskell quasi-quote" <$> pure (T.pack txt)
-    let context = fmap (traverse (madCtx ".")) (fmap T.unpack <$> inclusions)
+    let context = fmap (traverse (madCtxCheck ".")) (fmap T.unpack <$> inclusions)
     erroredFiles <- errorgen context
     inclusions' <- lift (T.unpack <$> errorgen inclusions)
     pure $ VarE 'errorgen `AppE` (parse' `AppE` (VarE 'ctx `AppE` inclusions' `AppE` ListE erroredFiles) `AppE` (VarE 'T.pack `AppE` LitE (StringL txt)))
@@ -68,15 +68,15 @@ textToExpression txt = do
 errorgen :: Either (ParseError Char (ErrorFancy Void)) a -> a
 errorgen = either (error . T.unpack . show') id
 
-embedFileCheck :: FilePath -> FilePath -> Q Exp
-embedFileCheck folder path = do
+madCtxCheck :: FilePath -> FilePath -> Q Exp
+madCtxCheck folder path = do
     let tryPath = folder ++ path
     local <- runIO $ doesFileExist tryPath
     home <- runIO $ getEnv "HOME"
     if local then
-        embedStringFile tryPath
+        madCtx folder path
     else
-        embedStringFile (home ++ "/.madlang/" ++ path) -- FIXME windows
+        madCtx (home ++ "/.madlang/") path
 
 ctx :: [FilePath] -> [[(Key, RandTok)]] -> [[(Key, RandTok)]]
 ctx = zipWith resolveKeys
@@ -84,11 +84,11 @@ ctx = zipWith resolveKeys
 
 madCtx :: FilePath -> FilePath -> Q Exp
 madCtx folder path = do
-    file <- embedFileCheck folder path
-    let tryPath = folder ++ "/" ++ path
+    let tryPath = folder ++ path
+    file <- embedStringFile tryPath
     inclusions <- parseInclusions tryPath <$> runIO (TIO.readFile tryPath)
     parse' <- [|parseTokFInternal path []|]
-    dependencies <- traverse (madCtx folder) (T.unpack <$> errorgen inclusions)
+    dependencies <- traverse (madCtxCheck folder) (T.unpack <$> errorgen inclusions)
     inclusions' <- lift (T.unpack <$> errorgen inclusions)
     pure $ VarE 'errorgen `AppE` (parse' `AppE` (VarE 'ctx `AppE` inclusions' `AppE` ListE dependencies) `AppE` file)
 
@@ -105,7 +105,7 @@ madFile :: FilePath -> Q Exp
 madFile path = do
     inclusions <- parseInclusions path <$> runIO (TIO.readFile path)
     file <- embedStringFile path
-    let context = fmap (traverse (madCtx (getDir path))) (fmap T.unpack <$> inclusions)
+    let context = fmap (traverse (madCtxCheck (getDir path))) (fmap T.unpack <$> inclusions)
     erroredFiles <- errorgen context
     parse' <- [|parseTokInternal path []|]
     inclusions' <- lift (T.unpack <$> errorgen inclusions)
