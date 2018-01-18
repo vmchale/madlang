@@ -15,14 +15,14 @@ import           Text.Madlibs.Ana.Resolve
 import           Text.Madlibs.Cata.Display
 import           Text.Madlibs.Internal.Utils
 import           Text.Madlibs.Packaging.Fetch
-import           Text.Megaparsec
+import           Text.Megaparsec hiding (many)
 
 -- | datatype for the program
 newtype Program = Program { sub :: Subcommand }
 
 -- | datatype for the subcommands
 data Subcommand = Debug { input :: FilePath }
-                | Run { _rep :: Maybe Int , clInputs :: [String] , input :: FilePath }
+                | Run { _rep :: Maybe Int , input :: FilePath }
                 | Lint { clInputs :: [String] , input :: FilePath }
                 | Sample { clInputs :: [String], input :: FilePath }
                 | Get { _remote :: String }
@@ -50,10 +50,6 @@ temp = Run
         <> short 'r'
         <> metavar "REPETITIONS"
         <> help "Number of times to repeat"))
-    <*> (many $ strOption
-        (short 'i'
-        <> metavar "VAR"
-        <> help "command-line inputs to the template."))
     <*> (argument str
         (metavar "FILEPATH"
         <> completer (bashCompleter "file -X '!*.mad' -o plusdirs")
@@ -128,7 +124,7 @@ template rec =
             let filepath = reverse . (takeWhile (/='/')) . reverse $ toFolder
             let ins = map T.pack (clInputs . sub $ rec)
             case sub rec of
-                (Run reps _ _) ->
+                (Run reps _) ->
                     (TL.init . TL.unlines . fmap TL.fromStrict <$> runFileN (fromMaybe 1 reps) ins filepath) >>= TLIO.putStrLn
                 (Sample _ _) ->
                     (TL.init . TL.unlines . fmap TL.fromStrict <$> runFileN 60 ins filepath) >>= TLIO.putStrLn

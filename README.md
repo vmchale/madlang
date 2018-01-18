@@ -28,13 +28,13 @@ Download [cabal](https://www.haskell.org/cabal/download.html) and
 
 ```bash
  $ cabal update
- $ cabal install madlang
+ $ cabal new-install madlang --symlink-bindir ~/.local/bin
 ```
 
-You may need to add `$HOME/.cabal/bin` to your `PATH`. To do so:
+You may need to add `$HOME/.local/bin` to your `PATH`. To do so:
 
 ```
- $ echo 'export PATH=$HOME/.cabal/bin:$PATH' >> $HOME/.bashrc
+ $ echo 'export PATH=$HOME/.local/bin:$PATH' >> $HOME/.bashrc
  $ source $HOME/.bashrc
 ```
 

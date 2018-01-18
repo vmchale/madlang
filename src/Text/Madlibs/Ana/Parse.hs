@@ -14,7 +14,6 @@ module Text.Madlibs.Ana.Parse (
   ) where
 
 import           Control.Composition
-import           Control.Monad
 import           Control.Monad.State
 import qualified Data.Map                    as M
 import           Data.Maybe

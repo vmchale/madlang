@@ -18,9 +18,6 @@ darcs:
     darcs optimize pristine
     darcs optimize cache
 
-tokei:
-    tokei . .*.yml .*.yaml .yamllint -e Justfile
-
 next:
     @export VERSION=$(ac madlang.cabal | grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1 | awk -F. '{$NF+=1; print $0}' | sed 's/ /\./g') && echo $VERSION && sed -i "2s/[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/$VERSION/" madlang.cabal
     git commit -am "next"

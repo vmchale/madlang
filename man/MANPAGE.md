@@ -80,16 +80,6 @@ Currently supported modifiers are:
   - reverse
   - oulipo (removes all instances of the letter 'e')
 
-# DISPLAYING TREES
-
-You may wish to use the command
-
-```
-madlang tree file.mad | less
-```
-
-for larger trees.
-
 # EXAMPLES
 
 You can examine an example using the bundled libraries

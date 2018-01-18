@@ -1,12 +1,13 @@
 ---
-resolver: lts-9.11
+resolver: lts-10.3
 packages:
 - .
 extra-deps:
-- composition-prelude-0.1.1.0
-- recursion-schemes-ext-0.2.1.0
-- megaparsec-6.2.0
+- composition-prelude-1.1.0.0
+- recursion-schemes-ext-1.0.0.0
+- megaparsec-6.4.0
 - hspec-megaparsec-1.0.0
+- cli-setup-0.1.0.2
 flags:
   madlang:
     development:

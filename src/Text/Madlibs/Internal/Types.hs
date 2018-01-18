@@ -1,5 +1,7 @@
+{-# LANGUAGE DeriveAnyClass       #-}
 {-# LANGUAGE DeriveFoldable       #-}
 {-# LANGUAGE DeriveFunctor        #-}
+{-# LANGUAGE DeriveGeneric        #-}
 {-# LANGUAGE DeriveLift           #-}
 {-# LANGUAGE DeriveTraversable    #-}
 {-# LANGUAGE FlexibleInstances    #-}
@@ -13,10 +15,12 @@ module Text.Madlibs.Internal.Types where
 
 import           Control.Arrow              (second)
 import           Control.Monad.State
+import           Data.Binary                (Binary)
 import           Data.Function
 import           Data.Functor.Foldable.TH   (makeBaseFunctor)
 import           Data.Monoid
 import qualified Data.Text                  as T
+import           GHC.Generics               (Generic)
 import           Instances.TH.Lift          ()
 import           Language.Haskell.TH.Syntax (Lift (..))
 
@@ -40,7 +44,7 @@ instance Eq PreTok where
 
 -- | datatype for a token returning a random string
 data RandTok = List [(Prob, RandTok)] | Value T.Text
-    deriving (Show, Eq, Lift)
+    deriving (Show, Eq, Lift, Generic, Binary)
 
 apply :: (T.Text -> T.Text) -> RandTok -> RandTok -- TODO make a base functor so we can map f over stuff?
 apply f (Value str) = Value (f str)

@@ -99,9 +99,7 @@ script:
   else
     export BINPATH="$(find -name madlang -executable | tail -n4 | head -n1)"
   fi
-- echo $BINPATH
 - mv $BINPATH madlang-$TARGET
-- ls madlang-$TARGET
 
 deploy:
   api_key:
