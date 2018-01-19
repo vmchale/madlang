@@ -38,6 +38,7 @@ module Text.Madlibs (
                     , SemanticError (..)
                     -- * Command-line executable
                     , runMadlang
+                    , cacheFile
                     -- * Template Haskell EDSL
                     , madlang
                     , madFile

@@ -1,4 +1,5 @@
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 -- | Module containing IO stuff to get/parse files with external dependencies
 module Text.Madlibs.Ana.Resolve (
@@ -56,7 +57,7 @@ pathSep | os == "windows" = '\\'
         | otherwise = '/'
 
 filenameBytecode :: FilePath -> FilePath
-filenameBytecode = id
+filenameBytecode = T.unpack . T.replace ".mad" ".mbc" . T.pack
 
 -- | Cache the parsed strucutre (and libraries it depends on) as a binary file
 -- `.filename.mbc`, reading instead from it when possible.
