@@ -1,5 +1,5 @@
 # inspired by https://twitter.com/biupdatebot
-# install libraries with `madlang install` if necessary.
+# install libraries with `madlang install` before running.
 :include adverbs.mad
 
 :return
