@@ -1,0 +1,6 @@
+# inspired by https://twitter.com/biupdatebot
+# install libraries with `madlang install` if necessary.
+:include adverbs.mad
+
+:return
+    1.0 "Today I am feeling " adverbs-adverb " bisexual"
