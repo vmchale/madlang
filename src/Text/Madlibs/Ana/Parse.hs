@@ -178,8 +178,7 @@ library = preLibrary >> pure ("Return", [(1, [])])
 final :: [T.Text] -> Parser [(Prob, [PreTok])]
 final ins = do
     main
-    val <- fmap normalize . some $ pair ins
-    pure val
+    fmap normalize . some $ pair ins
 
 -- | Parse the program in terms of `PreTok` and the `Key`s to link them.
 program :: [T.Text] -> Parser [(Key, [(Prob, [PreTok])])]

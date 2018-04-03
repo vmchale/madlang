@@ -1,2 +1,4 @@
-optimization: 1
+tests: true
+benchmarks: true
+documentation: true
 constraints: madlang +development
