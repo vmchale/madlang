@@ -18,7 +18,6 @@ import           Control.Exception
 import           Control.Monad               (replicateM, void)
 import           Control.Monad.IO.Class      (MonadIO, liftIO)
 import           Control.Monad.Random.Class
-import           Data.Monoid
 import qualified Data.Text                   as T
 import           Data.Void
 import           System.Directory

@@ -18,7 +18,6 @@ import           Control.Monad.State
 import           Data.Binary                (Binary)
 import           Data.Function
 import           Data.Functor.Foldable.TH   (makeBaseFunctor)
-import           Data.Monoid
 import qualified Data.Text                  as T
 import           GHC.Generics               (Generic)
 import           Instances.TH.Lift          ()
@@ -50,16 +49,18 @@ apply :: (T.Text -> T.Text) -> RandTok -> RandTok -- TODO make a base functor so
 apply f (Value str) = Value (f str)
 apply f (List l)    = List $ fmap (second (apply f)) l
 
+instance Semigroup RandTok where
+    (<>) (Value v1) (Value v2) = Value (T.append v1 v2)
+    (<>) (List l1) v@Value{}   = List $ fmap (second (`mappend` v)) l1
+    (<>) v@Value{} (List l2)   = List $ fmap (second (mappend v)) l2
+    (<>) l@List{} (List l2)    = List [ (p, l `mappend` tok) | (p,tok) <- l2 ]
+
 -- | Make `RandTok` a monoid so we can append them together nicely (since they do generate text).
 --
 -- > (Value "Hello") <> (List [(0.5," you"), (0.5, " me")])
 -- > (List [(0.5,"Hello you"), (0.5, "Hello me")])
 instance Monoid RandTok where
     mempty = Value ""
-    mappend (Value v1) (Value v2) = Value (T.append v1 v2)
-    mappend (List l1) v@Value{} = List $ fmap (second (`mappend` v)) l1
-    mappend v@Value{} (List l2) = List $ fmap (second (mappend v)) l2
-    mappend l@List{} (List l2) = List [ (p, l `mappend` tok) | (p,tok) <- l2 ]
 
 -- TODO make this a map instead of keys for faster parse.
 -- | State monad providing context, i.e. function we've already called before

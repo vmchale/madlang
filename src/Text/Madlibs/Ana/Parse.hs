@@ -17,7 +17,6 @@ import           Control.Composition
 import           Control.Monad.State
 import qualified Data.Map                    as M
 import           Data.Maybe
-import           Data.Monoid
 import qualified Data.Text                   as T
 import           Data.Void
 import           Text.Madlibs.Ana.ParseUtils

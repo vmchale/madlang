@@ -29,7 +29,6 @@ module Text.Madlibs (
                     , makeTree
                     -- * Functions and constructs for the `RandTok` data type
                     , run
-                    , runCata
                     , runText
                     , RandTok (..)
                     , Key
@@ -37,8 +36,14 @@ module Text.Madlibs (
                     , Context
                     , SemanticError (..)
                     -- * Command-line executable
-                    , runMadlang
                     , cacheFile
+                    , runFileN
+                    , getDir
+                    , displayTree
+                    , fetchPackages
+                    , cleanPackages
+                    , fetchGithub
+                    , installVimPlugin
                     -- * Template Haskell EDSL
                     , madlang
                     , madFile
@@ -46,8 +51,10 @@ module Text.Madlibs (
 
 import           Text.Madlibs.Ana.Parse
 import           Text.Madlibs.Ana.Resolve
+import           Text.Madlibs.Cata.Display
 import           Text.Madlibs.Cata.Run
 import           Text.Madlibs.Cata.SemErr
-import           Text.Madlibs.Exec.Main
 import           Text.Madlibs.Generate.TH
 import           Text.Madlibs.Internal.Types
+import           Text.Madlibs.Internal.Utils
+import           Text.Madlibs.Packaging.Fetch

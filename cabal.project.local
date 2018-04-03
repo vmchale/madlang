@@ -1,3 +1,2 @@
-with-compiler: ghc-8.2.2
 optimization: 1
 constraints: madlang +development

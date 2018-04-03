@@ -11,9 +11,7 @@ module Text.Madlibs.Generate.TH
     ) where
 
 import           Control.Arrow               (first)
-import           Control.Monad.IO.Class      (MonadIO, liftIO)
 import           Data.FileEmbed              (embedStringFile)
-import           Data.Monoid
 import qualified Data.Text                   as T
 import qualified Data.Text.IO                as TIO
 import           Data.Void
@@ -27,9 +25,6 @@ import           Text.Madlibs.Ana.Resolve    (pathSep)
 import           Text.Madlibs.Internal.Types (Key, RandTok)
 import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec
-
-instance MonadIO Q where
-    liftIO = runIO
 
 -- | `QuasiQuoter` for an EDSL, e.g.
 --
