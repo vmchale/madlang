@@ -96,6 +96,7 @@ script:
   else
     export BINPATH="$(find dist-newstyle -name madlang -executable | tail -n1)"
   fi
+- find dist-newstyle -name madlang -executable
 - mv $BINPATH madlang-$TARGET
 - ls madlang-$TARGET
 - strip madlang-$TARGET
