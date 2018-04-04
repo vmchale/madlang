@@ -95,7 +95,7 @@ script:
   then
     export BINPATH="$(find . -name madlang -perm 755 | tail -n1)"
   else
-    export BINPATH="$(find .stack-work -name madlang -executable | tail -n4 | head -n1)"
+    export BINPATH="$(find .stack-work -name madlang -executable | tail -n1)"
   fi
 - mv $BINPATH madlang-$TARGET
 - ls madlang-$TARGET
