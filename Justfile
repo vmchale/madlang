@@ -53,10 +53,6 @@ release:
     git tag -d "$(grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1)"
     git push origin master
 
-install:
-    cabal new-build
-    cp $(fd 'madlang$' -I | tail -n1) ~/.local/bin
-
 name:
     github-release edit -s $(ac ~/.git-token) -u vmchale -r madlang -n "$(madlang run ~/programming/madlang/releases/releases.mad)" -t "$(grep -P -o '\d+\.\d+\.\d+\.\d+' madlang.cabal | head -n1)"
 

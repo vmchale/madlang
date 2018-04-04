@@ -14,3 +14,4 @@
 - ignore: {name: Reduce duplication, within: [Text.Madlibs.Ana.ParseUtils, Text.Madlibs.Packaging.Fetch]}
 - ignore: {name: Use infix}
 - error: {lhs: concatMap, rhs: (=<<), name: "Use monadic join"}
+- error: {lhs: const, rhs: pure, name: "Generalize const"}

@@ -42,14 +42,14 @@ parseFile = fmap (fmap takeTemplate) .** getInclusionCtx False
 getInclusionCtx :: (MonadIO m) => Bool -> [T.Text] -> FilePath -> FilePath -> m (Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)])
 getInclusionCtx isTree ins folder filepath = liftIO $ do
     libDir <- do { home <- getEnv "HOME" ; pure (home <> (pathSep : ".madlang" <> pure pathSep)) }
-    file <- catch (readFile' (folder ++ filepath)) (const (readLibFile (libDir <> folder <> filepath)) :: IOException -> IO T.Text)
+    file <- catch (readFile' (folder ++ filepath)) (pure (readLibFile (libDir <> folder <> filepath)) :: IOException -> IO T.Text)
     let filenames = map T.unpack $ either (error . show) id $ parseInclusions filepath file -- TODO pass up errors correctly
     let resolveKeys file' = fmap (first (((T.pack . (<> "-")) . dropExtension) file' <>))
     ctxPure <- mapM (getInclusionCtx isTree ins folder) filenames
     let ctx = zipWith resolveKeys filenames <$> sequence ctxPure
     catch
-        (parseCtx isTree ins (concat . either (const []) id $ ctx) (folder ++ filepath))
-        (const (do { home <- getEnv "HOME" ; parseCtx isTree ins (concat . either (const []) id $ ctx) (home <> (pathSep : ".madlang") <> [pathSep] <> folder <> filepath) }) :: IOException -> IO (Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)]))
+        (parseCtx isTree ins (mconcat . either (pure []) id $ ctx) (folder ++ filepath))
+        (pure (do { home <- getEnv "HOME" ; parseCtx isTree ins (mconcat . either (pure []) id $ ctx) (home <> (pathSep : ".madlang") <> [pathSep] <> folder <> filepath) }) :: IOException -> IO (Either (ParseError Char (ErrorFancy Void)) [(Key, RandTok)]))
 
 pathSep :: Char
 pathSep | os == "windows" = '\\'

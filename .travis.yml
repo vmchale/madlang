@@ -73,7 +73,6 @@ script:
   then
     cabal new-build
     cabal new-test
-    cabal new-bench
     stack --no-terminal build --haddock --no-haddock-deps --copy-bins --test --no-run-tests --bench --no-run-benchmarks
   else
     stack --no-terminal build --haddock --no-haddock-deps --copy-bins
@@ -95,7 +94,7 @@ script:
   then
     export BINPATH="$(find . -name madlang -perm 755 | tail -n1)"
   else
-    export BINPATH="$(find .stack-work -name madlang -executable | tail -n1)"
+    export BINPATH="$(find dist-newstyle -name madlang -executable | tail -n1)"
   fi
 - mv $BINPATH madlang-$TARGET
 - ls madlang-$TARGET

@@ -1,5 +1,5 @@
 % madlang (1)
-% Vanessa McHale<vanessa.mchale@reconfigure.io>
+% Vanessa McHale<vamchale@gmail.com>
 
 # NAME
 

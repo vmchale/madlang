@@ -127,5 +127,5 @@ template rec =
                 (Debug _) -> putStr . either show displayTree =<< makeTree ins "" filepath
                 (Lint _ _) -> do
                     parsed <- parseFile ins "" filepath
-                    putStrLn $ either parseErrorPretty (const "No syntax errors found.") parsed
+                    putStrLn $ either parseErrorPretty (pure "No syntax errors found.") parsed
                 _ -> pure ()
