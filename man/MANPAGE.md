@@ -87,4 +87,4 @@ at https://hub.darcs.net/vmchale/madlang-insults.
 
 # COPYRIGHT
 
-Copyright 2017. Vanessa McHale. All Rights Reserved.
+Copyright 2017-2018. Vanessa McHale. All Rights Reserved.

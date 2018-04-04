@@ -94,7 +94,7 @@ script:
   then
     export BINPATH="$(find . -name madlang -perm 755 | tail -n1)"
   else
-    export BINPATH="$(find dist-newstyle -name madlang -executable | tail -n1)"
+    export BINPATH="$(find dist-newstyle -name madlang -executable | head -n2 | tail -n1)"
   fi
 - find dist-newstyle -name madlang -executable
 - mv $BINPATH madlang-$TARGET
