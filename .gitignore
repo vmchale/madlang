@@ -1,3 +1,5 @@
+.ghc.*
+.stack-work
 .git-token
 _darcs
 tags
