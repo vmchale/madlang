@@ -218,8 +218,15 @@ There is a project template bundled with
 
 and invoke with
 
-```
+```bash
  $ pi new madlang story
+```
+
+There is also a templated project
+[here](https://github.com/vmchale/madlang-miso) that can be invoked via
+
+```bash
+pi git vmchale/https://github.com/vmchale/madlang-miso story
 ```
 
 ### Manpages

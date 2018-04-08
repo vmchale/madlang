@@ -34,7 +34,7 @@ orders = Program
         <> command "check" (info lint (progDesc "Check a file"))
         <> command "sample" (info sample (progDesc "Sample a template by generating text many times."))
         <> command "install" (info (pure Install) (progDesc "Install/update prebundled libraries."))
-        <> command "get" (info fetch (progDesc "Sample a template by generating text many times."))
+        <> command "get" (info fetch (progDesc "Install/update a third-party library"))
         <> command "vim" (info (pure VimInstall) (progDesc "Install vim plugin."))
         )
 
