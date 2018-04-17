@@ -23,6 +23,9 @@ next:
     git commit -am "next"
     sn c .
 
+install:
+    cp $(fd -t x 'madlang$' -IH) ~/.cabal/bin
+
 ci:
     @cabal new-build all
     @cabal new-test
@@ -37,7 +40,7 @@ ci:
     yamllint .yamllint
 
 size:
-    sn d $(fd 'madlang$' -I | tail -n1)
+    sn d $(fd 'madlang$' -I | head -n2 | tail -n1)
 
 manpages:
     pandoc man/MANPAGE.md -s -t man -o man/madlang.1

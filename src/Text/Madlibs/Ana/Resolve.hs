@@ -84,7 +84,7 @@ runInFolderN n = replicateM n .** runInFolder
 
 -- | Run in the appropriate folder
 runInFolder :: [T.Text] -> FilePath -> FilePath -> IO T.Text
-runInFolder = (either (pure . parseErrorPretty') (>>= (pure . show')) =<<) .** (fmap (fmap run) .** parseFile)
+runInFolder = (either (pure . parseErrorPretty') (>>= pure) =<<) .** (fmap (fmap run) .** parseFile)
 
 -- | Run based on text input, with nothing linked.
 runText :: (MonadRandom m) => [T.Text] -> String -> T.Text -> m T.Text
