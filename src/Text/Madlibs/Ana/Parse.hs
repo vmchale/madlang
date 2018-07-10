@@ -17,6 +17,7 @@ import           Control.Composition
 import           Control.Monad.State
 import qualified Data.Map                    as M
 import           Data.Maybe
+import           Data.Semigroup              ((<>))
 import qualified Data.Text                   as T
 import           Data.Void
 import           Text.Madlibs.Ana.ParseUtils
@@ -26,7 +27,6 @@ import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec
 import           Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer  as L
-
 -- | Parse a lexeme, aka deal with whitespace nicely.
 lexeme :: Parser a -> Parser a
 lexeme = L.lexeme spaceConsumer

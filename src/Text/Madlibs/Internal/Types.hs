@@ -18,11 +18,11 @@ import           Control.Monad.State
 import           Data.Binary                (Binary)
 import           Data.Function
 import           Data.Functor.Foldable.TH   (makeBaseFunctor)
+import           Data.Semigroup
 import qualified Data.Text                  as T
 import           GHC.Generics               (Generic)
 import           Instances.TH.Lift          ()
 import           Language.Haskell.TH.Syntax (Lift (..))
-
 -- | datatype for a double representing a probability
 type Prob = Double
 

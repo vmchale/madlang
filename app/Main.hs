@@ -3,6 +3,7 @@ module Main (
     main ) where
 
 import           Data.Maybe
+import           Data.Semigroup      ((<>))
 import qualified Data.Text           as T
 import qualified Data.Text.Lazy      as TL
 import qualified Data.Text.Lazy.IO   as TLIO
@@ -12,7 +13,6 @@ import           Paths_madlang
 import           System.Directory
 import           Text.Madlibs
 import           Text.Megaparsec     hiding (many)
-
 -- | datatype for the program
 newtype Program = Program { sub :: Subcommand }
 

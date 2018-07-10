@@ -19,6 +19,7 @@ import           Data.Foldable
 import           Data.List
 import qualified Data.Map                    as M
 import           Data.Maybe                  (catMaybes)
+import           Data.Semigroup              ((<>))
 import qualified Data.Set                    as S
 import qualified Data.Text                   as T
 import           Data.Text.Titlecase
