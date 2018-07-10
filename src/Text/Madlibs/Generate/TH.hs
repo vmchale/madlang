@@ -12,6 +12,7 @@ module Text.Madlibs.Generate.TH
 
 import           Control.Arrow               (first)
 import           Data.FileEmbed              (embedStringFile)
+import           Data.Semigroup              ((<>))
 import qualified Data.Text                   as T
 import qualified Data.Text.IO                as TIO
 import           Data.Void
@@ -25,7 +26,6 @@ import           Text.Madlibs.Ana.Resolve    (pathSep)
 import           Text.Madlibs.Internal.Types (Key, RandTok)
 import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec
-
 -- | `QuasiQuoter` for an EDSL, e.g.
 --
 -- @

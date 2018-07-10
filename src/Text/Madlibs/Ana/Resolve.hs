@@ -18,6 +18,7 @@ import           Control.Exception
 import           Control.Monad               (replicateM, void)
 import           Control.Monad.IO.Class      (MonadIO, liftIO)
 import           Control.Monad.Random.Class
+import           Data.Semigroup              ((<>))
 import qualified Data.Text                   as T
 import           Data.Void
 import           System.Directory
@@ -29,7 +30,6 @@ import           Text.Madlibs.Cata.Run
 import           Text.Madlibs.Internal.Types
 import           Text.Madlibs.Internal.Utils
 import           Text.Megaparsec             hiding (parseErrorPretty')
-
 -- | Parse a template file into the `RandTok` data type
 parseFile :: MonadIO m
     => [T.Text] -- ^ variables to substitute into the template
